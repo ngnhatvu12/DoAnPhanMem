@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>E Store - eCommerce HTML Template</title>
+    <title>E store - eCommerce HTML Template</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="eCommerce HTML Template Free Download" name="keywords">
     <meta content="eCommerce HTML Template Free Download" name="description">
@@ -34,8 +34,17 @@
                     support@email.com
                 </div>
                 <div class="col-sm-6">
-                    <i class="fa fa-phone-alt"></i>
-                    +012-345-6789
+                    <p class="mona-html">
+                        <strong>Miễn phí vận chuyển toàn quốc</strong>
+                        với <strong>
+                            <span data-text-color="secondary">
+                                tất cả hóa đơn
+                            </span>
+                        </strong>
+                        từ 500.000 VNĐ <strong>
+                            <span data-text-color="secondary"></span>
+                        </strong>
+                    </p>
                 </div>
             </div>
         </div>
@@ -52,14 +61,14 @@
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto">
-                        <a href="index.html" class="nav-item nav-link active">Home</a>
-                        <a href="product-list.html" class="nav-item nav-link">Products</a>
-                        <a href="product-detail.html" class="nav-item nav-link">Product Detail</a>
-                        <a href="cart.html" class="nav-item nav-link">Cart</a>
-                        <a href="checkout.html" class="nav-item nav-link">Checkout</a>
-                        <a href="my-account.html" class="nav-item nav-link">My Account</a>
+                        <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
+                        <a href="product-list.html" class="nav-item nav-link">Sản phẩm</a>
+                        <a href="product-detail.html" class="nav-item nav-link">Đồ thể thao</a>
+                        <a href="cart.html" class="nav-item nav-link">Đồ lót</a>
+                        <a href="checkout.html" class="nav-item nav-link">Dụng cụ thể thao</a>
+                        <a href="my-account.html" class="nav-item nav-link">Sản phẩm mới</a>
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">More Pages</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Bộ sưu tập</a>
                             <div class="dropdown-menu">
                                 <a href="wishlist.html" class="dropdown-item">Wishlist</a>
                                 <a href="login.html" class="dropdown-item">Login & Register</a>
@@ -71,8 +80,8 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
                             <div class="dropdown-menu">
-                                <a href="#" class="dropdown-item">Login</a>
-                                <a href="#" class="dropdown-item">Register</a>
+                                <a href="/Access/Login" class="dropdown-item">Login</a>
+                                <a href="" class="dropdown-item">Register</a>
                             </div>
                         </div>
                     </div>
@@ -88,7 +97,7 @@
                 <div class="col-md-3">
                     <div class="logo">
                         <a href="index.html">
-                            <img src="../LayoutOgani/img/logo.png" alt="Logo">
+                            <img src="../LayoutOgani/img/logo2.png" alt="Logo" style="width:200px; height:400px">
                         </a>
                     </div>
                 </div>
@@ -411,54 +420,181 @@
     </div>
     <!-- Review End -->
     <!-- Footer-->
-    <footer class="footer" >
-        <div class="footer-top">
-            <div class="container">
-                <div class="row">
-                    <div class="footer-col">
-                        <h4>COOLCLUB</h4>
-                        <ul>
-                            <li><a href="#">Đăng kí thành viên</a></li>
-                            <li><a href="#">Ưu đãi & Đặc quyền</a></li>
-                        </ul>
+    <footer class="site-footer mobile--hidden">
+        <div class="container">
+            <div class="site-footer__inner">
+                <div class="site-footer__sidebar">
+                    <div>
+                        <h4 class="site-footer__title">
+                            COOLMATE lắng nghe bạn!
+                        </h4>
+                        <p class="site-footer__description" style="margin-bottom: 30px;">
+                            Chúng tôi luôn trân trọng và mong đợi nhận được mọi ý kiến đóng góp từ
+                            khách hàng để có thể nâng cấp trải nghiệm dịch vụ và sản phẩm tốt hơn nữa.
+                        </p> <a href="https://form.typeform.com/to/lU2oprGc?typeform-medium=embed-snippet" target="_blank" class="site-footer__btn">
+                            Đóng góp ý kiến
+                        </a>
                     </div>
-                    <div class="footer-col">
-                        <h4>CHÍNH SÁCH</h4>
-                        <ul>
-                            <li><a href="#">Chính sách đổi trả 60 ngày</a></li>
-                            <li><a href="#">Chính sách khuyến mãi</a></li>
-                            <li><a href="#">Chính sách bảo mật</a></li>
-                            <li><a href="#">Chính sách giao hàng</a></li>
-                        </ul>
+                    <div style="width: 25%;">
+                        <div class="footer-info">
+                            <div class="footer-info__icon">
+                                <img src="https://www.coolmate.me/images/footer/icon-hotline.svg" alt="Footer Icon Phone">
+                            </div>
+                            <div class="footer-info__content">
+                                <span class="footer-info__title">
+                                    Hotline
+                                </span>
+                                <p class="footer-info__desciption">
+                                    <a href="tel: 1900272737">1900.272737</a> - <a href="tel: 02877772737">028.7777.2737</a>
+                                    <br>
+                                    <span>(8:30 - 22:00)</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="footer-info">
+                            <div class="footer-info__icon">
+                                <img src="https://www.coolmate.me/images/footer/icon-email.svg" alt="Footer Icon Email">
+                            </div>
+                            <div class="footer-info__content">
+                                <span class="footer-info__title">
+                                    Email
+                                </span>
+                                <p class="footer-info__desciption">
+                                    <a href="mailto: Cool@coolmate.me">
+                                        Cool@coolmate.me
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="footer-col">
-                        <h4>CHĂM SÓC KHÁCH HÀNG</h4>
-                        <ul>
-                            <li><a href="#">Trải nghiệm mua sắm 100% hài lòng</a></li>
-                            <li><a href="#">Hỏi đáp - FAQs</a></li>
-                        </ul>
+                    <div class="footer-social">
+                        <a href="https://www.facebook.com/coolmate.me" target="_blank" class="footer-social__item">
+                            <img src="https://mcdn.coolmate.me/image/June2023/mceclip1_43.png" alt="Footer Icon facebook">
+                        </a>
+                        <a href="https://zalo.me/1517736583279228381" target="_blank" class="footer-social__item">
+                            <img src="https://mcdn.coolmate.me/image/June2023/mceclip2_68.png" alt="Footer Icon Zalo">
+                        </a>
+
+                        <a href="https://www.instagram.com/coolmate.me/" target="_blank" class="footer-social__item">
+                            <img src="https://www.coolmate.me/images/footer/icon-instar.svg" alt="Footer Icon instar">
+                        </a>
+                        <a href="https://www.youtube.com/channel/UCWw8wLlodKBtEvVt1tTAsMA" target="_blank" class="footer-social__item">
+                            <img src="https://www.coolmate.me/images/footer/icon-youtube.svg" alt="Footer Icon youtube">
+                        </a>
                     </div>
-                    <div class="footer-col">
-                        <h4>KIẾN THỨC MẶC ĐẸP</h4>
-                        <ul>
-                            <li><a href="#">Hướng dẫn chọn size</a></li>
-                            <li><a href="#">Blog</a></li>
-                        </ul>
-                    </div>
-                    <div class="footer-col">
-                        <h4>ĐỊA CHỈ LIÊN HỆ</h4>
-                        <ul>
-                            <li><a href="#">Văn phòng Hà Nội: Tầng 3 Tòa nhà BMM, KM2, Đường Phùng Hưng, Hà Đông</a></li>
-                            <li><a href="#">Trung tâm vận hành HN: Lô C8, KCN Lại Yên, Hoài Đức</a></li>
-                            <li><a href="#">Văn phòng HCM: Lô C3, KCN Cát Lái, TP Thủ Đức</a></li>
-                        </ul>
+                </div>
+                <div class="site-footer__menu">
+                    <div class="footer-menu">
+                        <div class="footer-menu__item">
+                            <h4 class="footer-menu__title">COOLCLUB</h4>
+                            <ul>
+                                <li>
+                                    <a href="/account/register?itm_source=footerm">Đăng kí thành viên</a>
+                                </li>
+                                <li>
+                                    <a href="/coolclub?itm_source=footer">Ưu đãi &amp; Đặc quyền</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-menu__item">
+                            <h4 class="footer-menu__title">Chính sách</h4>
+                            <ul>
+                                <li>
+                                    <a href="/page/dich-vu-60-ngay-doi-tra">Chính sách đổi trả 60 ngày</a>
+                                </li>
+                                <li>
+                                    <a href="/page/chuong-trinh-va-chinh-sach-khuyen-mai-tai-coolmate">Chính sách khuyến mãi</a>
+                                </li>
+                                <li>
+                                    <a href="/page/chinh-sach-bao-mat-thong-tin-ca-nhan">Chính sách bảo mật</a>
+                                </li>
+                                <li>
+                                    <a href="/page/dich-vu-giao-hang-coolmate">Chính sách giao hàng</a>
+                                </li>
+                            </ul>
+                            <h4 class="footer-menu__title">Coolmate.me</h4>
+                            <ul>
+                                <li>
+                                    <a href="/page/changelog?itm_source=footer">Lịch sử thay đổi website</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-menu__item">
+                            <h4 class="footer-menu__title">Chăm sóc khách hàng</h4>
+                            <ul>
+                                <li>
+                                    <a href="/page/11-dich-vu-tai-coolmate-co-the-ban-chua-biet">Trải nghiệm mua sắm 100% hài lòng</a>
+                                </li>
+                                <li>
+                                    <a href="/page/faqs">Hỏi đáp - FAQs</a>
+                                </li>
+                            </ul>
+                            <h4 class="footer-menu__title">Kiến thức mặc đẹp</h4>
+                            <ul>
+                                <li>
+                                    <a href="/size-chart">Hướng dẫn chọn size</a>
+                                </li>
+                                <li>
+                                    <a href="/blog">Blog</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-menu__item">
+                            <h4 class="footer-menu__title">Tài liệu - Tuyển dụng</h4>
+                            <ul>
+                                <li>
+                                    <a href="/lp/coolmate-101?itm_source=footer#recruitment-jobs">Tuyển dụng</a>
+                                </li>
+                                <li>
+                                    <a href="http://online.gov.vn/(X(1)S(sgmttobbtsiaq3l5itoicxhw))/Home/WebDetails/53184?AspxAutoDetectCookieSupport=1" target="_blank">Đăng ký bản quyền</a>
+                                </li>
+                            </ul>
+                            <h4 class="footer-menu__title">Về COOLMATE</h4>
+                            <ul>
+                                <li>
+                                    <a href="/lp/coolmate-101?itm_source=footer">Coolmate 101</a>
+                                </li>
+                                <li>
+                                    <a href="/page/11-dich-vu-tai-coolmate-co-the-ban-chua-biet?itm_source=footer">DVKH xuất sắc</a>
+                                </li>
+                                <li><a href="/page/coolmate-story?itm_source=footer"> Câu chuyện về Coolmate</a></li>
+                                <li><a href="/page/san-pham-coolmate-duoc-san-xuat-nhu-the-nao?itm_source=footer">Nhà máy</a></li>
+                                <li>
+                                    <a href="/collection/care-and-share?itm_source=footer">Care &amp; Share</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="footer-menu__item">
+                            <h4 class="footer-menu__title">Địa chỉ liên hệ</h4>
+                            <p class="footer-menu__desciption">
+                                <u>Văn phòng Hà Nội:</u> Tầng 3 Tòa nhà BMM, KM2, Đường Phùng Hưng, Phường Phúc La, Quận Hà Đông, TP Hà Nội
+                            </p>
+                            <p class="footer-menu__desciption"><u>Trung tâm vận hành Hà Nội:</u> Lô C8, KCN Lại Yên, Xã Lại Yên, Huyện Hoài Đức, Thành phố Hà Nội</p>
+                            <p class="footer-menu__desciption"><u>Văn phòng và Trung tâm vận hành TP. HCM:</u> Lô C3, đường D2, KCN Cát Lái, Thạnh Mỹ Lợi, TP. Thủ  Đức, TP. Hồ Chí Minh.</p>
+                            <p class="footer-menu__desciption"><u>Trung tâm R&amp;D:</u> T6-01, The Manhattan Vinhomes Grand Park, Long Bình, TP. Thủ Đức</p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="footer-bottom">
-            <div class="container">
-                <p>© CÔNG TY TNHH FASTECH ASIA - Mã số doanh nghiệp: 0108617038</p>
+            <div class="site-footer__after">
+                <div class="copyright">
+
+                    <p class="copyright__description">Mã số doanh nghiệp: 0108617038. Giấy chứng nhận đăng ký doanh nghiệp do Sở Kế hoạch và Đầu tư TP Hà Nội cấp lần đầu ngày 20/02/2019.</p>
+                </div>
+                <div class="site-footer__logo">
+                    <a href="https://tinnhiemmang.vn/danh-ba-tin-nhiem/coolmateme-1646213826" title="Chung nhan Tin Nhiem Mang" target="_blank" style="margin-right: 10px;">
+                        <img src="https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/March2022/handle_cert.png" alt="Chung nhan Tin Nhiem Mang" style="max-height: 40px;">
+                    </a>
+                    <a href="https://www.dmca.com/Protection/Status.aspx?ID=c6fdbdee-127c-4cf1-923d-7efe75201df6&amp;refurl=https://www.coolmate.me/?utm_source=ggads&amp;utm_medium=search&amp;utm_campaign=VN_GG_SEARCH_BRANDKEY&amp;utm_term=21084599217-163380422121&amp;gad_source=1&amp;gclid=Cj0KCQjwmOm3BhC8ARIsAOSbapWnBt3B8xPT6jtAYnOhE7Zzj66InQ0r53Lm40hl-njXi5wDTbI4GfQaAn2FEALw_wcB" title="DMCA.com Protection Status" target="_blank" class="dmca-badge" style="margin-right: 10px;">
+                        <img src="https://media3.coolmate.me/cdn-cgi/image/quality=80,format=auto/uploads/March2022/dmca_protected_15_120.png" alt="DMCA.com Protection Status" style="max-height: 40px;">
+                    </a>
+                    <a href="#" style="margin-right: 10px;">
+                        <img src="https://www.coolmate.me/images/footer/Coolmate-info.png" alt="Coolmate info" width="39" height="40">
+                    </a>
+                    <a href="http://online.gov.vn/(X(1)S(3e0hkhscv5zs101mhuopx43a))/Home/WebDetails/53184?AspxAutoDetectCookieSupport=1" target="_blank">
+                        <img src="https://www.coolmate.me/images/footer/logoSaleNoti.png" alt="Coolmate info" width="106" height="40">
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
