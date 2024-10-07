@@ -15,6 +15,10 @@ namespace DoAnPhanMem.Controllers
         {
                 return View();
         }
+        public IActionResult Register()
+        {
+            return View();
+        }
         [HttpPost]
         public IActionResult Login(TaiKhoan taiKhoan)
         {
