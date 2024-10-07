@@ -1,4 +1,4 @@
-using DoAnPhanMem.Models;
+﻿using DoAnPhanMem.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -18,7 +18,7 @@ namespace DoAnPhanMem.Controllers
         {
             return View();
         }
-
+      
         public IActionResult Privacy()
         {
             return View();
