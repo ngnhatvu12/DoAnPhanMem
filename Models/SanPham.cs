@@ -3,15 +3,17 @@
 public class SanPham
 {
     [Key]
-    public int MaSanPham { get; set; }
+    [StringLength(10)]
+    public string MaSanPham { get; set; }
 
-    [MaxLength(255)]
+    [Required]
+    [StringLength(255)]
     public string TenSanPham { get; set; }
 
-    [MaxLength(200)]
+    [StringLength(200)]
     public string MoTa { get; set; }
 
     public decimal GiaBan { get; set; }
-
     public decimal GiaGiam { get; set; }
 }
+

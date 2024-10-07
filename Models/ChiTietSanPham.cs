@@ -4,26 +4,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class ChiTietSanPham
 {
     [Key]
-    public int MaChiTietSP { get; set; }
+    [StringLength(10)]
+    public string MaChiTietSP { get; set; }
 
     [ForeignKey("SanPham")]
-    public int MaSanPham { get; set; }
+    public string MaSanPham { get; set; }
     public SanPham SanPham { get; set; }
 
     public int SoLuongTon { get; set; }
 
-    [MaxLength(50)]
+    [StringLength(50)]
     public string TrangThai { get; set; }
 
     [ForeignKey("DanhMuc")]
-    public int MaDanhMuc { get; set; }
+    public string MaDanhMuc { get; set; }
     public DanhMuc DanhMuc { get; set; }
 
     [ForeignKey("KichThuoc")]
-    public int MaKichThuoc { get; set; }
+    public string MaKichThuoc { get; set; }
     public KichThuoc KichThuoc { get; set; }
 
     [ForeignKey("MauSac")]
-    public int MaMauSac { get; set; }
+    public string MaMauSac { get; set; }
     public MauSac MauSac { get; set; }
 }
+

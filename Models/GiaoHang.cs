@@ -5,14 +5,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class GiaoHang
 {
     [Key]
-    public int MaGiaoHang { get; set; }
+    public string MaGiaoHang { get; set; }
 
-    [ForeignKey("DonHang")]
-    public int MaDonHang { get; set; }
+    public string MaDonHang { get; set; }
     public DonHang DonHang { get; set; }
 
     public DateTime NgayGiao { get; set; }
 
-    [MaxLength(100)]
-    public string TrangThai { get; set; } // Đang giao, Đã giao, Hủy
+    [StringLength(100)]
+    public string TrangThai { get; set; }  // Giá trị có thể là 'Đang giao', 'Đã giao', 'Hủy'
 }
+
+

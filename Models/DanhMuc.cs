@@ -3,8 +3,11 @@
 public class DanhMuc
 {
     [Key]
-    public int MaDanhMuc { get; set; }
+    [StringLength(10)]
+    public string MaDanhMuc { get; set; }
 
-    [MaxLength(50)]
+    [Required]
+    [StringLength(50)]
     public string TenDanhMuc { get; set; }
 }
+

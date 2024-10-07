@@ -3,8 +3,11 @@
 public class MauSac
 {
     [Key]
-    public int MaMauSac { get; set; }
+    [StringLength(10)]
+    public string MaMauSac { get; set; }
 
-    [MaxLength(30)]
+    [Required]
+    [StringLength(30)]
     public string TenMauSac { get; set; }
 }
+

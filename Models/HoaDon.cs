@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class HoaDon
 {
     [Key]
-    public int MaHoaDon { get; set; }
+    public string MaHoaDon { get; set; }
 
-    [ForeignKey("DonHang")]
-    public int MaDonHang { get; set; }
+    public string MaDonHang { get; set; }
     public DonHang DonHang { get; set; }
 
     public decimal TongTien { get; set; }
 
     public DateTime NgayLap { get; set; }
 
-    [MaxLength(50)]
-    public string TrangThai { get; set; }
+    [StringLength(50)]
+    public string TrangThai { get; set; }  // Giá trị có thể là 'Đã thanh toán', 'Chờ thanh toán', 'Hủy'
 }
+

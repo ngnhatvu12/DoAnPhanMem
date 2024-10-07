@@ -3,17 +3,18 @@
 public class TaiKhoan
 {
     [Key]
-    public int MaTaiKhoan { get; set; }
+    [StringLength(10)]
+    public string MaTaiKhoan { get; set; }
 
     [Required]
-    [MaxLength(50)]
+    [StringLength(50)]
     public string TenDangNhap { get; set; }
 
     [Required]
-    [MaxLength(255)]
+    [StringLength(255)]
     public string MatKhau { get; set; }
 
     [Required]
-    [MaxLength(50)]
-    public string VaiTro { get; set; } // KhachHang, Admin
+    [StringLength(50)]
+    public string VaiTro { get; set; } // KhachHang or Admin
 }

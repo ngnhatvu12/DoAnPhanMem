@@ -10,7 +10,7 @@ namespace DoAnPhanMem.Models
 
         public DbSet<TaiKhoan> TaiKhoan { get; set; }
         public DbSet<KhachHang> KhachHang { get; set; }
-        public DbSet<ADMINA> Admins { get; set; }
+        public DbSet<Admina> Admins { get; set; }
         public DbSet<SanPham> SanPhams { get; set; }
         public DbSet<KichThuoc> KichThuocs { get; set; }
         public DbSet<MauSac> MauSacs { get; set; }

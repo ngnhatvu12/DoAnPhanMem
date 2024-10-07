@@ -1,22 +1,30 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-public class ADMINA
+public class Admina
 {
     [Key]
-    public int MaAdmin { get; set; }
+    [StringLength(10)]
+    public string MaAdmin { get; set; }
 
-    [MaxLength(255)]
+    [Required]
+    [StringLength(255)]
     public string TenNhanVien { get; set; }
 
-    [MaxLength(50)]
+    [StringLength(50)]
     public string ChucVu { get; set; }
 
-    [MaxLength(20)]
+    [StringLength(20)]
     public string SoDienThoai { get; set; }
 
-    [MaxLength(255)]
+    [StringLength(255)]
     public string Email { get; set; }
 
     public DateTime NgayTao { get; set; }
+
+    [ForeignKey("TaiKhoan")]
+    public string MaTaiKhoan { get; set; }
+    public TaiKhoan TaiKhoan { get; set; }
 }
+

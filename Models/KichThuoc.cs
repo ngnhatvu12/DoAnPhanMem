@@ -3,8 +3,11 @@
 public class KichThuoc
 {
     [Key]
-    public int MaKichThuoc { get; set; }
+    [StringLength(10)]
+    public string MaKichThuoc { get; set; }
 
-    [MaxLength(30)]
+    [Required]
+    [StringLength(30)]
     public string TenKichThuoc { get; set; }
 }
+
