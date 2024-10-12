@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DoAnPhanMem.Migrations
 {
-    [DbContext(typeof(WebTheThaoDbContext))]
+    [DbContext(typeof(dbSportStoreContext))]
     [Migration("20241007144525_InitialCreate")]
     partial class InitialCreate
     {

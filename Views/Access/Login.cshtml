@@ -1,4 +1,5 @@
-﻿
+﻿@model DoAnPhanMem.ViewModels.LoginViewModel
+
 @{
     Layout = null;
 }
@@ -9,19 +10,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
     <meta name="csrf-token" content="kFUwdTvH3UnoiQxtBfkVtN5JzhPiLNby1JiMoBbI">
-
     <title>Viblo - Login</title>
 
     <link href="../css/SignCss.css" rel="stylesheet">
     <script src="/assets/webpack/app.e5a07e6.js" defer=""></script>
 
-
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700,700i&amp;subset=vietnamese" rel="stylesheet" type="text/css">
-
-
 
     <link href="/assets/webpack/app.e5a07e6.css" rel="stylesheet">
 </head>
@@ -31,32 +27,82 @@
             <div class="row justify-content-center">
                 <div class="col-md-8 col-lg-6 col-xl-5">
                     <div class="el-card is-always-shadow card_39334a8">
-                        <!----><div class="el-card__body">
-                            <div class="mb-6 text-center"><img src="../LayoutOgani/img/logo3.png" alt="Viblo" class="logo_0ce2aea"></div> <div class="my-4 text-center"><h5>Đăng nhập vào Viblo</h5></div> <div class="login-form">
-                                <!----> <form class="el-form"><div class="el-form-item is-required el-form-item--medium"><!----><div class="el-form-item__content"><div class="el-input el-input--medium el-input-group el-input-group--prepend"><div class="el-input-group__prepend"><i aria-hidden="true" class="fa fa-user"></i></div><input type="text" autocomplete="off" autofocus="autofocus" placeholder="Tên người dùng hoặc email" class="el-input__inner"><!----><!----><!----><!----></div><!----></div></div> <div class="el-form-item is-required el-form-item--medium"><!----><div class="el-form-item__content"><div class="el-input el-input--medium el-input-group el-input-group--prepend"><div class="el-input-group__prepend"><i aria-hidden="true" class="fa fa-lock"></i></div><input type="password" autocomplete="off" placeholder="Mật khẩu" class="el-input__inner"><!----><!----><!----><!----></div><!----></div></div></form> <button type="button" class="el-button w-100 el-button--primary">
-                                    <!----><!----><span>
-                                        Đăng nhập
-                                    </span>
-                                </button> <div class="d-flex justify-content-between my-2"><a href="/forgot-password" class=""><small>Quên mật khẩu?</small></a> <a href="/register" class=""><small>Tạo tài khoản</small></a></div> <div class="d-flex align-items-center justify-content-between my-4">
-                                    <hr class="flex-fill m-0"> <span class="mx-3">
-                                        Đăng nhập bằng
-                                    </span> <hr class="flex-fill m-0">
-                                </div> <div class="social-login">
+                        <div class="el-card__body">
+                            <div class="mb-6 text-center">
+                                <img src="../LayoutOgani/img/logo3.png" alt="Viblo" class="logo_0ce2aea">
+                            </div>
+                            <div class="my-4 text-center">
+                                <h5>Đăng nhập vào Viblo</h5>
+                            </div>
+                            <div class="login-form">
+                                <!-- Form đăng nhập -->
+                                <form asp-action="Login" method="post" class="el-form">
+                                    <div class="el-form-item is-required el-form-item--medium">
+                                        <div class="el-form-item__content">
+                                            <div class="el-input el-input--medium el-input-group el-input-group--prepend">
+                                                <div class="el-input-group__prepend">
+                                                    <i aria-hidden="true" class="fa fa-user"></i>
+                                                </div>
+                                                <!-- Input Username -->
+                                                <input asp-for="Username" autocomplete="off" autofocus="autofocus" placeholder="Tên người dùng hoặc email" class="el-input__inner">
+                                            </div>
+                                            <!-- Thông báo lỗi username -->
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="el-form-item is-required el-form-item--medium">
+                                        <div class="el-form-item__content">
+                                            <div class="el-input el-input--medium el-input-group el-input-group--prepend">
+                                                <div class="el-input-group__prepend">
+                                                    <i aria-hidden="true" class="fa fa-lock"></i>
+                                                </div>
+                                                <!-- Input Password -->
+                                                <input asp-for="Password" type="password" autocomplete="off" placeholder="Mật khẩu" class="el-input__inner">
+                                            </div>
+                                            <!-- Thông báo lỗi password -->
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <!-- Hiển thị thông báo lỗi chung nếu có -->
+                                    @if (ViewData.ModelState.Count > 0)
+                                    {
+                                        <div class="text-danger text-center">
+                                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                            {
+                                                <p>@error.ErrorMessage</p>
+                                            }
+                                        </div>
+                                    }
+
+                                    <!-- Nút Đăng nhập -->
+                                    <button type="submit" class="el-button w-100 el-button--primary">
+                                        <span>Đăng nhập</span>
+                                    </button>
+                                </form>
+
+                                <!-- Các phần khác của trang không thay đổi -->
+                                <div class="d-flex justify-content-between my-2">
+                                    <a href="/forgot-password" class=""><small>Quên mật khẩu?</small></a>
+                                    <a href="/register" class=""><small>Tạo tài khoản</small></a>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-between my-4">
+                                    <hr class="flex-fill m-0">
+                                    <span class="mx-3">Đăng nhập bằng</span>
+                                    <hr class="flex-fill m-0">
+                                </div>
+                                <div class="social-login">
                                     <ul class="list-unstyled d-flex align-items-center justify-content-between flex-wrap mb-0">
                                         <button type="button" class="el-button social-login__button facebook el-button--default el-button--medium">
-                                            <!----><i class="fab fa-facebook-f mr-1"></i><span>
-                                                Facebook
-                                            </span>
+                                            <i class="fab fa-facebook-f mr-1"></i>
+                                            <span>Facebook</span>
                                         </button>
                                         <button type="button" class="el-button social-login__button google el-button--default el-button--medium">
-                                            <!----><i class="fab fa-google mr-1"></i><span>
-                                                Google
-                                            </span>
+                                            <i class="fab fa-google mr-1"></i>
+                                            <span>Google</span>
                                         </button>
                                         <button type="button" class="el-button social-login__button github el-button--default el-button--medium">
-                                            <!----><i class="fab fa-github mr-1"></i><span>
-                                                Github
-                                            </span>
+                                            <i class="fab fa-github mr-1"></i>
+                                            <span>Github</span>
                                         </button>
                                     </ul>
                                 </div>
@@ -68,8 +114,71 @@
         </div>
     </div>
 
-    <script type="text/javascript">window.GLOBALS={"currentUser":null,"session":null,"messages":null,"config":{"app_env":"production","app_url":"https:\/\/accounts.viblo.asia","images_url":"https:\/\/images.viblo.asia","sentry":{"dsn":"https:\/\/f7cf88724e014d51bda712ffd7d159f4@sentry.sun-asterisk.vn\/26","environment":"production","traces_sample_rate":0.02,"track_components":false},"sso":{"domain":"viblo.asia","services":{"battle":{"code":"battle","name":"Viblo Battle","subdomain":"battle","webhook":true},"ctf":{"code":"ctf","name":"Viblo CTF","subdomain":"ctf","webhook":true},"viblo":{"code":"viblo","name":"Viblo","subdomain":null,"webhook":true},"partner":{"code":"partner","name":"Viblo Partners","subdomain":"partner","webhook":true},"cv":{"code":"cv","name":"Viblo CV","subdomain":"cv","webhook":true},"learning":{"code":"learning","name":"Viblo Learning","subdomain":"learn","webhook":true},"code":{"code":"code","name":"Viblo Code","subdomain":"code","webhook":true}}}}}</script>
-
+    <script type="text/javascript">
+        window.GLOBALS = {
+            "currentUser": null,
+            "session": null,
+            "messages": null,
+            "config": {
+                "app_env": "production",
+                "app_url": "https:\/\/accounts.viblo.asia",
+                "images_url": "https:\/\/images.viblo.asia",
+                "sentry": {
+                    "dsn": "https:\/\/f7cf88724e014d51bda712ffd7d159f4@sentry.sun-asterisk.vn\/26",
+                    "environment": "production",
+                    "traces_sample_rate": 0.02,
+                    "track_components": false
+                },
+                "sso": {
+                    "domain": "viblo.asia",
+                    "services": {
+                        "battle": {
+                            "code": "battle",
+                            "name": "Viblo Battle",
+                            "subdomain": "battle",
+                            "webhook": true
+                        },
+                        "ctf": {
+                            "code": "ctf",
+                            "name": "Viblo CTF",
+                            "subdomain": "ctf",
+                            "webhook": true
+                        },
+                        "viblo": {
+                            "code": "viblo",
+                            "name": "Viblo",
+                            "subdomain": null,
+                            "webhook": true
+                        },
+                        "partner": {
+                            "code": "partner",
+                            "name": "Viblo Partners",
+                            "subdomain": "partner",
+                            "webhook": true
+                        },
+                        "cv": {
+                            "code": "cv",
+                            "name": "Viblo CV",
+                            "subdomain": "cv",
+                            "webhook": true
+                        },
+                        "learning": {
+                            "code": "learning",
+                            "name": "Viblo Learning",
+                            "subdomain": "learn",
+                            "webhook": true
+                        },
+                        "code": {
+                            "code": "code",
+                            "name": "Viblo Code",
+                            "subdomain": "code",
+                            "webhook": true
+                        }
+                    }
+                }
+            }
+        };
+    </script>
 
 </body>
 </html>

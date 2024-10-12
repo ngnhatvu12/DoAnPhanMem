@@ -1,8 +1,54 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
+    <link href="~/css/site.css" rel="stylesheet">
 }
 
-<div class="text-center">
-    <h1 class="display-4">TRANG CHU Ban hag</h1>
-</div>
+@model List<ChiTietSanPham>
+
+@if (!Model.Any())
+{
+    <p>Không có sản phẩm nào để hiển thị.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" />
+                        }
+                        else
+                        {
+                            <img src="~//img/no-image.png" alt="No Image" />
+                        }
+                        <div class="product-action">
+                            <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                            <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                            <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                        <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+

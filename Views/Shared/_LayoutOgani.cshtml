@@ -1,4 +1,4 @@
-﻿
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,15 +34,6 @@
                     support@email.com
                 </div>
                 <div class="col-sm-6">
-<<<<<<< HEAD
-                   <p class="mona-html">
-                       <strong>Miễn phí vận chuyển toàn quốc</strong>
-                       với <strong><span data-text-color="secondary">
-                       tất cả hóa đơn </span></strong>
-                       từ 500.000 VNĐ <strong>
-                           <span data-text-color="secondary"></span>
-                           </strong></p>
-=======
                     <p class="mona-html">
                         <strong>Miễn phí vận chuyển toàn quốc</strong>
                         với <strong>
@@ -54,7 +45,6 @@
                             <span data-text-color="secondary"></span>
                         </strong>
                     </p>
->>>>>>> a62573f8755b4753c6b55f11b17c8132ef23ac85
                 </div>
             </div>
         </div>
@@ -86,15 +76,38 @@
                             </div>
                         </div>
                     </div>
-                    <div class="navbar-nav ml-auto">
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
-                            <div class="dropdown-menu">
-                                <a href="/Access/Login" class="dropdown-item">Login</a>
-                                <a href="/Access/Register" class="dropdown-item">Register</a>
-                            </div>
+
+                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                        <a class="navbar-brand" href="/">Trang chủ</a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ml-auto">
+                                <div class="nav-item dropdown">
+                                    @if (Context.Session.GetString("TenKhachHang") != null)
+                                    {
+                                        <!-- Nếu người dùng đã đăng nhập -->
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                                            @Context.Session.GetString("TenKhachHang") <!-- Hiển thị tên khách hàng từ session -->
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <a href="/Access/Logout" class="dropdown-item">Đăng xuất</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <!-- Nếu người dùng chưa đăng nhập -->
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
+                                        <div class="dropdown-menu">
+                                            <a href="/Access/Login" class="dropdown-item">Login</a>
+                                            <a href="/Access/Register" class="dropdown-item">Register</a>
+                                        </div>
+                                    }
+                                </div>
+                            </ul>
                         </div>
-                    </div>
+                    </nav>
                 </div>
             </nav>
         </div>

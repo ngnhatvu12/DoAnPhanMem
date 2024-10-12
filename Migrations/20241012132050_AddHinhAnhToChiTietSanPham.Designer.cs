@@ -4,6 +4,7 @@ using DoAnPhanMem.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoAnPhanMem.Migrations
 {
     [DbContext(typeof(dbSportStoreContext))]
-    partial class WebTheThaoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241012132050_AddHinhAnhToChiTietSanPham")]
+    partial class AddHinhAnhToChiTietSanPham
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,7 +62,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("MaTaiKhoan");
 
-                    b.ToTable("Admina");
+                    b.ToTable("Admins");
                 });
 
             modelBuilder.Entity("BaoCao", b =>
@@ -91,7 +94,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("AdminMaAdmin");
 
-                    b.ToTable("BaoCao");
+                    b.ToTable("BaoCaos");
                 });
 
             modelBuilder.Entity("ChiTietDonHang", b =>
@@ -126,7 +129,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("MaSanPham");
 
-                    b.ToTable("ChiTietDonHang");
+                    b.ToTable("ChiTietDonHangs");
                 });
 
             modelBuilder.Entity("ChiTietGioHang", b =>
@@ -162,7 +165,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("SanPhamMaSanPham");
 
-                    b.ToTable("ChiTietGioHang");
+                    b.ToTable("ChiTietGioHangs");
                 });
 
             modelBuilder.Entity("ChiTietHoaDon", b =>
@@ -198,7 +201,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("SanPhamMaSanPham");
 
-                    b.ToTable("ChiTietHoaDon");
+                    b.ToTable("ChiTietHoaDons");
                 });
 
             modelBuilder.Entity("ChiTietSanPham", b =>
@@ -245,7 +248,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("MaSanPham");
 
-                    b.ToTable("ChiTietSanPham");
+                    b.ToTable("ChiTietSanPhams");
                 });
 
             modelBuilder.Entity("DanhGia", b =>
@@ -300,7 +303,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("SanPhamMaSanPham");
 
-                    b.ToTable("DanhGia");
+                    b.ToTable("DanhGias");
                 });
 
             modelBuilder.Entity("DanhMuc", b =>
@@ -316,7 +319,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasKey("MaDanhMuc");
 
-                    b.ToTable("DanhMuc");
+                    b.ToTable("DanhMucs");
                 });
 
             modelBuilder.Entity("DonHang", b =>
@@ -349,7 +352,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("MaKhachHang");
 
-                    b.ToTable("DonHang");
+                    b.ToTable("DonHangs");
                 });
 
             modelBuilder.Entity("GiamGia", b =>
@@ -373,7 +376,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasKey("MaGiamGia");
 
-                    b.ToTable("GiamGia");
+                    b.ToTable("GiamGias");
                 });
 
             modelBuilder.Entity("GiaoHang", b =>
@@ -400,7 +403,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("DonHangMaDonHang");
 
-                    b.ToTable("GiaoHang");
+                    b.ToTable("GiaoHangs");
                 });
 
             modelBuilder.Entity("GioHang", b =>
@@ -428,7 +431,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("KhachHangMaKhachHang");
 
-                    b.ToTable("GioHang");
+                    b.ToTable("GioHangs");
                 });
 
             modelBuilder.Entity("HoaDon", b =>
@@ -458,7 +461,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("DonHangMaDonHang");
 
-                    b.ToTable("HoaDon");
+                    b.ToTable("HoaDons");
                 });
 
             modelBuilder.Entity("KhachHang", b =>
@@ -519,7 +522,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasKey("MaKichThuoc");
 
-                    b.ToTable("KichThuoc");
+                    b.ToTable("KichThuocs");
                 });
 
             modelBuilder.Entity("MauSac", b =>
@@ -535,7 +538,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasKey("MaMauSac");
 
-                    b.ToTable("MauSac");
+                    b.ToTable("MauSacs");
                 });
 
             modelBuilder.Entity("SanPham", b =>
@@ -632,7 +635,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("KhachHangMaKhachHang");
 
-                    b.ToTable("ThanhToan");
+                    b.ToTable("ThanhToans");
                 });
 
             modelBuilder.Entity("Admina", b =>

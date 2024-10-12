@@ -12,6 +12,7 @@ public class ChiTietSanPham
     public SanPham SanPham { get; set; }
 
     public int SoLuongTon { get; set; }
+    public string HinhAnh { get; set; }
 
     [StringLength(50)]
     public string TrangThai { get; set; }
