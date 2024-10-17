@@ -27,6 +27,6 @@ namespace DoAnPhanMem.Models
         public DbSet<DanhGia> DanhGia { get; set; }
         public DbSet<BaoCao> BaoCao { get; set; }
         public DbSet<ThanhToan> ThanhToan { get; set; }
-       
+        public DbSet<Loai> Loai { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using DoAnPhanMem.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class ChiTietSanPham
@@ -20,6 +21,10 @@ public class ChiTietSanPham
     [ForeignKey("DanhMuc")]
     public string MaDanhMuc { get; set; }
     public DanhMuc DanhMuc { get; set; }
+
+    [ForeignKey("Loai")]
+    public string MaLoai { get; set; }
+    public Loai Loai { get; set; }
 
     [ForeignKey("KichThuoc")]
     public string MaKichThuoc { get; set; }

@@ -1,0 +1,100 @@
+﻿/* Đặt các style tổng thể */
+.home-page-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Style cho banner */
+.banner-container {
+    width: 100%;
+    margin-bottom: 20px; /* Khoảng cách giữa banner và danh mục */
+}
+
+.full-width-banner {
+    width: 100%;
+    height: auto;
+}
+
+/* Style cho tên danh mục */
+.category-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    display: inline-block; /* Giúp căn chỉnh ngang với nút xem thêm */
+}
+
+/* Style cho nút "Xem thêm" */
+.btn-see-more {
+    float: right; /* Đẩy nút sang bên phải cùng hàng với tên danh mục */
+    
+}
+
+   
+
+/* Khoảng cách giữa các danh mục */
+.product-category {
+    margin-bottom: 40px; /* Tạo khoảng cách giữa các danh mục */
+}
+
+/* Item sản phẩm */
+/* Item sản phẩm */
+.product-item {
+    background-color: #fff;
+    border: 1px solid #e1e1e1;
+    margin-bottom: 20px;
+    padding: 10px;
+    text-align: center;
+    height: 100%; /* Đảm bảo mỗi item có chiều cao 100% của container */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Đảm bảo khoảng cách giữa các phần tử bên trong */
+}
+
+    /* Hình ảnh sản phẩm */
+    .product-item img {
+        max-width: 100%;
+        object-fit: cover; /* Giữ tỉ lệ hình ảnh mà không bị bóp méo */
+        height : 400px;/* Giới hạn chiều cao tối đa của ảnh để các ảnh có kích thước tương đồng */
+    }
+
+/* Tiêu đề sản phẩm */
+.product-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    height: 60px; /* Giữ cố định chiều cao tiêu đề để không bị giãn nở */
+    overflow: hidden; /* Ẩn phần tiêu đề tràn ra ngoài */
+    text-overflow: ellipsis; /* Thêm dấu "..." nếu tiêu đề quá dài */
+}
+
+/* Giá sản phẩm */
+.product-price h3 {
+    font-size: 20px;
+    color: #e74c3c;
+    margin-bottom: 10px;
+}
+
+/* Hành động sản phẩm (thêm vào giỏ hàng, yêu thích, xem chi tiết) */
+.product-action {
+    margin-top: 10px;
+}
+
+    .product-action a {
+        margin-right: 10px;
+        color: #333;
+        font-size: 16px;
+    }
+
+/* Đảm bảo các sản phẩm khác nhau không bị thay đổi chiều cao */
+.col-lg-3, .col-md-4, .col-sm-6 {
+    display: flex;
+    align-items: stretch; /* Đảm bảo các item có cùng chiều cao */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .product-item {
+        margin-bottom: 15px;
+    }
+}

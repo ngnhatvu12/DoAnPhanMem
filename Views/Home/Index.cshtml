@@ -1,54 +1,201 @@
-﻿@{
+﻿@model DoAnPhanMem.ViewModels.HomeViewModel
+
+@{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
-    <link href="~/css/site.css" rel="stylesheet">
+    <link href="~/css/Category.css" rel="stylesheet">
 }
 
-@model List<ChiTietSanPham>
-
-@if (!Model.Any())
+@if (!Model.PhoBienNhat.Any() && !Model.YeuThichNhat.Any() && !Model.BanChayNhat.Any() && !Model.CoTheQuanTam.Any())
 {
     <p>Không có sản phẩm nào để hiển thị.</p>
 }
 else
 {
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product-item">
-                    <div class="product-title">
-                        <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
-                        <div class="ratting">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
+    <div class="home-page-container">
+        <!-- Banner full width for "Phổ biến nhất" -->
+        <div class="banner-container">
+            <img src="~/LayoutOgani/img/banner-pho-bien-nhat.jpg" alt="Phổ biến nhất" class="full-width-banner">
+        </div>
+        <!-- Phổ biến nhất Section -->
+        <h2 class="category-title">Phổ biến nhất</h2>
+        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM001">Xem thêm</a>
+        <div class="row product-category">
+            @foreach (var item in Model.PhoBienNhat)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-item">
+                        <div class="product-title">
+                            <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <div class="ratting">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-image">
-                        @if (!string.IsNullOrEmpty(item.HinhAnh))
-                        {
-                            <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" />
-                        }
-                        else
-                        {
-                            <img src="~//img/no-image.png" alt="No Image" />
-                        }
-                        <div class="product-action">
-                            <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-                            <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
-                            <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                        <div class="product-image" >
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            {
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                            }
+                            else
+                            {
+                                <img src="~//img/no-image.png" alt="No Image" />
+                            }
+                            <div class="product-action">
+                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="product-price">
-                        <h3><span>đ</span>@item.SanPham.GiaBan</h3>
-                        <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        <div class="product-price">
+                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+       
+        <!-- Banner for "Được yêu thích nhất" -->
+        <div class="banner-container">
+            <img src="~/LayoutOgani/img/banner-yeu-thich-nhat.jpg" alt="Được yêu thích nhất" class="full-width-banner">
+        </div>
+        <!-- Được yêu thích nhất Section -->
+        <h2 class="category-title">Được yêu thích nhất</h2>
+        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM002">Xem thêm</a>
+        <div class="row product-category">
+            @foreach (var item in Model.YeuThichNhat)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-item">
+                        <div class="product-title">
+                            <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <div class="ratting">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="product-image">
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            {
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                            }
+                            else
+                            {
+                                <img src="~//img/no-image.png" alt="No Image" />
+                            }
+                            <div class="product-action">
+                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- Banner for "Bán chạy nhất" -->
+        <div class="banner-container">
+            <img src="~/LayoutOgani/img/banner-ban-chay-nhat.jpg" alt="Bán chạy nhất" class="full-width-banner">
+        </div>
+        <!-- Bán chạy nhất Section -->
+        <h2 class="category-title">Bán chạy nhất</h2>
+        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM003">Xem thêm</a>
+        <div class="row product-category">
+            @foreach (var item in Model.BanChayNhat)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-item">
+                        <div class="product-title">
+                            <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <div class="ratting">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="product-image">
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            {
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                            }
+                            else
+                            {
+                                <img src="~//img/no-image.png" alt="No Image" />
+                            }
+                            <div class="product-action">
+                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <!-- Banner for "Có thể bạn quan tâm" -->
+        <div class="banner-container">
+            <img src="~/LayoutOgani/img/banner-co-the-ban-quan-tam.jpg" alt="Có thể bạn quan tâm" class="full-width-banner">
+        </div>
+        <!-- Có thể bạn quan tâm Section -->
+        <h2 class="category-title">Có thể bạn quan tâm</h2>
+        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM004">Xem thêm</a>
+        <div class="row product-category">
+            @foreach (var item in Model.CoTheQuanTam)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-item">
+                        <div class="product-title">
+                            <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <div class="ratting">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="product-image">
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            {
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                            }
+                            else
+                            {
+                                <img src="~//img/no-image.png" alt="No Image" />
+                            }
+                            <div class="product-action">
+                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
     </div>
 }
-
