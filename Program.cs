@@ -63,10 +63,17 @@ app.UseSession(); // Cấu hình session middleware để ứng dụng có thể
 app.UseAuthorization(); // Kích hoạt xác thực quyền người dùng
 
 // Cấu hình route mặc định cho ứng dụng
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "productDetail",
+    pattern: "product/{id}",
+    defaults: new { controller = "Home", action = "ProductDetail" });
+
 app.MapRazorPages(); // Cấu hình Razor Pages cho các trang đăng nhập, đăng ký, v.v...
 
 app.Run(); // Chạy ứng dụng
+

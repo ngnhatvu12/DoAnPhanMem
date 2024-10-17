@@ -12,6 +12,7 @@ namespace DoAnPhanMem.Controllers
         {
             _db = db;
         }
+
         [HttpGet]        
         public IActionResult Login()
         {
@@ -26,42 +27,27 @@ namespace DoAnPhanMem.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Kiểm tra tài khoản trong bảng TaiKhoan
-                var user = _db.TaiKhoan.SingleOrDefault(t => t.TenDangNhap == model.Username && t.MatKhau == model.Password);
-
-                if (user != null)
+                // Kiểm tra xem tài khoản có tồn tại trong database không
+                var account = _db.TaiKhoan.FirstOrDefault(t => t.TenDangNhap == model.Username && t.MatKhau == model.Password);
+                if (account != null)
                 {
-                    // Lưu thông tin đăng nhập vào session
-                    HttpContext.Session.SetString("MaTaiKhoan", user.MaTaiKhoan.ToString());
-                    HttpContext.Session.SetString("TenDangNhap", user.TenDangNhap);
+                    // Tìm khách hàng có mã tài khoản tương ứng
+                    var khachHang = _db.KhachHang.FirstOrDefault(kh => kh.MaTaiKhoan == account.MaTaiKhoan);
 
-                    // Kiểm tra vai trò của người dùng
-                    if (user.VaiTro == "KhachHang")
+                    if (khachHang != null)
                     {
-                        // Lấy thông tin khách hàng dựa vào MaTaiKhoan
-                        var khachHang = _db.KhachHang.SingleOrDefault(kh => kh.MaTaiKhoan == user.MaTaiKhoan);
+                        // Lưu tên khách hàng vào session
+                        HttpContext.Session.SetString("TenKhachHang", khachHang.TenKhachHang);
 
-                        if (khachHang != null)
-                        {
-                            // Lưu tên khách hàng vào session
-                            HttpContext.Session.SetString("TenKhachHang", khachHang.TenKhachHang);
-                            return RedirectToAction("Index", "Home");
-                        }
-                    }
-                    else if (user.VaiTro == "QuanLy")
-                    {
-                        // Điều hướng đến trang quản lý
-                        return RedirectToAction("Index", "QuanLy");
+                        // Điều hướng về trang Home/Index
+                        return RedirectToAction("Index", "Home");
                     }
                 }
-                else
-                {
-                    // Tài khoản hoặc mật khẩu sai, hiển thị thông báo lỗi
-                    ModelState.AddModelError(string.Empty, "Tài khoản hoặc mật khẩu của bạn sai.");
-                }
+                // Nếu tài khoản hoặc mật khẩu không đúng, thêm thông báo lỗi
+                ModelState.AddModelError(string.Empty, "Sai tên tài khoản hoặc mật khẩu.");
             }
 
-            return View(model);
+            return View(model); // Trả về trang Login kèm thông báo lỗi nếu đăng nhập thất bại
         }
 
         // GET: Logout

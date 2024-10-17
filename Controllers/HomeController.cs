@@ -65,6 +65,24 @@ namespace DoAnPhanMem.Controllers
 
             return View(homeViewModel);  // Gửi view model sang View
         }
+        public IActionResult ProductDetail(string id)
+        {
+            // Lấy chi tiết sản phẩm theo id
+            var chiTietSanPham = _db.ChiTietSanPham
+                                    .Include(ctsp => ctsp.SanPham)
+                                    .Include(ctsp => ctsp.DanhMuc)
+                                    .Include(ctsp => ctsp.KichThuoc)
+                                    .Include(ctsp => ctsp.MauSac)
+                                    .FirstOrDefault(ctsp => ctsp.MaChiTietSP == id);
+
+            if (chiTietSanPham == null)
+            {
+                _logger.LogWarning("Không tìm thấy sản phẩm.");
+                return NotFound();
+            }
+
+            return View(chiTietSanPham);
+        }
 
         public IActionResult Privacy()
         {

@@ -64,15 +64,7 @@
                                         </div>
                                     </div>
                                     <!-- Hiển thị thông báo lỗi chung nếu có -->
-                                    @if (ViewData.ModelState.Count > 0)
-                                    {
-                                        <div class="text-danger text-center">
-                                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                            {
-                                                <p>@error.ErrorMessage</p>
-                                            }
-                                        </div>
-                                    }
+                                   
 
                                     <!-- Nút Đăng nhập -->
                                     <button type="submit" class="el-button w-100 el-button--primary">
@@ -113,6 +105,7 @@
             </div>
         </div>
     </div>
+   
 
     <script type="text/javascript">
         window.GLOBALS = {

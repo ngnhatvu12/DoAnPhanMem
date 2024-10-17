@@ -678,6 +678,72 @@ h2 {
 
 
 
+/**********************************/
+/******** Product Item CSS ********/
+/**********************************/
+.product-item {
+    position: relative;
+}
+
+    .product-item .product-title {
+        padding: 15px;
+        text-align: center;
+        background: #000000;
+        transition: all .3s;
+       
+    }
+
+    .product-item:hover .product-title {
+        background: #574cff;
+        
+    }
+
+    .product-item .product-title a,
+    .product-item .product-title .ratting {
+        position: relative;
+        width: 100%;
+    }
+
+    .product-item .product-title a {
+        margin-bottom: 5px;
+        color: #ffffff;
+        font-size: 18px;
+        font-family: 'Roboto', 'Arial', sans-serif;
+    }
+
+    .product-item .product-title .ratting i {
+        font-size: 14px;
+        color: #574cff;
+    }
+
+    .product-item .product-content .price span {
+        margin-left: 12px;
+        text-decoration: line-through;
+        font-weight: 700;
+        color: #999999;
+    }
+
+    .product-item:hover .product-title a,
+    .product-item:hover .product-title .ratting i {
+        color: #ffffff;
+    }
+
+    .product-item:hover .product-content .price span {
+        color: #dddddd;
+    }
+
+    .product-item .product-image {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .product-item .product-image a {
+            display: block;
+            background: #ffffff;
+            transition: .3s;
+        }
+
+
 
 
 /**********************************/
