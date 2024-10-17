@@ -24,6 +24,27 @@ namespace DoAnPhanMem.Controllers
                                        .Include(ctsp => ctsp.SanPham)  // Liên kết với bảng SanPham
                                        .ToList();
 
+            // Lọc sản phẩm theo danh mục
+            var sanPhamPhoBienNhat = lstChiTietSanPham
+                                     .Where(ctsp => ctsp.MaDanhMuc == "DM001") // DM01 là mã danh mục Phổ biến nhất
+                                     .Take(4)
+                                     .ToList();
+
+            var sanPhamYeuThichNhat = lstChiTietSanPham
+                                      .Where(ctsp => ctsp.MaDanhMuc == "DM002") // DM02 là mã danh mục Được yêu thích nhất
+                                      .Take(4)
+                                      .ToList();
+
+            var sanPhamBanChayNhat = lstChiTietSanPham
+                                     .Where(ctsp => ctsp.MaDanhMuc == "DM003") // DM03 là mã danh mục Bán chạy nhất
+                                     .Take(4)
+                                     .ToList();
+
+            var sanPhamCoTheQuanTam = lstChiTietSanPham
+                                      .Where(ctsp => ctsp.MaDanhMuc == "DM004") // DM04 là mã danh mục Có thể bạn quan tâm
+                                      .Take(4)
+                                      .ToList();
+
             if (lstChiTietSanPham == null || !lstChiTietSanPham.Any())
             {
                 _logger.LogWarning("Không có sản phẩm nào được tìm thấy.");
@@ -33,7 +54,16 @@ namespace DoAnPhanMem.Controllers
                 _logger.LogInformation($"Tìm thấy {lstChiTietSanPham.Count} sản phẩm.");
             }
 
-            return View(lstChiTietSanPham);
+            // Tạo một view model để gửi dữ liệu sang view
+            var homeViewModel = new HomeViewModel
+            {
+                PhoBienNhat = sanPhamPhoBienNhat,
+                YeuThichNhat = sanPhamYeuThichNhat,
+                BanChayNhat = sanPhamBanChayNhat,
+                CoTheQuanTam = sanPhamCoTheQuanTam
+            };
+
+            return View(homeViewModel);  // Gửi view model sang View
         }
         public IActionResult ProductDetail(string id)
         {
