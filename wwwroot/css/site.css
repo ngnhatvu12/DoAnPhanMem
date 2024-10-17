@@ -689,10 +689,12 @@ h2 {
         text-align: center;
         background: #000000;
         transition: all .3s;
+       
     }
 
     .product-item:hover .product-title {
         background: #574cff;
+        
     }
 
     .product-item .product-title a,
@@ -705,6 +707,7 @@ h2 {
         margin-bottom: 5px;
         color: #ffffff;
         font-size: 18px;
+        font-family: 'Roboto', 'Arial', sans-serif;
     }
 
     .product-item .product-title .ratting i {

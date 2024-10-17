@@ -1,0 +1,54 @@
+﻿.product-detail {
+    max-width: 800px; /* Chiều rộng tối đa của chi tiết sản phẩm */
+    margin: 0 auto; /* Căn giữa nội dung */
+    padding: 20px; /* Khoảng cách bên trong */
+    border: 1px solid #ddd; /* Đường viền xung quanh */
+    border-radius: 8px; /* Bo tròn các góc */
+    background-color: #fff; /* Màu nền trắng */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+}
+
+    .product-detail h1 {
+        font-size: 24px; /* Kích thước font cho tiêu đề sản phẩm */
+        margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
+        color: #333; /* Màu chữ */
+    }
+
+.product-image img {
+    width: 100%; /* Đặt hình ảnh chiếm 100% chiều rộng */
+    height: auto; /* Tự động điều chỉnh chiều cao để giữ tỉ lệ */
+    border-radius: 8px; /* Bo tròn các góc của hình ảnh */
+}
+
+.product-info {
+    margin-top: 20px; /* Khoảng cách trên thông tin sản phẩm */
+}
+
+    .product-info h3 {
+        font-size: 20px; /* Kích thước font cho giá sản phẩm */
+        color: #ff5722; /* Màu sắc cho giá sản phẩm */
+    }
+
+    .product-info p {
+        margin: 5px 0; /* Khoảng cách giữa các đoạn văn */
+        line-height: 1.5; /* Khoảng cách giữa các dòng */
+    }
+
+.product-action {
+    margin-top: 20px; /* Khoảng cách trên phần hành động */
+}
+
+    .product-action .btn {
+        display: inline-block; /* Hiển thị nút dạng khối */
+        padding: 10px 20px; /* Khoảng cách bên trong nút */
+        margin-right: 10px; /* Khoảng cách bên phải giữa các nút */
+        background-color: #007bff; /* Màu nền của nút */
+        color: #fff; /* Màu chữ của nút */
+        text-decoration: none; /* Không có gạch chân */
+        border-radius: 4px; /* Bo tròn các góc của nút */
+        transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+    }
+
+        .product-action .btn:hover {
+            background-color: #0056b3; /* Màu nền khi di chuột qua */
+        }

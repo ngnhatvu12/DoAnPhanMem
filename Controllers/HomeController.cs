@@ -1,4 +1,5 @@
 ﻿using DoAnPhanMem.Models;
+using DoAnPhanMem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
@@ -33,6 +34,24 @@ namespace DoAnPhanMem.Controllers
             }
 
             return View(lstChiTietSanPham);
+        }
+        public IActionResult ProductDetail(string id)
+        {
+            // Lấy chi tiết sản phẩm theo id
+            var chiTietSanPham = _db.ChiTietSanPham
+                                    .Include(ctsp => ctsp.SanPham)
+                                    .Include(ctsp => ctsp.DanhMuc)
+                                    .Include(ctsp => ctsp.KichThuoc)
+                                    .Include(ctsp => ctsp.MauSac)
+                                    .FirstOrDefault(ctsp => ctsp.MaChiTietSP == id);
+
+            if (chiTietSanPham == null)
+            {
+                _logger.LogWarning("Không tìm thấy sản phẩm.");
+                return NotFound();
+            }
+
+            return View(chiTietSanPham);
         }
 
         public IActionResult Privacy()
