@@ -39,11 +39,17 @@ namespace DoAnPhanMem.Controllers
                         // Lưu tên khách hàng vào session
                         HttpContext.Session.SetString("TenKhachHang", khachHang.TenKhachHang);
 
+                        // Lấy số lượng sản phẩm yêu thích của khách hàng
+                        var soLuongYeuThich = _db.DanhSachYeuThich.Count(w => w.MaKhachHang == khachHang.MaKhachHang);
+
+                        // Lưu số lượng vào session
+                        HttpContext.Session.SetInt32("SoLuongYeuThich", soLuongYeuThich);
+
                         // Điều hướng về trang Home/Index
                         return RedirectToAction("Index", "Home");
                     }
                 }
-                // Nếu tài khoản hoặc mật khẩu không đúng, thêm thông báo lỗi
+                // Nếu sai tài khoản hoặc mật khẩu, thêm thông báo lỗi
                 ModelState.AddModelError(string.Empty, "Sai tên tài khoản hoặc mật khẩu.");
             }
 
@@ -57,6 +63,7 @@ namespace DoAnPhanMem.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Login", "Access");
         }
+
     }
 
 }

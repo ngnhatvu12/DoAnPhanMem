@@ -14,6 +14,7 @@ namespace DoAnPhanMem.Models
         public DbSet<SanPham> SanPham { get; set; }
         public DbSet<KichThuoc> KichThuoc { get; set; }
         public DbSet<MauSac> MauSac { get; set; }
+        public DbSet<DanhSachYeuThich> DanhSachYeuThich { get; set; }
         public DbSet<DanhMuc> DanhMuc { get; set; }
         public DbSet<ChiTietSanPham> ChiTietSanPham { get; set; }
         public DbSet<DonHang> DonHang { get; set; }

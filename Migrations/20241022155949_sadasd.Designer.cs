@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoAnPhanMem.Migrations
 {
     [DbContext(typeof(dbSportStoreContext))]
-    [Migration("20241016091833_capnhatctsp")]
-    partial class capnhatctsp
+    [Migration("20241022155949_sadasd")]
+    partial class sadasd
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -326,6 +326,31 @@ namespace DoAnPhanMem.Migrations
                     b.HasKey("MaDanhMuc");
 
                     b.ToTable("DanhMuc");
+                });
+
+            modelBuilder.Entity("DoAnPhanMem.Models.DanhSachYeuThich", b =>
+                {
+                    b.Property<string>("MaYeuThich")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MaKhachHang")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("MaSanPham")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MaYeuThich");
+
+                    b.HasIndex("MaKhachHang");
+
+                    b.HasIndex("MaSanPham");
+
+                    b.ToTable("DanhSachYeuThich");
                 });
 
             modelBuilder.Entity("DoAnPhanMem.Models.Loai", b =>
@@ -809,6 +834,25 @@ namespace DoAnPhanMem.Migrations
                         .IsRequired();
 
                     b.Navigation("HoaDon");
+
+                    b.Navigation("KhachHang");
+
+                    b.Navigation("SanPham");
+                });
+
+            modelBuilder.Entity("DoAnPhanMem.Models.DanhSachYeuThich", b =>
+                {
+                    b.HasOne("KhachHang", "KhachHang")
+                        .WithMany()
+                        .HasForeignKey("MaKhachHang")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SanPham", "SanPham")
+                        .WithMany()
+                        .HasForeignKey("MaSanPham")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("KhachHang");
 

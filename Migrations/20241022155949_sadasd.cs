@@ -5,7 +5,7 @@
 namespace DoAnPhanMem.Migrations
 {
     /// <inheritdoc />
-    public partial class nayhsud : Migration
+    public partial class sadasd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
