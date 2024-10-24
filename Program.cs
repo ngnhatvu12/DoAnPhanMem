@@ -24,17 +24,17 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true; // Yêu cầu người dùng xác nhận email
 })
-    .AddEntityFrameworkStores<ApplicationDbContext>(); // Sử dụng ApplicationDbContext cho Identity
+    .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Cấu hình bộ nhớ cache để lưu trữ session
-builder.Services.AddDistributedMemoryCache(); // Bộ nhớ cache cho session (cần thiết cho session lưu trữ tạm thời)
+builder.Services.AddDistributedMemoryCache(); // Bộ nhớ cache cho session
 
 // Cấu hình session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian session timeout là 30 phút
-    options.Cookie.HttpOnly = true; // Cookie session chỉ có thể truy cập qua HTTP, bảo mật hơn
-    options.Cookie.IsEssential = true; // Đánh dấu cookie là cần thiết
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 builder.Services.AddControllersWithViews(); // Thêm các dịch vụ MVC với view
@@ -44,23 +44,23 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseMigrationsEndPoint(); // Hiển thị lỗi chi tiết cho nhà phát triển
+    app.UseMigrationsEndPoint();
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error"); // Trang lỗi chung cho người dùng
-    app.UseHsts(); // Sử dụng HSTS để bảo vệ trang web
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
 
-app.UseHttpsRedirection(); // Chuyển hướng sang HTTPS nếu người dùng truy cập qua HTTP
-app.UseStaticFiles(); // Cho phép truy cập các file tĩnh (CSS, JS, hình ảnh)
+app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-app.UseRouting(); // Kích hoạt routing cho các request
+app.UseRouting();
 
 // Thêm middleware để xử lý session
-app.UseSession(); // Cấu hình session middleware để ứng dụng có thể sử dụng session
+app.UseSession(); // Cấu hình session middleware
 
-app.UseAuthorization(); // Kích hoạt xác thực quyền người dùng
+app.UseAuthorization();
 
 // Cấu hình route mặc định cho ứng dụng
 app.MapControllerRoute(
@@ -80,9 +80,10 @@ app.MapControllerRoute(
 
 // Cấu hình Razor Pages cho các trang đăng nhập, đăng ký, v.v...
 app.MapRazorPages();
+    defaults: new { controller = "Product", action = "GetProductDetails" }); // Cập nhật controller cho route
 
-app.Run(); // Chạy ứng dụng
-
+app.MapRazorPages();
 app.MapControllerRoute(
    name: "admin",
    pattern: "{controller=Admin}/{action=Dashboard}/{id?}");
+app.Run();
