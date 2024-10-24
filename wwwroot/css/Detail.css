@@ -1,54 +1,165 @@
-﻿.product-detail {
-    max-width: 800px; /* Chiều rộng tối đa của chi tiết sản phẩm */
-    margin: 0 auto; /* Căn giữa nội dung */
-    padding: 20px; /* Khoảng cách bên trong */
-    border: 1px solid #ddd; /* Đường viền xung quanh */
-    border-radius: 8px; /* Bo tròn các góc */
-    background-color: #fff; /* Màu nền trắng */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+﻿.product-detail-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #f9f9f9;
 }
 
-    .product-detail h1 {
-        font-size: 24px; /* Kích thước font cho tiêu đề sản phẩm */
-        margin-bottom: 10px; /* Khoảng cách dưới tiêu đề */
-        color: #333; /* Màu chữ */
+.row {
+    display: flex;
+    justify-content: space-between;
+}
+
+.product-image {
+    text-align: center;
+}
+
+    .product-image img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-
-.product-image img {
-    width: 100%; /* Đặt hình ảnh chiếm 100% chiều rộng */
-    height: auto; /* Tự động điều chỉnh chiều cao để giữ tỉ lệ */
-    border-radius: 8px; /* Bo tròn các góc của hình ảnh */
-}
 
 .product-info {
-    margin-top: 20px; /* Khoảng cách trên thông tin sản phẩm */
+    padding-left: 20px;
 }
 
-    .product-info h3 {
-        font-size: 20px; /* Kích thước font cho giá sản phẩm */
-        color: #ff5722; /* Màu sắc cho giá sản phẩm */
-    }
-
-    .product-info p {
-        margin: 5px 0; /* Khoảng cách giữa các đoạn văn */
-        line-height: 1.5; /* Khoảng cách giữa các dòng */
-    }
-
-.product-action {
-    margin-top: 20px; /* Khoảng cách trên phần hành động */
+.product-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
 }
 
-    .product-action .btn {
-        display: inline-block; /* Hiển thị nút dạng khối */
-        padding: 10px 20px; /* Khoảng cách bên trong nút */
-        margin-right: 10px; /* Khoảng cách bên phải giữa các nút */
-        background-color: #007bff; /* Màu nền của nút */
-        color: #fff; /* Màu chữ của nút */
-        text-decoration: none; /* Không có gạch chân */
-        border-radius: 4px; /* Bo tròn các góc của nút */
-        transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+.rating {
+    margin-bottom: 10px;
+}
+
+    .rating i {
+        color: #FFD700; /* Màu vàng cho sao */
     }
 
-        .product-action .btn:hover {
-            background-color: #0056b3; /* Màu nền khi di chuột qua */
-        }
+.product-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 15px;
+}
+
+.original-price {
+    text-decoration: line-through;
+    margin-right: 10px;
+}
+
+.discount-price {
+    color: #16a085;
+}
+
+.product-status {
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #2c3e50;
+}
+
+.quantity-selector {
+    margin: 20px 0;
+}
+
+.btn {
+    background-color: #e67e22;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 18px;
+    text-transform: uppercase;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .btn:hover {
+        background-color: #d35400;
+    }
+.product-discount-code {
+    margin-bottom: 15px; /* Khoảng cách bên dưới */
+}
+
+    .product-discount-code input {
+        padding: 5px; /* Khoảng cách bên trong */
+        width: 200px; /* Chiều rộng của input */
+        border: 1px solid #ccc; /* Đường viền */
+        border-radius: 4px; /* Bo tròn góc */
+        font-size: 16px; /* Kích thước chữ */
+    }
+/* Đánh giá sản phẩm */
+.product-rating {
+    margin-bottom: 20px;
+}
+
+.star-rating {
+    display: flex;
+    cursor: pointer;
+}
+
+.star {
+    font-size: 24px; /* Kích thước của sao */
+    color: #e67e22; /* Màu sao */
+    margin-right: 5px;
+}
+
+/* Thêm vào yêu thích */
+.add-to-favorites {
+    margin-bottom: 20px;
+}
+
+.btn-favorite {
+    background-color: #e67e22;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .btn-favorite:hover {
+        background-color: #d35400;
+    }
+
+/* Bình luận */
+.comments-section {
+    margin-top: 30px;
+}
+
+.comments-list {
+    margin-bottom: 15px;
+}
+
+.comment-item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.btn-submit-comment {
+    padding: 10px 15px;
+    background-color: #e67e22;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .btn-submit-comment:hover {
+        background-color: #d35400;
+    }

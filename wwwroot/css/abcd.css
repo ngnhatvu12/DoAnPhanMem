@@ -1,0 +1,86 @@
+﻿/* site.css */
+
+/* Toàn cục */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007bff;
+    color: white;
+}
+
+    .navbar a.navbar-brand, .navbar a.nav-link {
+        color: white;
+    }
+
+        .navbar a.nav-link:hover {
+            color: #ffd700;
+        }
+
+/* Container */
+.container {
+    margin-top: 20px;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+    }
+
+/* Table */
+table.table {
+    background-color: white;
+}
+
+    table.table thead th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    table.table tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+
+/* Form styling */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    border: 1px solid #ccc;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+input[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
