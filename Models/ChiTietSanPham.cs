@@ -33,5 +33,6 @@ public class ChiTietSanPham
     [ForeignKey("MauSac")]
     public string MaMauSac { get; set; }
     public MauSac MauSac { get; set; }
+   
 }
 

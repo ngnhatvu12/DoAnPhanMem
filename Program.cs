@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Thêm DbContext riêng cho các model khác nếu cần
 builder.Services.AddDbContext<dbSportStoreContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); // Sử dụng cùng chuỗi kết nối
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -37,7 +37,7 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(); // Thêm các dịch vụ MVC với view
 
 var app = builder.Build();
 
@@ -67,11 +67,23 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Cấu hình route cho sản phẩm chi tiết
 app.MapControllerRoute(
     name: "productDetail",
     pattern: "product/{id}",
+    defaults: new { controller = "Home", action = "ProductDetail" });
+
+// Cấu hình route cho Admin
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "{controller=Admin}/{action=Dashboard}/{id?}");
+
+// Cấu hình Razor Pages cho các trang đăng nhập, đăng ký, v.v...
+app.MapRazorPages();
     defaults: new { controller = "Product", action = "GetProductDetails" }); // Cập nhật controller cho route
 
 app.MapRazorPages();
-
+app.MapControllerRoute(
+   name: "admin",
+   pattern: "{controller=Admin}/{action=Dashboard}/{id?}");
 app.Run();

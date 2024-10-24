@@ -1,0 +1,206 @@
+﻿/* Đặt các style tổng thể */
+.home-page-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Style cho banner */
+.banner-container {
+    width: 100%;
+    margin-bottom: 20px; /* Khoảng cách giữa banner và danh mục */
+}
+
+.full-width-banner {
+    width: 100%;
+    height: auto;
+}
+
+/* Style cho tên danh mục */
+.category-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+    display: inline-block; /* Giúp căn chỉnh ngang với nút xem thêm */
+}
+
+/* Style cho nút "Xem thêm" */
+.btn-see-more {
+    float: right; /* Đẩy nút sang bên phải cùng hàng với tên danh mục */
+}
+
+
+
+/* Khoảng cách giữa các danh mục */
+.product-category {
+    margin-bottom: 40px; /* Tạo khoảng cách giữa các danh mục */
+}
+
+
+
+
+
+
+
+
+.product-item {
+    position: relative;
+}
+
+    .product-item .product-title {
+        padding: 15px;
+        text-align: center;
+        background: #000000;
+        transition: all .3s;
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: bold;
+        height: 80px; /* Giữ cố định chiều cao tiêu đề để không bị giãn nở */
+        overflow: hidden; /* Ẩn phần tiêu đề tràn ra ngoài */
+        text-overflow: ellipsis; /* Thêm dấu "..." nếu tiêu đề quá dài */
+    }
+
+    .product-item:hover .product-title {
+        background: #FF6F61;
+
+    }
+
+    .product-item .product-title a,
+    .product-item .product-title .ratting {
+        position: relative;
+        width: 100%;
+    }
+
+    .product-item .product-title a {
+        margin-bottom: 5px;
+        color: #ffffff;
+        font-size: 18px;
+    }
+
+    .product-item .product-title .ratting i {
+        font-size: 14px;
+        color: #FF6F61;
+    }
+
+    .product-item .product-content .price span {
+        margin-left: 12px;
+        text-decoration: line-through;
+        font-weight: 700;
+        color: #999999;
+    }
+
+    .product-item:hover .product-title a,
+    .product-item:hover .product-title .ratting i {
+        color: #ffffff;
+    }
+
+    .product-item:hover .product-content .price span {
+        color: #dddddd;
+    }
+
+    .product-item .product-image {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .product-item .product-image a {
+            display: block;
+            background: #ffffff;
+            transition: .3s;
+        }
+
+        .product-item .product-image img {
+            width: 100%;
+            transition: all .3s;
+        }
+
+    .product-item:hover .product-image img {
+        transform: scale(1.2);
+    }
+
+    .product-item .product-image .product-action {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 111, 97, .5);
+        transition: all .3s;
+        font-size: 0;
+        z-index: 1;
+        opacity: 0;
+    }
+
+    .product-item:hover .product-image .product-action {
+        opacity: 1;
+    }
+
+    .product-item .product-image .product-action a {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        margin-right: 5px;
+        padding: 7px 0 10px 0;
+        font-size: 16px;
+        text-align: center;
+        color: #ffffff;
+        background: #FF6F61;
+        border: 1px solid #ffffff;
+        border-radius: 4px;
+        transition: all .3s;
+        margin-top: 50px;
+    }
+
+    .product-item:hover .product-image .product-action a {
+        margin-top: 0;
+    }
+
+    .product-item .product-image .product-action a:last-child {
+        margin-right: 0;
+    }
+
+    .product-item .product-image .product-action a:hover {
+        color: #FF6F61;
+        background: #ffffff;
+        border: 1px solid #FF6F61;
+    }
+
+    .product-item .product-price {
+        padding: 20px;
+        background: #000000;
+        transition: all .3s;
+    }
+
+    .product-item:hover .product-price {
+        background: #FF6F61;
+    }
+
+    .product-item .product-price h3 {
+        display: inline-block;
+        color: #ffffff;
+        margin: 0;
+    }
+
+        .product-item .product-price h3 span {
+            font-size: 16px;
+        }
+
+    .product-item .product-price .btn {
+        float: right;
+        border: none;
+        color: #000000;
+        background: #FF6F61;
+    }
+
+        .product-item:hover .product-price .btn,
+        .product-item .product-price .btn:hover {
+            color: #FF6F61;
+            background: #ffffff;
+        }
+
+        .product-item .product-price .btn i {
+            margin-right: 5px;
+        }
