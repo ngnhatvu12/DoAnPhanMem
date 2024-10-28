@@ -80,8 +80,6 @@ app.MapControllerRoute(
 
 // Cấu hình Razor Pages cho các trang đăng nhập, đăng ký, v.v...
 app.MapRazorPages();
-    defaults: new { controller = "Product", action = "GetProductDetails" }); // Cập nhật controller cho route
-
 app.MapRazorPages();
 app.MapControllerRoute(
    name: "admin",
