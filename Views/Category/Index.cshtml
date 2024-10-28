@@ -22,7 +22,7 @@ else
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
                         <div class="product-title">
-                            <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaChiTietSP })" tabindex="-1">@item.SanPham.TenSanPham</a>
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>

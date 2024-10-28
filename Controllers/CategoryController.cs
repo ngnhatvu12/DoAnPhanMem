@@ -38,28 +38,28 @@ namespace DoAnPhanMem.Controllers
             // Kiểm tra mã danh mục hợp lệ
             if (string.IsNullOrEmpty(maDanhMuc))
             {
-                // Kiểm tra mã danh mục hợp lệ
-                if (string.IsNullOrEmpty(maDanhMuc))
-                {
-                    return NotFound("Danh mục không tồn tại.");
-                }
-
-                // Lấy danh sách chi tiết sản phẩm theo mã danh mục
-                var sanPhamTheoDanhMuc = _db.ChiTietSanPham
-                    .Include(ctsp => ctsp.SanPham) // Liên kết với bảng Sản Phẩm
-                    .Where(ctsp => ctsp.MaDanhMuc == maDanhMuc)
-                    .ToList();
-
-                if (sanPhamTheoDanhMuc == null || !sanPhamTheoDanhMuc.Any())
-                {
-                    return NotFound("Không có sản phẩm nào trong danh mục này.");
-                }
-
-                // Trả về view cùng với dữ liệu sản phẩm
-                return View("Index", sanPhamTheoDanhMuc);
-
+                return NotFound("Danh mục không tồn tại.");
             }
+
+            // Lấy danh sách chi tiết sản phẩm theo mã danh mục
+            var sanPhamTheoDanhMuc = _db.ChiTietSanPham
+                .Include(ctsp => ctsp.SanPham) // Liên kết với bảng Sản Phẩm
+                .Where(ctsp => ctsp.MaDanhMuc == maDanhMuc)
+                .ToList();
+
+            if (sanPhamTheoDanhMuc == null || !sanPhamTheoDanhMuc.Any())
+            {
+                return NotFound("Không có sản phẩm nào trong danh mục này.");
+            }
+
+            // Trả về view cùng với dữ liệu sản phẩm
+            return View("Index", sanPhamTheoDanhMuc);
+
+            // Thêm một return mặc định để đảm bảo tất cả các đường dẫn đều trả về giá trị
+            // (mặc dù phương thức này sẽ không bao giờ tới đây)
+            return View();
         }
+
         [HttpPost]
         public IActionResult ThemYeuThich(string id)
         {
@@ -102,5 +102,5 @@ namespace DoAnPhanMem.Controllers
 
             return Json(new { success = false, message = "Có lỗi xảy ra." });
         }
-
     }
+}
