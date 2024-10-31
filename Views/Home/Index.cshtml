@@ -222,6 +222,7 @@ else
             <div class="modal-body">
                 <img id="productImage" src="" alt="Product Image" style="width: 100%; height: auto;">
                 <p id="productPrice">Giá: 0 đ</p>
+                 <p id="productQuantity">Số lượng tồn: 0</p>
                 <div>
                     <label for="colorSelect">Màu sắc:</label>
                     <select id="colorSelect" class="form-control">
@@ -240,8 +241,8 @@ else
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" onclick="addToCart()">Thêm vào giỏ hàng</button>
+                <button type="button" class="btn btn-secondary" onclick="$('#addToCartModal').modal('hide')">Đóng</button>
+                <button type="button" class="btn btn-primary" id="addToCartButton" onclick="addToCart()">Thêm vào giỏ hàng</button>
             </div>
         </div>
     </div>
@@ -280,7 +281,10 @@ $('#sizeSelect').html(sizeOptionsHtml);
                             $('#productImage').attr('src', '/LayoutOgani/img/' + selectedImage);
                         }
                     });
-
+                     // Thêm sự kiện onchange cho colorSelect và sizeSelect để cập nhật số lượng tồn kho
+                $('#colorSelect, #sizeSelect').on('change', function () {
+                    updateQuantity(productId); // gọi hàm updateQuantity để cập nhật số lượng tồn kho
+                });
                     $('#addToCartModal').modal('show');
                 } else {
                     alert(response.message || "Không thể tải thông tin sản phẩm");
@@ -291,6 +295,35 @@ $('#sizeSelect').html(sizeOptionsHtml);
             }
         });
     }
+
+    function updateQuantity(productId) {
+    const selectedColor = $('#colorSelect').val();
+    const selectedSize = $('#sizeSelect').val();
+
+    $.ajax({
+        url: '/Home/GetProductQuantity',
+        type: 'GET',
+        data: { productId: productId, colorId: selectedColor, sizeId: selectedSize },
+        success: function (response) {
+            if (response.success) {
+                $('#productQuantity').text('Số lượng tồn: ' + response.soLuongTon);
+                $('#addToCartButton').prop('disabled', response.soLuongTon === 0);
+
+                if (response.soLuongTon === 0) {
+                    $('#productQuantity').text('Đã hết hàng');
+                }
+            } else {
+                $('#productQuantity').text('Đã hết hàng');
+                $('#addToCartButton').prop('disabled', true);
+            }
+        },
+        error: function (err) {
+            console.error("Lỗi AJAX:", err);
+            $('#productQuantity').text('Đã hết hàng');
+            $('#addToCartButton').prop('disabled', true);
+        }
+    });
+}
 
 
         // Mảng lưu trữ sản phẩm trong giỏ hàng
