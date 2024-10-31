@@ -42,8 +42,7 @@ namespace DoAnPhanMem.Controllers
             }
 
             // Lấy danh sách chi tiết sản phẩm theo mã danh mục
-            var sanPhamTheoDanhMuc = _db.ChiTietSanPham
-                .Include(ctsp => ctsp.SanPham) // Liên kết với bảng Sản Phẩm
+            var sanPhamTheoDanhMuc = _db.SanPham // Liên kết với bảng Sản Phẩm
                 .Where(ctsp => ctsp.MaDanhMuc == maDanhMuc)
                 .ToList();
 

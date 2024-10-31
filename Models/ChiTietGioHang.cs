@@ -9,8 +9,9 @@ public class ChiTietGioHang
     public string MaGioHang { get; set; }
     public GioHang GioHang { get; set; }
 
-    public string MaSanPham { get; set; }
-    public SanPham SanPham { get; set; }
+    [ForeignKey("ChiTietSanPham")]
+    public string MaChiTietSP { get; set; }
+    public ChiTietSanPham ChiTietSanPham { get; set; }
 
     public int SoLuong { get; set; }
     public decimal TongTien { get; set; }

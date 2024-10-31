@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DoAnPhanMem.Migrations
 {
     [DbContext(typeof(dbSportStoreContext))]
-    [Migration("20241017160112_sanpham")]
-    partial class sanpham
+    [Migration("20241028142118_chitietsanpham")]
+    partial class chitietsanpham
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,17 +141,13 @@ namespace DoAnPhanMem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("MaChiTietSP")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
                     b.Property<string>("MaGioHang")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MaSanPham")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SanPhamMaSanPham")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("SoLuong")
                         .HasColumnType("int");
@@ -163,7 +159,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("GioHangMaGioHang");
 
-                    b.HasIndex("SanPhamMaSanPham");
+                    b.HasIndex("MaChiTietSP");
 
                     b.ToTable("ChiTietGioHang");
                 });
@@ -252,7 +248,8 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasIndex("MaMauSac");
 
-                    b.HasIndex("MaSanPham");
+                    b.HasIndex("MaSanPham")
+                        .IsUnique();
 
                     b.ToTable("ChiTietSanPham");
                 });
@@ -326,6 +323,31 @@ namespace DoAnPhanMem.Migrations
                     b.HasKey("MaDanhMuc");
 
                     b.ToTable("DanhMuc");
+                });
+
+            modelBuilder.Entity("DoAnPhanMem.Models.DanhSachYeuThich", b =>
+                {
+                    b.Property<string>("MaYeuThich")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MaKhachHang")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("MaSanPham")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<DateTime>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MaYeuThich");
+
+                    b.HasIndex("MaKhachHang");
+
+                    b.HasIndex("MaSanPham");
+
+                    b.ToTable("DanhSachYeuThich");
                 });
 
             modelBuilder.Entity("DoAnPhanMem.Models.Loai", b =>
@@ -715,15 +737,15 @@ namespace DoAnPhanMem.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SanPham", "SanPham")
+                    b.HasOne("ChiTietSanPham", "ChiTietSanPham")
                         .WithMany()
-                        .HasForeignKey("SanPhamMaSanPham")
+                        .HasForeignKey("MaChiTietSP")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("GioHang");
+                    b.Navigation("ChiTietSanPham");
 
-                    b.Navigation("SanPham");
+                    b.Navigation("GioHang");
                 });
 
             modelBuilder.Entity("ChiTietHoaDon", b =>
@@ -772,8 +794,8 @@ namespace DoAnPhanMem.Migrations
                         .IsRequired();
 
                     b.HasOne("SanPham", "SanPham")
-                        .WithMany()
-                        .HasForeignKey("MaSanPham")
+                        .WithOne("ChiTietSanPham")
+                        .HasForeignKey("ChiTietSanPham", "MaSanPham")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -809,6 +831,25 @@ namespace DoAnPhanMem.Migrations
                         .IsRequired();
 
                     b.Navigation("HoaDon");
+
+                    b.Navigation("KhachHang");
+
+                    b.Navigation("SanPham");
+                });
+
+            modelBuilder.Entity("DoAnPhanMem.Models.DanhSachYeuThich", b =>
+                {
+                    b.HasOne("KhachHang", "KhachHang")
+                        .WithMany()
+                        .HasForeignKey("MaKhachHang")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SanPham", "SanPham")
+                        .WithMany()
+                        .HasForeignKey("MaSanPham")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("KhachHang");
 
@@ -879,6 +920,12 @@ namespace DoAnPhanMem.Migrations
                     b.Navigation("DonHang");
 
                     b.Navigation("KhachHang");
+                });
+
+            modelBuilder.Entity("SanPham", b =>
+                {
+                    b.Navigation("ChiTietSanPham")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

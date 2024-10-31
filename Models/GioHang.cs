@@ -14,5 +14,6 @@ public class GioHang
 
     [StringLength(50)]
     public string TrangThai { get; set; }
+    public List<ChiTietGioHang> ChiTietGioHang { get; set; }
 }
 

@@ -1,7 +1,7 @@
-﻿@model ChiTietSanPham
+﻿@model SanPham
 
 @{
-    ViewData["Title"] = Model.SanPham.TenSanPham;
+    ViewData["Title"] = Model.TenSanPham;
     Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
     <link href="~/css/site.css" rel="stylesheet">
     <link href="~/css/Detail.css" rel="stylesheet" >
@@ -15,7 +15,7 @@
             <div class="product-image">
                 @if (!string.IsNullOrEmpty(Model.HinhAnh))
                 {
-                    <img src="~/LayoutOgani/img/@Model.HinhAnh" alt="@Model.SanPham.TenSanPham" class="main-product-image" />
+                    <img src="~/LayoutOgani/img/@Model.HinhAnh" alt="@Model.TenSanPham" class="main-product-image" />
                 }
                 else
                 {
@@ -27,13 +27,13 @@
         <!-- Thông tin chi tiết sản phẩm -->
         <div class="col-md-6">
             <div class="product-info">
-                <h1 class="product-title">@Model.SanPham.TenSanPham</h1>
-      
+                <h1 class="product-title">@Model.TenSanPham</h1>
+
                 <p class="product-price">
-                    Giá gốc: <span class="original-price">@Model.SanPham.GiaBan đ</span>
-                    @if (Model.SanPham.GiaGiam > 0)
+                    Giá gốc: <span class="original-price">@Model.GiaBan đ</span>
+                    @if (Model.GiaGiam > 0)
                     {
-                        <span class="discount-price">Giá giảm: @Model.SanPham.GiaGiam đ</span>
+                        <span class="discount-price">Giá giảm: @Model.GiaGiam đ</span>
                     }
                 </p>
                 <p class="product-status">
@@ -56,7 +56,7 @@
 
                 <div class="quantity-selector">
                     <label for="quantity">Số lượng:</label>
-                    <input type="number" id="quantity" value="1" min="1" max="@Model.SoLuongTon" />
+                    
                 </div>
                 <!-- Mã giảm giá -->
                 <div class="product-discount-code">
@@ -66,7 +66,7 @@
                 <!-- Nút đặt hàng và thêm vào giỏ hàng -->
                 <div class="product-action">
                     <button class="btn btn-order" onclick="orderProduct()">Đặt hàng</button>
-                    <a href="/Cart/AddToCart?id=@Model.MaChiTietSP" class="btn btn-add-to-cart"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</a>
+                    <a href="/Cart/AddToCart?id=@Model.MaSanPham" class="btn btn-add-to-cart"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</a>
                 </div>
             
             </div>
@@ -76,7 +76,7 @@
     <!-- Mô tả chi tiết -->
     <div class="product-description">
         <h2>Mô tả chi tiết</h2>
-        <p>@Model.SanPham.MoTa</p>
+        <p>@Model.MoTa</p>
     </div>
     <div class="product-rating">
         <h3>Đánh giá sản phẩm</h3>

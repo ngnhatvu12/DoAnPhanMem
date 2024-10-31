@@ -138,13 +138,13 @@
                 </div>
                 <div class="col-md-3">
                     <div class="user">
+                        <a href="javascript:void(0);" class="btn cart" onclick="openCartPopup()">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span>(0)</span>
+                        </a>
                         <a href="javascript:void(0);" class="btn wishlist" onclick="showWishlist()">
                             <i class="fa fa-heart"></i>
                             <span>(@Context.Session.GetInt32("SoLuongYeuThich"))</span>
-                        </a>
-                        <a href="cart.html" class="btn cart">
-                            <i class="fa fa-shopping-cart"></i>
-                            <span>(0)</span>
                         </a>
                     </div>
                 </div>
@@ -531,7 +531,14 @@
             </div>
         </div>
     </div>
-
+    <div id="cartPopup" class="cart-popup" style="display: none;">
+        <h4>Giỏ hàng của bạn</h4>
+        <ul id="cartItems">
+            <!-- Cart items will be populated dynamically -->
+        </ul>
+        <a href="/Cart/Details" class="btn">Xem tất cả</a>
+        <button onclick="closeCartPopup()">Đóng</button>
+    </div>
     
     <script>
         function showWishlist() {
@@ -606,17 +613,13 @@
                     console.error('Lỗi khi thêm vào danh sách yêu thích:', error);
                 });
         }
-
     </script>
     <!-- Bao gồm jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Bao gồm Bootstrap (cho modal) -->
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

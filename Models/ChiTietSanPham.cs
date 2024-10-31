@@ -13,18 +13,10 @@ public class ChiTietSanPham
     public SanPham SanPham { get; set; }
 
     public int SoLuongTon { get; set; }
-    public string HinhAnh { get; set; }
+    public string HinhAnhBienThe { get; set; }
 
     [StringLength(50)]
     public string TrangThai { get; set; }
-
-    [ForeignKey("DanhMuc")]
-    public string MaDanhMuc { get; set; }
-    public DanhMuc DanhMuc { get; set; }
-
-    [ForeignKey("Loai")]
-    public string MaLoai { get; set; }
-    public Loai Loai { get; set; }
 
     [ForeignKey("KichThuoc")]
     public string MaKichThuoc { get; set; }

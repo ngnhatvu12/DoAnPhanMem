@@ -15,7 +15,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Thêm DbContext riêng cho các model khác nếu cần
 builder.Services.AddDbContext<dbSportStoreContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))); // Sử dụng cùng chuỗi kết nối
+    options.UseSqlServer(connectionString)); // Sử dụng cùng chuỗi kết nối
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -32,12 +32,13 @@ builder.Services.AddDistributedMemoryCache(); // Bộ nhớ cache cho session
 // Cấu hình session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Thời gian hết hạn session
+    options.Cookie.HttpOnly = true; // Cookie chỉ có thể truy cập qua HTTP
+    options.Cookie.IsEssential = true; // Cookie cần thiết cho ứng dụng
 });
 
-builder.Services.AddControllersWithViews(); // Thêm các dịch vụ MVC với view
+// Thêm các dịch vụ MVC với view
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -80,8 +81,5 @@ app.MapControllerRoute(
 
 // Cấu hình Razor Pages cho các trang đăng nhập, đăng ký, v.v...
 app.MapRazorPages();
-app.MapRazorPages();
-app.MapControllerRoute(
-   name: "admin",
-   pattern: "{controller=Admin}/{action=Dashboard}/{id?}");
+
 app.Run();

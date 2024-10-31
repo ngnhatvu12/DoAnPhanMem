@@ -29,9 +29,9 @@ else
                             </div>
                         </div>
                         <div class="product-image">
-                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            @if (!string.IsNullOrEmpty(item.SanPham.HinhAnh))
                             {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" />
+                                <img src="~/LayoutOgani/img/@item.SanPham.HinhAnh" alt="Product Image" />
                             }
                             else
                             {

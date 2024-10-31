@@ -1,0 +1,57 @@
+﻿/* Xóa lớp overlay và đặt vị trí cố định cho popup giỏ hàng */
+.cart-popup {
+    position: absolute;
+    background: #fff;
+    padding: 20px;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+    /* Tạo một mũi tên cho popup */
+    .cart-popup::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 20px;
+        border-width: 0 10px 10px 10px;
+        border-style: solid;
+        border-color: transparent transparent #fff transparent;
+    }
+
+    .cart-popup h5 {
+        margin: 0 0 10px;
+    }
+
+    .cart-popup a {
+        color: #007bff;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .cart-popup ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .cart-popup li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+        .cart-popup li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+    .cart-popup button {
+        background: none;
+        border: none;
+        color: red;
+        cursor: pointer;
+        font-size: 16px;
+    }

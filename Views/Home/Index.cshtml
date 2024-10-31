@@ -5,6 +5,9 @@
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
     <link href="~/css/Item.css" rel="stylesheet">;
     <script src="~/js/site.js"></script>
+    <link rel="stylesheet" href="~/css/CartPopup.css" />
+    
+
 }
 
 
@@ -28,7 +31,7 @@ else
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
                         <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaChiTietSP })" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -47,15 +50,16 @@ else
                                 <img src="~//img/no-image.png" alt="No Image" />
                             }                           
                             <div class="product-action">
-                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-                                <a href="javascript:void(0);" onclick="addToWishlist('@item.SanPham.MaSanPham')" tabindex="-1">
+                                <a href="javascript:void(0);" onclick="openAddToCartModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+
+                                <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
                                     <i class="fa fa-heart"></i>
                                 </a>
                                 <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <h3><span>đ</span>@item.GiaBan</h3>
                             <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                         </div>
                     </div>
@@ -77,7 +81,7 @@ else
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
                         <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaChiTietSP })" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
 
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
@@ -103,7 +107,7 @@ else
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <h3><span>đ</span>@item.GiaBan</h3>
                             <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                         </div>
                     </div>
@@ -124,7 +128,7 @@ else
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
                         <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaChiTietSP })" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
 
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
@@ -150,7 +154,7 @@ else
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <h3><span>đ</span>@item.GiaBan</h3>
                             <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                         </div>
                     </div>
@@ -171,7 +175,7 @@ else
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
                         <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaChiTietSP })" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
 
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
@@ -197,7 +201,7 @@ else
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <h3><span>đ</span>@item.GiaBan</h3>
                             <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
                         </div>
                     </div>
@@ -205,7 +209,195 @@ else
             }
         </div>      
     </div>
+    <!-- Modal thêm vào giỏ hàng -->
+<div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productName">Tên Sản Phẩm</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <img id="productImage" src="" alt="Product Image" style="width: 100%; height: auto;">
+                <p id="productPrice">Giá: 0 đ</p>
+                <div>
+                    <label for="colorSelect">Màu sắc:</label>
+                    <select id="colorSelect" class="form-control">
+                        <!-- Tùy chọn màu sắc sẽ được load tại đây -->
+                    </select>
+                </div>
+                <div>
+                    <label for="sizeSelect">Kích thước:</label>
+                    <select id="sizeSelect" class="form-control">
+                        <!-- Tùy chọn kích thước sẽ được load tại đây -->
+                    </select>
+                </div>
+                <div>
+                    <label for="quantityInput">Số lượng:</label>
+                    <input type="number" id="quantityInput" class="form-control" min="1" value="1">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="addToCart()">Thêm vào giỏ hàng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
     <script>
+    function openAddToCartModal(productId) {
+        $.ajax({
+            url: '/Home/GetProductDetails',
+            type: 'GET',
+            data: { id: productId },
+            success: function (response) {
+                console.log(response); // kiểm tra dữ liệu nhận được từ server
+                if (response.success) {
+                    $('#productName').text(response.tenSanPham);
+                    $('#productPrice').text('Giá: ' + response.giaBan + ' đ');
+                    $('#productImage').attr('src', '/LayoutOgani/img/' + response.hinhAnh);
+
+                    // Cập nhật tùy chọn màu sắc
+let colorOptionsHtml = response.colorOptions.map(option => 
+    `<option value="${option.maMauSac}" data-image="${option.hinhAnhBienThe}">${option.tenMauSac}</option>`
+).join('');
+$('#colorSelect').html(colorOptionsHtml);
+
+// Cập nhật tùy chọn kích thước
+let sizeOptionsHtml = response.sizeOptions.map(option => 
+    `<option value="${option.maKichThuoc}">${option.tenKichThuoc}</option>`
+).join('');
+$('#sizeSelect').html(sizeOptionsHtml);
+                    // Thêm sự kiện onchange cho colorSelect để cập nhật hình ảnh biến thể
+                    $('#colorSelect').on('change', function () {
+                        const selectedImage = $(this).find(':selected').data('image');
+                        if (selectedImage) {
+                            $('#productImage').attr('src', '/LayoutOgani/img/' + selectedImage);
+                        }
+                    });
+
+                    $('#addToCartModal').modal('show');
+                } else {
+                    alert(response.message || "Không thể tải thông tin sản phẩm");
+                }
+            },
+            error: function (err) {
+                console.error("Lỗi AJAX:", err);
+            }
+        });
+    }
+
+
+        // Mảng lưu trữ sản phẩm trong giỏ hàng
+let cartItems = [];
+
+// Hàm thêm sản phẩm vào giỏ hàng
+function addToCart() {
+    const productName = $('#productName').text();
+    const productImage = $('#productImage').attr('src');
+    const selectedColor = $('#colorSelect option:selected').text();
+    const selectedSize = $('#sizeSelect option:selected').text();
+    const quantity = parseInt($('#quantityInput').val());
+    const price = parseInt($('#productPrice').text().replace(/\D/g, ''));
+    const totalPrice = price * quantity;
+
+    // Tạo đối tượng sản phẩm
+    const cartItem = {
+        name: productName,
+        image: productImage,
+        color: selectedColor,
+        size: selectedSize,
+        quantity: quantity,
+        totalPrice: totalPrice
+    };
+
+    // Thêm sản phẩm vào mảng giỏ hàng
+    cartItems.push(cartItem);
+
+    // Cập nhật số lượng giỏ hàng trên giao diện
+    updateCartCount();
+
+    // Đóng modal
+    $('#addToCartModal').modal('hide');
+}
+
+// Hàm cập nhật số lượng hiển thị trên nút giỏ hàng
+function updateCartCount() {
+    const itemCount = cartItems.length;
+    $('.cart span').text(`(${itemCount})`);
+}
+
+// Hàm hiển thị popup giỏ hàng
+function openCartPopup() {
+    // Xóa popup cũ nếu có
+    $('.cart-popup').remove();
+
+    let cartHtml = `<div class="cart-popup">
+                        <h5>${cartItems.length} sản phẩm</h5>
+                        <a href="#" onclick="viewCartDetails()">Xem tất cả</a>
+                        <ul>`;
+
+    cartItems.forEach(item => {
+        cartHtml += `<li>
+                        <img src="${item.image}" alt="${item.name}">
+                        <div>
+                            <h6>${item.name}</h6>
+                            <p>${item.color} / ${item.size}</p>
+                            <p>${item.totalPrice.toLocaleString()} đ x${item.quantity}</p>
+                        </div>
+                        <button onclick="removeCartItem('${item.name}', '${item.color}', '${item.size}')">X</button>
+                     </li>`;
+    });
+
+    cartHtml += `</ul></div>`;
+
+    // Thêm popup mới vào DOM
+    $('body').append(cartHtml);
+
+    // Tìm vị trí của nút giỏ hàng
+    const cartButton = $('.btn.cart');
+    const buttonOffset = cartButton.offset();
+
+    // Đặt vị trí cho popup bên dưới nút giỏ hàng
+    $('.cart-popup').css({
+        top: buttonOffset.top + cartButton.outerHeight() + 10, // Đặt cách dưới nút giỏ hàng một chút
+        left: buttonOffset.left
+    });
+}
+
+// Hàm xóa sản phẩm khỏi giỏ hàng
+function removeCartItem(name, color, size) {
+    cartItems = cartItems.filter(item => !(item.name === name && item.color === color && item.size === size));
+    updateCartCount();
+    openCartPopup(); // Cập nhật lại giao diện popup
+}
+
+// Hàm xem chi tiết giỏ hàng
+function viewCartDetails() {
+    // Điều hướng đến trang chi tiết giỏ hàng
+    window.location.href = "/cart";
+}
+
+// Đóng popup khi click bên ngoài
+$(document).on('click', function(event) {
+    if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
+        $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
+    }
+});
+
+// Đảm bảo popup không bị xóa khi nhấn vào nó
+$(document).on('click', '.cart-popup', function(event) {
+    event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
+});
+
+
+
+
         function addToWishlist(productId) {
             const isLoggedIn = '@User.Identity.IsAuthenticated'; // Kiểm tra đăng nhập
 
@@ -214,20 +406,37 @@ else
                 return;
             }
 
+            if (!productId) {
+                console.error('Lỗi: productId bị null hoặc undefined.');
+                alert('Không thể thêm vào danh sách yêu thích. ID sản phẩm không hợp lệ.');
+                return;
+            }
+
+            console.log("Product ID:", productId); // Kiểm tra productId trong console
+
             fetch('/Product/ThemYeuThich', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ productId: productId })
+                body: JSON.stringify({ id: productId }) // Đảm bảo 'id' trùng khớp với bên C#
             })
-                .then(response => {
-                    if (response.ok) {
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
                         alert('Sản phẩm đã được thêm vào danh sách yêu thích.');
+
+                        // Cập nhật số lượng yêu thích
+                        const wishlistCount = document.querySelector('.wishlist span');
+                        wishlistCount.textContent = `(${data.wishlistCount})`;
                     } else {
-                        alert('Có lỗi xảy ra. Vui lòng thử lại.');
+                        alert(data.message);
                     }
+                })
+                .catch(error => {
+                    console.error('Lỗi khi thêm vào danh sách yêu thích:', error);
                 });
         }
+
     </script>
 }
