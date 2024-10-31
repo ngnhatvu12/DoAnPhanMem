@@ -20,13 +20,12 @@ namespace DoAnPhanMem.Controllers
             // Kiểm tra nếu không có từ khóa
             if (string.IsNullOrEmpty(keyword))
             {
-                return View(new List<ChiTietSanPham>()); // Trả về view rỗng
+                return View(new List<SanPham>()); // Trả về view rỗng
             }
 
             // Tìm sản phẩm theo tên gần giống với từ khóa tìm kiếm
-            var ketQuaTimKiem = _db.ChiTietSanPham
-                .Include(ctsp => ctsp.SanPham) // Bao gồm thông tin từ bảng Sản Phẩm
-                .Where(ctsp => ctsp.SanPham.TenSanPham.Contains(keyword))
+            var ketQuaTimKiem = _db.SanPham
+                .Where(sp => sp.TenSanPham.Contains(keyword))
                 .ToList();
 
             // Trả về view cùng với danh sách sản phẩm tìm kiếm được

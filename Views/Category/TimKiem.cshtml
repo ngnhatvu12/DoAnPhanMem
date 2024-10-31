@@ -1,4 +1,4 @@
-﻿@model List<ChiTietSanPham>
+﻿@model List<SanPham>
 
 @{
     ViewData["Title"] = "Kết quả tìm kiếm";
@@ -19,7 +19,7 @@ else
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
                         <div class="product-title">
-                            <a href="#" tabindex="-1">@item.SanPham.TenSanPham</a>
+                            <a href="#" tabindex="-1">@item.TenSanPham</a>
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -29,9 +29,9 @@ else
                             </div>
                         </div>
                         <div class="product-image">
-                            @if (!string.IsNullOrEmpty(item.SanPham.HinhAnh))
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
                             {
-                                <img src="~/LayoutOgani/img/@item.SanPham.HinhAnh" alt="Product Image" />
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" />
                             }
                             else
                             {
@@ -44,7 +44,7 @@ else
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.SanPham.GiaBan</h3>
+                            <h3><span>đ</span>@item.GiaBan</h3>
                             <a class="btn" href="#" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>

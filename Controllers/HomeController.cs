@@ -161,6 +161,22 @@ namespace DoAnPhanMem.Controllers
 
             return Json(productDetails);
         }
+        [HttpGet]
+        public IActionResult GetProductQuantity(string productId, string colorId, string sizeId)
+        {
+            // Tìm sản phẩm theo mã, màu sắc và kích thước
+            var productVariant = _db.ChiTietSanPham
+                                    .FirstOrDefault(ct => ct.MaSanPham == productId &&
+                                                          ct.MaMauSac == colorId &&
+                                                          ct.MaKichThuoc == sizeId);
+
+            if (productVariant == null || productVariant.SoLuongTon <= 0)
+            {
+                return Json(new { success = false, message = "Đã hết hàng" });
+            }
+
+            return Json(new { success = true, soLuongTon = productVariant.SoLuongTon });
+        }
 
     }
 }
