@@ -355,12 +355,15 @@ h2 {
 
     .bottom-bar .user {
         font-size: 0;
-        text-align: left;
+        text-align: center;
     }
-
-        .bottom-bar .user .wishlist {
-            margin-right: 15px;
-        }
+    .bottom-bar .user .btn-cart 
+    {
+        margin-right: 20px
+    }
+    .bottom-bar .user .wishlist {
+        margin-left: 20px;
+    }
 
             .bottom-bar .user .cart i,
             .bottom-bar .user .wishlist i {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 public class BaoCao
 {
@@ -7,6 +8,7 @@ public class BaoCao
     public string MaBaoCao { get; set; }
 
     public string MaAdmin { get; set; }
+    [ForeignKey("MaAdmin")]
     public Admina Admin { get; set; }
 
     public DateTime NgayTao { get; set; }

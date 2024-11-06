@@ -7,9 +7,11 @@ public class ChiTietHoaDon
     public string MaChiTietHoaDon { get; set; }
 
     public string MaHoaDon { get; set; }
+    [ForeignKey("MaHoaDon")]
     public HoaDon HoaDon { get; set; }
 
     public string MaSanPham { get; set; }
+    [ForeignKey("MaSanPham")]
     public SanPham SanPham { get; set; }
 
     public int SoLuong { get; set; }

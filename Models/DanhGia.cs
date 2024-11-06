@@ -7,12 +7,11 @@ public class DanhGia
     [Key]
     public string MaDanhGia { get; set; }
 
-    public string MaKhachHang { get; set; }
-    public KhachHang KhachHang { get; set; }
-
+    [ForeignKey("HoaDon")]
     public string MaHoaDon { get; set; }
     public HoaDon HoaDon { get; set; }
 
+    [ForeignKey("SanPham")]
     public string MaSanPham { get; set; }
     public SanPham SanPham { get; set; }
 

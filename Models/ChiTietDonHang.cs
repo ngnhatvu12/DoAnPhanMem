@@ -7,16 +7,16 @@ public class ChiTietDonHang
     [StringLength(10)]
     public string MaChiTietDonHang { get; set; }
 
-    [ForeignKey("DonHang")]
     public string MaDonHang { get; set; }
+    [ForeignKey("MaDonHang")]
     public DonHang DonHang { get; set; }
 
-    [ForeignKey("SanPham")]
-    public string MaSanPham { get; set; }
-    public SanPham SanPham { get; set; }
+    public string MaChiTietSP { get; set; }
+    [ForeignKey("MaChiTietSP")]
+    public ChiTietSanPham ChiTietSanPham { get; set; }
 
-    [ForeignKey("GiamGia")]
     public string MaGiamGia { get; set; }
+    [ForeignKey("MaGiamGia")]
     public GiamGia GiamGia { get; set; }
 
     public int SoLuong { get; set; }

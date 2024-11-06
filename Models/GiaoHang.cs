@@ -7,6 +7,7 @@ public class GiaoHang
     [Key]
     public string MaGiaoHang { get; set; }
 
+    [ForeignKey("DonHang")]
     public string MaDonHang { get; set; }
     public DonHang DonHang { get; set; }
 

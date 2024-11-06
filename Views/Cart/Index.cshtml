@@ -1,0 +1,172 @@
+﻿@{
+    ViewData["Title"] = "Chi tiết giỏ hàng";
+    Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
+    <link href="~/css/Cart.css" rel="stylesheet">;
+    var cartItems = ViewBag.CartItems;
+    var totalQuantity = ViewBag.TotalQuantity;
+    var totalPrice = ViewBag.TotalPrice;
+    var discountCodes = ViewBag.DiscountCodes;
+}
+<div class="cart-container">
+    <!-- Left Section: Cart Details -->
+    <div class="cart-details">
+        <h2>Giỏ hàng của bạn</h2>
+        <ul class="cart-items">
+            @foreach (var item in cartItems)
+            {
+                <li class="cart-item">
+                    <img src="/LayoutOgani/img/@item.HinhAnh" alt="@item.TenSanPham" class="product-image" />
+                    <div class="item-info">
+                        <h3 class="item-name">@item.TenSanPham</h3>
+                        <p class="item-attributes">Màu: @item.MauSac, Kích thước: @item.KichThuoc</p>
+                        <div class="quantity-controls">
+                            <button class="btn-quantity decrease" onclick="updateQuantity(@item.MaSanPham, -1)">-</button>
+                            <span class="quantity">@item.SoLuong</span>
+                            <button class="btn-quantity increase" onclick="updateQuantity(@item.MaSanPham, 1)">+</button>
+                        </div>
+                        <p class="item-price">@String.Format("{0:N0}", item.GiaBan) đ</p>
+                        <button class="btn-remove" onclick="removeCartItem('@item.MaSanPham')">Xóa</button>
+                    </div>
+                    <p class="item-total">Tổng: @String.Format("{0:N0}", item.TongTien) đ</p>
+                </li>
+            }
+        </ul>
+
+        <!-- Discount Code Section with Separator -->
+        <div class="separator"></div>
+        <div class="discount-section">
+            <input type="text" placeholder="Nhập mã giảm giá" class="discount-input">
+            <button class="apply-discount">Áp dụng</button>
+        </div>
+
+        <!-- Price Details Section with Separators -->
+        <div class="separator"></div>
+        <div class="price-details">
+            <p>Tạm tính: <span>1.122.000đ</span></p>
+            <p class="savings">Tiết kiệm: <span>483k</span></p>
+            <p>Giảm giá: <span>0đ</span></p>
+            <div class="separator"></div>
+            <p>Phí giao hàng: <span>Miễn phí</span></p>
+            <div class="separator"></div>
+            <h3 class="total-price">Tổng: <span>1.122.000đ</span></h3>
+        </div>
+    </div>
+
+    <!-- Right Section: Customer Information with Separator -->
+    <div class="customer-section">
+        <div class="customer-info">
+            <h2>Thông tin khách hàng</h2>
+            <form id="order-form">
+                <div class="form-group">
+                    <label for="name">Họ và tên</label>
+                    <input type="text" id="name" name="name" placeholder="Nhập họ tên của bạn" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="example@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="address">Địa chỉ</label>
+                    <input type="text" id="address" name="address" placeholder="Nhập địa chỉ của bạn" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Số điện thoại</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Số điện thoại của bạn" required>
+                </div>
+            </form>
+        </div>
+        <div class="separator bold"></div>
+
+        <!-- Payment Method Outside of Customer Info Section -->
+        <div class="payment-method">
+            <h3>Hình thức thanh toán</h3>
+            <label>
+                <input type="radio" name="paymentMethod" value="bank_transfer" checked> Chuyển khoản ngân hàng
+            </label><br>
+            <label>
+                <input type="radio" name="paymentMethod" value="cod"> Thanh toán khi nhận hàng (COD)
+            </label><br>
+            <label>
+                <input type="radio" name="paymentMethod" value="stripe"> Thanh toán qua Stripe
+            </label><br>
+            <div id="card-element" style="margin-top: 20px; display: none;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Order Button -->
+<div class="place-order">
+    <button id="order-button">Đặt hàng</button>
+</div>
+
+<div id="orderSuccessModal" class="modal" style="display: none;">
+    <div class="modal-content">
+        <h2>Đơn hàng đã được đặt thành công!</h2>
+        <p>Vui lòng kiểm tra đơn hàng trong mục đơn hàng của bạn.</p>
+        <button id="closeModalBtn">Về trang chủ</button>
+    </div>
+</div>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#order-button").on("click", function () {
+            $.ajax({
+                url: "/Cart/CreateOrder",
+                type: "POST",
+                success: function (response) {
+                    if (response.success) {
+                        alert("Đơn hàng của bạn đã được tạo thành công!");
+                        window.location.href = "/Order/Details/" + response.orderId; // Chuyển hướng đến chi tiết đơn hàng
+                    } else {
+                        alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại.");
+                    }
+                },
+                error: function () {
+                    alert("Đã xảy ra lỗi. Vui lòng kiểm tra lại.");
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+        .modal-content h2 {
+            margin-top: 0;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+</style>
+
+
+
+
+
+

@@ -50,7 +50,7 @@ else
                                 <img src="~//img/no-image.png" alt="No Image" />
                             }                           
                             <div class="product-action">
-                                <a href="javascript:void(0);" onclick="openAddToCartModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                                <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
 
                                 <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
                                     <i class="fa fa-heart"></i>
@@ -82,7 +82,6 @@ else
                     <div class="product-item">
                         <div class="product-title">
                             <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
-
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -99,10 +98,13 @@ else
                             else
                             {
                                 <img src="~//img/no-image.png" alt="No Image" />
-                            }
+                            }                           
                             <div class="product-action">
-                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                                <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+
+                                <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
+                                    <i class="fa fa-heart"></i>
+                                </a>
                                 <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
                             </div>
                         </div>
@@ -220,6 +222,7 @@ else
                 </button>
             </div>
             <div class="modal-body">
+                <input type="hidden" id="productId" value="" />
                 <img id="productImage" src="" alt="Product Image" style="width: 100%; height: auto;">
                 <p id="productPrice">Giá: 0 đ</p>
                  <p id="productQuantity">Số lượng tồn: 0</p>
@@ -251,7 +254,28 @@ else
 
 
     <script>
+        function checkLoginAndOpenModal(productId) {
+            $.ajax({
+                url: '/Home/CheckLoginStatus',
+                type: 'GET',
+                success: function (response) {
+                    if (response.isLoggedIn) {
+                        // Người dùng đã đăng nhập, mở modal thêm sản phẩm vào giỏ hàng
+                        openAddToCartModal(productId);
+                    } else {
+                        // Người dùng chưa đăng nhập, yêu cầu họ đăng nhập
+                        alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+                        window.location.href = '/Access/Login';
+                    }
+                },
+                error: function () {
+                    console.error("Không thể kiểm tra trạng thái đăng nhập.");
+                }
+            });
+        }
+    let selectedProductDetailId = null;
     function openAddToCartModal(productId) {
+        $('#productId').val(productId);
         $.ajax({
             url: '/Home/GetProductDetails',
             type: 'GET',
@@ -264,16 +288,16 @@ else
                     $('#productImage').attr('src', '/LayoutOgani/img/' + response.hinhAnh);
 
                     // Cập nhật tùy chọn màu sắc
-let colorOptionsHtml = response.colorOptions.map(option => 
-    `<option value="${option.maMauSac}" data-image="${option.hinhAnhBienThe}">${option.tenMauSac}</option>`
-).join('');
-$('#colorSelect').html(colorOptionsHtml);
+                     let colorOptionsHtml = response.colorOptions.map(option => 
+                    `<option value="${option.maMauSac}" data-image="${option.hinhAnhBienThe}">${option.tenMauSac}</option>`
+                     ).join('');
+                     $('#colorSelect').html(colorOptionsHtml);
 
-// Cập nhật tùy chọn kích thước
-let sizeOptionsHtml = response.sizeOptions.map(option => 
-    `<option value="${option.maKichThuoc}">${option.tenKichThuoc}</option>`
-).join('');
-$('#sizeSelect').html(sizeOptionsHtml);
+                    // Cập nhật tùy chọn kích thước
+                     let sizeOptionsHtml = response.sizeOptions.map(option => 
+                    `<option value="${option.maKichThuoc}">${option.tenKichThuoc}</option>`
+                     ).join('');
+                     $('#sizeSelect').html(sizeOptionsHtml);
                     // Thêm sự kiện onchange cho colorSelect để cập nhật hình ảnh biến thể
                     $('#colorSelect').on('change', function () {
                         const selectedImage = $(this).find(':selected').data('image');
@@ -329,104 +353,147 @@ $('#sizeSelect').html(sizeOptionsHtml);
         // Mảng lưu trữ sản phẩm trong giỏ hàng
 let cartItems = [];
 
-// Hàm thêm sản phẩm vào giỏ hàng
-function addToCart() {
-    const productName = $('#productName').text();
-    const productImage = $('#productImage').attr('src');
-    const selectedColor = $('#colorSelect option:selected').text();
-    const selectedSize = $('#sizeSelect option:selected').text();
+        // Hàm thêm sản phẩm vào giỏ hàng
+    function addToCart() {
+    const productId = $('#productId').val();
+    const selectedColor = $('#colorSelect').val();
+    const selectedSize = $('#sizeSelect').val();
     const quantity = parseInt($('#quantityInput').val());
-    const price = parseInt($('#productPrice').text().replace(/\D/g, ''));
-    const totalPrice = price * quantity;
 
-    // Tạo đối tượng sản phẩm
-    const cartItem = {
-        name: productName,
-        image: productImage,
-        color: selectedColor,
-        size: selectedSize,
-        quantity: quantity,
-        totalPrice: totalPrice
-    };
-
-    // Thêm sản phẩm vào mảng giỏ hàng
-    cartItems.push(cartItem);
-
-    // Cập nhật số lượng giỏ hàng trên giao diện
-    updateCartCount();
-
-    // Đóng modal
-    $('#addToCartModal').modal('hide');
+    $.ajax({
+        url: '/Home/GetProductDetailId',
+        type: 'POST',
+        data: { productId: productId, colorId: selectedColor, sizeId: selectedSize },
+        success: function (response) {
+            if (response.success) {
+                const maChiTietSP = response.maChiTietSP;
+                console.log("Mã chi tiết sản phẩm:", maChiTietSP); // In kiểm tra mã chi tiết sản phẩm
+                $.ajax({
+                    url: '/Cart/AddToCart',
+                    type: 'POST',
+                    data: JSON.stringify({ maChiTietSP: maChiTietSP, soLuong: quantity }),
+                    contentType: 'application/json',
+                    success: function (addResponse) {
+                        if (addResponse.success) {
+                            alert("Thêm vào giỏ hàng thành công!");
+                            updateCartCount();
+                        } else {
+                            alert(addResponse.message || "Không thể thêm vào giỏ hàng.");
+                        }
+                    },
+                    error: function (error) {
+                        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng.", error);
+                        alert("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.");
+                    }
+                });
+            } else {
+                alert("Không tìm thấy chi tiết sản phẩm cho lựa chọn của bạn.");
+            }
+        },
+        error: function (error) {
+            console.error("Lỗi khi tìm mã chi tiết sản phẩm.", error);
+            alert("Đã xảy ra lỗi khi tìm mã chi tiết sản phẩm.");
+        }
+    });
 }
+
+
 
 // Hàm cập nhật số lượng hiển thị trên nút giỏ hàng
 function updateCartCount() {
-    const itemCount = cartItems.length;
-    $('.cart span').text(`(${itemCount})`);
-}
-
-// Hàm hiển thị popup giỏ hàng
-function openCartPopup() {
-    // Xóa popup cũ nếu có
-    $('.cart-popup').remove();
-
-    let cartHtml = `<div class="cart-popup">
-                        <h5>${cartItems.length} sản phẩm</h5>
-                        <a href="#" onclick="viewCartDetails()">Xem tất cả</a>
-                        <ul>`;
-
-    cartItems.forEach(item => {
-        cartHtml += `<li>
-                        <img src="${item.image}" alt="${item.name}">
-                        <div>
-                            <h6>${item.name}</h6>
-                            <p>${item.color} / ${item.size}</p>
-                            <p>${item.totalPrice.toLocaleString()} đ x${item.quantity}</p>
-                        </div>
-                        <button onclick="removeCartItem('${item.name}', '${item.color}', '${item.size}')">X</button>
-                     </li>`;
-    });
-
-    cartHtml += `</ul></div>`;
-
-    // Thêm popup mới vào DOM
-    $('body').append(cartHtml);
-
-    // Tìm vị trí của nút giỏ hàng
-    const cartButton = $('.btn.cart');
-    const buttonOffset = cartButton.offset();
-
-    // Đặt vị trí cho popup bên dưới nút giỏ hàng
-    $('.cart-popup').css({
-        top: buttonOffset.top + cartButton.outerHeight() + 10, // Đặt cách dưới nút giỏ hàng một chút
-        left: buttonOffset.left
+    $.ajax({
+        url: '/Cart/GetCartDetails',
+        type: 'GET',
+        success: function (response) {
+            if (response.success) {
+                const itemCount = response.totalQuantity;
+                $('.cart span').text(`(${itemCount})`);
+            }
+        },
+        error: function (error) {
+            console.error("Lỗi khi lấy số lượng giỏ hàng.", error);
+        }
     });
 }
 
-// Hàm xóa sản phẩm khỏi giỏ hàng
-function removeCartItem(name, color, size) {
-    cartItems = cartItems.filter(item => !(item.name === name && item.color === color && item.size === size));
-    updateCartCount();
-    openCartPopup(); // Cập nhật lại giao diện popup
-}
 
-// Hàm xem chi tiết giỏ hàng
-function viewCartDetails() {
-    // Điều hướng đến trang chi tiết giỏ hàng
-    window.location.href = "/cart";
-}
+        function openCartPopup() {
+            $.ajax({
+                url: '/Cart/GetCartDetails',
+                method: 'GET',
+                success: function (response) {
+                    if (response.success) {
+                        console.log(response.cartItems); // Kiểm tra toàn bộ dữ liệu cartItems từ server
+                        let cartItems = response.cartItems;
+                        let totalQuantity = response.totalQuantity; // Tổng số lượng từ response
 
-// Đóng popup khi click bên ngoài
-$(document).on('click', function(event) {
-    if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
-        $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
-    }
-});
+                        $('.cart-popup').remove();
 
-// Đảm bảo popup không bị xóa khi nhấn vào nó
-$(document).on('click', '.cart-popup', function(event) {
-    event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
-});
+                        let cartHtml = `<div class="cart-popup">
+                                            <h5>${totalQuantity} sản phẩm</h5>
+                                            <a href="#" onclick="viewCartDetails()">Xem tất cả</a>
+                                            <ul>`;
+
+                        // Sử dụng map và join để tạo ra các phần tử HTML cho mỗi sản phẩm
+                        cartHtml += cartItems.map(item => {
+                            const formattedPrice = (item.giaBan || 0).toLocaleString(); // Định dạng giá tiền
+                            return `<li>
+                                        <img src="/LayoutOgani/img/${item.hinhAnh || 'default-image.jpg'}" alt="${item.tenSanPham || 'Sản phẩm'}">
+                                        <div>
+                                            <h6>${item.tenSanPham || 'Sản phẩm không tên'}</h6>
+                                            <p>${item.mauSac || 'N/A'} / ${item.kichThuoc || 'N/A'}</p>
+                                            <p>${formattedPrice} đ x${item.soLuong || 1}</p>
+                                        </div>
+                                        <button onclick="removeCartItem('${item.maSanPham}', '${item.mauSac}', '${item.kichThuoc}')">X</button>
+                                     </li>`;
+                        }).join(""); // join("") để nối tất cả các phần tử lại thành chuỗi HTML
+
+                        cartHtml += `</ul></div>`;
+
+                        console.log(cartHtml); // Kiểm tra nội dung của cartHtml
+
+                        // Thêm cartHtml vào body
+                        $('body').append(cartHtml);
+
+                        // Định vị trí cho popup
+                        const cartButton = $('.btn.cart');
+                        const buttonOffset = cartButton.offset();
+
+                        $('.cart-popup').css({
+                            top: buttonOffset.top + cartButton.outerHeight() + 10,
+                            left: buttonOffset.left
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+        function removeCartItem(maSanPham, mauSac, kichThuoc) {
+            // Xử lý xóa sản phẩm khỏi giỏ hàng
+            openCartPopup();
+        }
+
+
+        // Hàm xem chi tiết giỏ hàng
+        function viewCartDetails() {
+            window.location.href = '/Cart/Index';
+        }
+
+
+        // Đóng popup khi click bên ngoài
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
+                $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
+            }
+        });
+
+        // Đảm bảo popup không bị xóa khi nhấn vào nó
+        $(document).on('click', '.cart-popup', function (event) {
+            event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
+        });
+
 
 
 

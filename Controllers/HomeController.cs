@@ -178,5 +178,27 @@ namespace DoAnPhanMem.Controllers
             return Json(new { success = true, soLuongTon = productVariant.SoLuongTon });
         }
 
+        [HttpGet]
+        public IActionResult CheckLoginStatus()
+        {
+            var isLoggedIn = HttpContext.Session.GetString("VaiTro") != null;
+            return Json(new { isLoggedIn });
+        }
+        [HttpPost]
+        public JsonResult GetProductDetailId(string productId, string colorId, string sizeId)
+        {
+            var productDetail = _db.ChiTietSanPham
+                .FirstOrDefault(pd => pd.MaSanPham == productId && pd.MaMauSac == colorId && pd.MaKichThuoc == sizeId);
+
+            if (productDetail != null)
+            {
+                return Json(new { success = true, maChiTietSP = productDetail.MaChiTietSP });
+            }
+            else
+            {
+                return Json(new { success = false, message = "Không tìm thấy chi tiết sản phẩm cho lựa chọn của bạn." });
+            }
+        }
+
     }
 }

@@ -6,9 +6,7 @@ public class ThanhToan
     [Key]
     public string MaThanhToan { get; set; }
 
-    public string MaKhachHang { get; set; }
-    public KhachHang KhachHang { get; set; }
-
+    [ForeignKey("DonHang")]
     public string MaDonHang { get; set; }
     public DonHang DonHang { get; set; }
 

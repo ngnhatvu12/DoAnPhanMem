@@ -60,7 +60,7 @@ app.UseRouting();
 
 // Thêm middleware để xử lý session
 app.UseSession(); // Cấu hình session middleware
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Cấu hình route mặc định cho ứng dụng
