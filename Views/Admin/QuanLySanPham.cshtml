@@ -1,6 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Quản lý sản phẩm";
+﻿@model List<DoAnPhanMem.ViewModels.ProductViewModel>
 
+@{
+    ViewData["Title"] = "Quản lý sản phẩm";
+    Layout = null;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -72,9 +74,9 @@
                     <span class="app-menu__label">Quản lý nhân viên</span>
                 </a>
             </li>
-                <a class="app-menu__item " href="#">
-                    <i class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách hàng</span>
-                </a>
+            <a class="app-menu__item " href="#">
+                <i class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách hàng</span>
+            </a>
             </li>
             <li>
                 <a class="app-menu__item active" href="table-data-product.html">
@@ -137,9 +139,8 @@
                         <div class="row element-button">
                             <div class="col-sm-2">
 
-                                <a class="btn btn-add btn-sm" href="form-add-san-pham.html" title="Thêm">
-                                    <i class="fas fa-plus"></i>
-                                    Tạo mới sản phẩm
+                                <a class="btn btn-add btn-sm" href="#" data-toggle="modal" data-target="#addProductModal" title="Thêm">
+                                    <i class="fas fa-plus"></i> Tạo mới sản phẩm
                                 </a>
                             </div>
                             <div class="col-sm-2">
@@ -188,342 +189,27 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>71309005</td>
-                                    <td>Túi thể thao Gym Bag</td>
-                                    <td><img src="/LayoutOgani/img/hinh10.jpg" alt="" width="100px;"></td>
-                                    <td>40</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>600.000 đ</td>    
-                                    <td>Túi-Balo</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>61304005</td>
-                                    <td>Áo tập gym Flex Fit</td>
-                                    <td><img src="/LayoutOgani/img/hinh11.jpg" alt="" width="100px;"></td>
-                                    <td>70</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>700.000 đ</td>
-                                    <td>Áo</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>62304003</td>
-                                    <td>Quần legging High Waist</td>
-                                    <td><img src="/LayoutOgani/img/hinh12.jpg" alt="" width="100px;"></td>
-                                    <td>40</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>400.000 đ</td>
-                                    <td>Quần</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>72638003</td>
-                                    <td>Giày thể thao Cross Training</td>
-                                    <td><img src="/LayoutOgani/img/hinh13.jpg" alt="" width="100px;"></td>
-                                    <td>50</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>1.300.000 đ</td>
-                                    <td>Giày</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>72109004</td>
-                                    <td>Áo thun thể thao Dry Fit</td>
-                                    <td><img src="/LayoutOgani/img/hinh14.jpg" alt="" width="100px;"></td>
-                                    <td>50</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>1.500.000 đ</td>
-                                    <td>Áo</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>82716001</td>
-                                    <td>Quần short thể thao Quich Dry</td>
-                                    <td><img src="/LayoutOgani/img/hinh15.jpg" alt="" width="100px;"></td>
-                                    <td>55</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>320.000 đ</td>
-                                    <td>Quần</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>72109001</td>
-                                    <td>Thảm tập Yoga Eco-Friendly</td>
-                                    <td><img src="/LayoutOgani/img/hinh16.jpg" alt="" width="100px;"></td>
-                                    <td>38</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>370.000 đ</td>
-                                    <td>Dụng cụ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>71304041</td>
-                                    <td>Bóng đá tiêu chuẩn Pro Ball</td>
-                                    <td><img src="/LayoutOgani/img/hinh17.jpg" alt="" width="100px;"></td>
-                                    <td>80</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>300.000 đ</td>
-                                    <td>Dụng cụ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>71304037</td>
-                                    <td>Bóng rổ All-Star</td>
-                                    <td><img src="/LayoutOgani/img/hinh18.jpg" alt="" width="100px;"></td>
-                                    <td>80</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>400.000 đ</td>
-                                    <td>Dụng cụ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>71304032</td>
-                                    <td>Dây nhảy thể thao Speed Jump</td>
-                                    <td><img src="/LayoutOgani/img/hinh19.jpg" alt="" width="100px;"></td>
-                                    <td>46</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>100.000 đ</td>
-                                    <td>Dụng cụ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>71338008</td>
-                                    <td>Đai bụng tập gym Slimming Belt</td>
-                                    <td><img src="/LayoutOgani/img/hinh21.jpg" alt="" width="100px;"></td>
-                                    <td>66</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>250.000 đ</td>
-                                    <td>Dụng cụ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>83826226</td>
-                                    <td>Giày leo núi Adventure</td>
-                                    <td><img src="/LayoutOgani/img/hinh22.jpg" alt="" width="100px;"></td>
-                                    <td>0</td>
-                                    <td><span class="badge bg-danger">Hét hàng</span></td>
-                                    <td>1.600.000 đ</td>
-                                    <td>Giày</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>83252001</td>
-                                    <td>Quần jogger thể thao Active</td>
-                                    <td><img src="/LayoutOgani/img/hinh24.jpg" alt="" width="100px;"></td>
-                                    <td>73</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>420.000 đ</td>
-                                    <td>Quần</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>83252002</td>
-                                    <td>Giày bơi Aqua Shoes</td>
-                                    <td><img src="/LayoutOgani/img/hinh25.jpg" alt="" width="100px;"></td>
-                                    <td>60</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>300.000 đ</td>
-                                    <td>Giày</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>83216008</td>
-                                    <td>Mũ thể thao Sun Shield</td>
-                                    <td><img src="/LayoutOgani/img/hinh26.jpg" alt="" width="100px;"></td>
-                                    <td>65</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>200.000 đ</td>
-                                    <td>Mũ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>83216006</td>
-                                    <td>Băng đô thể thao Sweat Band</td>
-                                    <td><img src="/LayoutOgani/img/hinh27.jpg" alt="" width="100px;"></td>
-                                    <td>60</td>
-                                    <td><span class="badge bg-success">Còn hàng</span></td>
-                                    <td>100.000 đ</td>
-                                    <td>Dụng cụ</td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"
-                                                onclick="myFunction(this)">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" id="show-emp" data-toggle="modal"
-                                                data-target="#ModalUP">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-
-                                    </td>
-                                </tr>
+                                @foreach (var product in Model)
+                                {
+                                    <tr>
+                                        <td width="10"><input type="checkbox" name="check1" value="@product.MaSanPham"></td>
+                                        <td>@product.MaSanPham</td>
+                                        <td>@product.TenSanPham</td>
+                                        <td><img src="~/LayoutOgani/img/@product.HinhAnh" alt="" width="100px;"></td>
+                                        <td>@product.SoLuong</td>
+                                        <td><span class="badge @(product.TinhTrang == "Còn hàng" ? "bg-success" : "bg-danger")">@product.TinhTrang</span></td>
+                                        <td>@product.GiaBan.ToString("N0") đ</td>
+                                        <td>@product.TenDanhMuc</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm trash" type="button" title="Xóa" onclick="myFunction(this)">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" data-toggle="modal" data-target="#ModalUP">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -581,7 +267,7 @@
                                 <option>Giày</option>
                                 <option>Mũ</option>
                                 <option>Túi-Balo</option>
-                                <option>Dụng cụ</option>                              
+                                <option>Dụng cụ</option>
                             </select>
                         </div>
                     </div>
@@ -618,46 +304,46 @@
     <script type="text/javascript" src="/Plugin/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="/Plugin/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript">
-            $('#sampleTable').DataTable();
-            //Thời Gian
+        $('#sampleTable').DataTable();
+        //Thời Gian
         function time() {
-          var today = new Date();
-          var weekday = new Array(7);
-          weekday[0] = "Chủ Nhật";
-          weekday[1] = "Thứ Hai";
-          weekday[2] = "Thứ Ba";
-          weekday[3] = "Thứ Tư";
-          weekday[4] = "Thứ Năm";
-          weekday[5] = "Thứ Sáu";
-          weekday[6] = "Thứ Bảy";
-          var day = weekday[today.getDay()];
-          var dd = today.getDate();
-          var mm = today.getMonth() + 1;
-          var yyyy = today.getFullYear();
-          var h = today.getHours();
-          var m = today.getMinutes();
-          var s = today.getSeconds();
-          m = checkTime(m);
-          s = checkTime(s);
-          nowTime = h + " giờ " + m + " phút " + s + " giây";
-          if (dd < 10) {
-            dd = '0' + dd
-          }
-          if (mm < 10) {
-            mm = '0' + mm
-          }
-          today = day + ', ' + dd + '/' + mm + '/' + yyyy;
-          tmp = '<span class="date"> ' + today + ' - ' + nowTime +
-            '</span>';
-          document.getElementById("clock").innerHTML = tmp;
-          clocktime = setTimeout("time()", "1000", "Javascript");
-
-          function checkTime(i) {
-            if (i < 10) {
-              i = "0" + i;
+            var today = new Date();
+            var weekday = new Array(7);
+            weekday[0] = "Chủ Nhật";
+            weekday[1] = "Thứ Hai";
+            weekday[2] = "Thứ Ba";
+            weekday[3] = "Thứ Tư";
+            weekday[4] = "Thứ Năm";
+            weekday[5] = "Thứ Sáu";
+            weekday[6] = "Thứ Bảy";
+            var day = weekday[today.getDay()];
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            nowTime = h + " giờ " + m + " phút " + s + " giây";
+            if (dd < 10) {
+                dd = '0' + dd
             }
-            return i;
-          }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+            tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+                '</span>';
+            document.getElementById("clock").innerHTML = tmp;
+            clocktime = setTimeout("time()", "1000", "Javascript");
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
         }
     </script>
     <script>
@@ -686,6 +372,176 @@
             $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
             e.stopImmediatePropagation();
         });
+    </script>
+    <!-- Modal Thêm Sản Phẩm -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Thêm Sản Phẩm Mới</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="form-group">
+                            <label for="MaSanPham">Mã Sản Phẩm</label>
+                            <input type="text" id="MaSanPham" name="MaSanPham" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="TenSanPham">Tên Sản Phẩm</label>
+                            <input type="text" id="TenSanPham" name="TenSanPham" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="MoTa">Mô Tả</label>
+                            <input type="text" id="MoTa" name="MoTa" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="GiaBan">Giá Bán</label>
+                            <input type="number" id="GiaBan" name="GiaBan" class="form-control" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="GiaGiam">Giá Giảm</label>
+                            <input type="number" id="GiaGiam" name="GiaGiam" class="form-control" step="0.01">
+                        </div>
+                        <div class="form-group">
+                            <label for="MaLoai">Loại Sản Phẩm</label>
+                            <select id="MaLoai" name="MaLoai" class="form-control">
+                                <!-- Dữ liệu danh sách loại sẽ được truyền từ controller -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="MaDanhMuc">Danh Mục</label>
+                            <select id="MaDanhMuc" name="MaDanhMuc" class="form-control">
+                                <!-- Dữ liệu danh sách danh mục sẽ được truyền từ controller -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="HinhAnh">Hình Ảnh</label>
+                            <input type="file" id="HinhAnh" name="HinhAnh" class="form-control">
+                        </div>
+
+                        <!-- Phần Thêm Biến Thể Sản Phẩm -->
+                        <h5>Thêm Biến Thể Sản Phẩm</h5>
+                        <div id="productVariants">
+                            <button type="button" class="btn btn-secondary btn-sm" onclick="addVariant()">+ Thêm biến thể</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="submitProduct()">Thêm Sản Phẩm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let variantCount = 0;
+
+        function addVariant() {
+            variantCount++;
+            const variantHTML = `
+                <div id="variant_${variantCount}" class="variant">
+                    <h6>Biến thể ${variantCount}</h6>
+                    <div class="form-group">
+                        <label for="MaChiTietSP_${variantCount}">Mã Chi Tiết SP</label>
+                        <input type="text" id="MaChiTietSP_${variantCount}" name="MaChiTietSP" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="SoLuongTon_${variantCount}">Số Lượng Tồn</label>
+                        <input type="number" id="SoLuongTon_${variantCount}" name="SoLuongTon" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="MaKichThuoc_${variantCount}">Kích Thước</label>
+                        <select id="MaKichThuoc_${variantCount}" name="MaKichThuoc" class="form-control">
+                            <!-- Danh sách kích thước -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="MaMauSac_${variantCount}">Màu Sắc</label>
+                        <select id="MaMauSac_${variantCount}" name="MaMauSac" class="form-control">
+                            <!-- Danh sách màu sắc -->
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeVariant(${variantCount})">Xóa biến thể</button>
+                </div>
+            `;
+            document.getElementById("productVariants").insertAdjacentHTML("beforeend", variantHTML);
+        }
+
+        function removeVariant(id) {
+            document.getElementById(`variant_${id}`).remove();
+        }
+
+        async function submitProduct() {
+            // Lấy dữ liệu từ form chính (Sản phẩm)
+            const productData = {
+                MaSanPham: document.getElementById("MaSanPham").value,
+                TenSanPham: document.getElementById("TenSanPham").value,
+                MoTa: document.getElementById("MoTa").value,
+                GiaBan: parseFloat(document.getElementById("GiaBan").value),
+                GiaGiam: parseFloat(document.getElementById("GiaGiam").value),
+                MaLoai: document.getElementById("MaLoai").value,
+                MaDanhMuc: document.getElementById("MaDanhMuc").value,
+                HinhAnh: document.getElementById("HinhAnh").files[0] // Lấy file ảnh
+            };
+
+            // Lấy dữ liệu từ các biến thể sản phẩm
+            const variants = [];
+            document.querySelectorAll(".variant").forEach(variant => {
+                variants.push({
+                    MaChiTietSP: variant.querySelector("input[name='MaChiTietSP']").value,
+                    SoLuongTon: parseInt(variant.querySelector("input[name='SoLuongTon']").value),
+                    MaKichThuoc: variant.querySelector("select[name='MaKichThuoc']").value,
+                    MaMauSac: variant.querySelector("select[name='MaMauSac']").value,
+                    HinhAnhBienThe: variant.querySelector("input[name='HinhAnhBienThe']").files[0] // Lấy file ảnh biến thể
+                });
+            });
+
+            // Tạo FormData để gửi file cùng dữ liệu
+            const formData = new FormData();
+            formData.append("MaSanPham", productData.MaSanPham);
+            formData.append("TenSanPham", productData.TenSanPham);
+            formData.append("MoTa", productData.MoTa);
+            formData.append("GiaBan", productData.GiaBan);
+            formData.append("GiaGiam", productData.GiaGiam);
+            formData.append("MaLoai", productData.MaLoai);
+            formData.append("MaDanhMuc", productData.MaDanhMuc);
+            formData.append("HinhAnh", productData.HinhAnh);
+
+            // Đính kèm thông tin các biến thể vào formData
+            variants.forEach((variant, index) => {
+                formData.append(`Variants[${index}].MaChiTietSP`, variant.MaChiTietSP);
+                formData.append(`Variants[${index}].SoLuongTon`, variant.SoLuongTon);
+                formData.append(`Variants[${index}].MaKichThuoc`, variant.MaKichThuoc);
+                formData.append(`Variants[${index}].MaMauSac`, variant.MaMauSac);
+                formData.append(`Variants[${index}].HinhAnhBienThe`, variant.HinhAnhBienThe);
+            });
+
+            try {
+                // Gửi dữ liệu tới controller
+                const response = await fetch('/Admin/AddProduct', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    alert("Thêm sản phẩm thành công!");
+                    location.reload();
+                } else {
+                    alert(`Lỗi: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Lỗi khi gửi dữ liệu:', error);
+                alert('Đã xảy ra lỗi khi gửi dữ liệu.');
+            }
+        }
+
+
     </script>
 </body>
 

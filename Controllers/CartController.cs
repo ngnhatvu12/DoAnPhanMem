@@ -2,6 +2,7 @@
 using DoAnPhanMem.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 using System.Text.Json;
 
 public class CartController : Controller
@@ -100,110 +101,145 @@ public class CartController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateOrder()
+    public IActionResult CreateOrder(string paymentMethodId, string paymentMethod)
     {
         using (var transaction = _db.Database.BeginTransaction())
         {
-                // Kiểm tra và lấy mã khách hàng từ Session
+            try
+            {
                 var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
                 if (string.IsNullOrEmpty(maKhachHang))
                 {
-                    Console.WriteLine("Khách hàng chưa đăng nhập hoặc session đã hết hạn.");
                     return Json(new { success = false, message = "Bạn cần đăng nhập trước khi đặt hàng." });
                 }
 
-                // Lấy thông tin khách hàng từ cơ sở dữ liệu
                 var khachHang = _db.KhachHang.FirstOrDefault(kh => kh.MaKhachHang == maKhachHang);
                 if (khachHang == null)
                 {
-                    Console.WriteLine("Không tìm thấy thông tin khách hàng trong database.");
                     return Json(new { success = false, message = "Không tìm thấy thông tin khách hàng." });
                 }
 
-            // Tạo mã đơn hàng mới
-            string maDonHang = "DH" + DateTime.Now.ToString("yyyyMMdd");
+                string maDonHang = "DH" + DateTime.Now.ToString("yyyyMMdd");
+                Console.WriteLine("Mã đơn hàng được tạo: " + maDonHang);
 
-            // Tạo và lưu đơn hàng mới
-            var donHang = new DonHang
+                var donHang = new DonHang
                 {
                     MaDonHang = maDonHang,
                     MaKhachHang = maKhachHang,
                     NgayDat = DateTime.Now,
-                    TrangThai = "Đang giao",
+                    TrangThai = "Đang giao hàng",
                     NgayGiao = DateTime.Now.AddDays(2),
                     DiaChiGiao = khachHang.DiaChi
                 };
                 _db.DonHang.Add(donHang);
                 _db.SaveChanges();
+                Console.WriteLine("Đơn hàng đã được lưu vào DB.");
 
-                // Lấy thông tin giỏ hàng
                 var maGioHang = HttpContext.Session.GetString("MaGioHang");
-            var cartItems = _db.ChiTietGioHang
-.Include(ct => ct.ChiTietSanPham)
-    .ThenInclude(ctsp => ctsp.SanPham)
-.Where(ct => ct.MaGioHang == maGioHang)
-.ToList();
+                var cartItems = _db.ChiTietGioHang.Include(ct => ct.ChiTietSanPham).ThenInclude(ctsp => ctsp.SanPham)
+                                                   .Where(ct => ct.MaGioHang == maGioHang).ToList();
 
-
-            decimal tongTienDonHang = 0;
-
-            // Thêm chi tiết đơn hàng cho mỗi mục trong giỏ hàng
-            foreach (var item in cartItems)
-            {
-                // Kiểm tra xem `ChiTietSanPham` và `SanPham` đã được load thành công chưa
-                if (item.ChiTietSanPham == null || item.ChiTietSanPham.SanPham == null)
+                decimal tongTienDonHang = 0;
+                foreach (var item in cartItems)
                 {
-                    Console.WriteLine("ChiTietSanPham hoặc SanPham null cho mã giỏ hàng: " + item.MaGioHang);
-                    continue; // Bỏ qua nếu không thể load dữ liệu sản phẩm
+                    if (item.ChiTietSanPham == null || item.ChiTietSanPham.SanPham == null) continue;
+
+                    string maChiTietDonHang = "CTDH" + Guid.NewGuid().ToString("N").Substring(0, 6);
+                    var chiTietDonHang = new ChiTietDonHang
+                    {
+                        MaChiTietDonHang = maChiTietDonHang,
+                        MaDonHang = maDonHang,
+                        MaChiTietSP = item.MaChiTietSP,
+                        MaGiamGia = "GG003",
+                        SoLuong = item.SoLuong,
+                        GiaBan = item.ChiTietSanPham.SanPham.GiaBan * item.SoLuong
+                    };
+
+                    tongTienDonHang += chiTietDonHang.GiaBan;
+                    _db.ChiTietDonHang.Add(chiTietDonHang);
                 }
 
-                // Tạo mã chi tiết đơn hàng
-                string maChiTietDonHang = "CTDH" + Guid.NewGuid().ToString("N").Substring(0, 6);
+                Console.WriteLine("Tổng tiền đơn hàng: " + tongTienDonHang);
 
-                // Khởi tạo `ChiTietDonHang` mới
-                var chiTietDonHang = new ChiTietDonHang
-                {
-                    MaChiTietDonHang = maChiTietDonHang,
-                    MaDonHang = maDonHang, // Mã đơn hàng vừa tạo
-                    MaChiTietSP = item.MaChiTietSP,
-                    MaGiamGia = "GG003", // Giả định mã giảm giá 20%
-                    SoLuong = item.SoLuong,
-                    GiaBan = item.ChiTietSanPham.SanPham.GiaBan * item.SoLuong
-                };
-
-                // Thêm `ChiTietDonHang` vào `DbContext`
-                _db.ChiTietDonHang.Add(chiTietDonHang);
-            }
-
-            // Gọi `SaveChanges` để lưu tất cả thay đổi vào cơ sở dữ liệu
-            _db.SaveChanges();
-
-
-
-            // Tạo mã thanh toán và thêm vào bảng thanh toán
-            string maThanhToan = "TT" + DateTime.Now.Ticks.ToString().Substring(0, 8);
+                string maThanhToan = "TT" + DateTime.Now.Ticks.ToString().Substring(0, 8);
                 var thanhToan = new ThanhToan
                 {
                     MaThanhToan = maThanhToan,
                     MaDonHang = maDonHang,
-                    PhuongThuc = "Thanh toán khi nhận hàng",
+                    PhuongThuc = paymentMethod,
                     TongTien = tongTienDonHang,
-                    TrangThai = "Đã thanh toán",
+                    TrangThai = paymentMethod == "stripe" ? "Đang xử lý" : "Chưa thanh toán",
                     NgayThanhToan = DateTime.Now
                 };
                 _db.ThanhToan.Add(thanhToan);
                 _db.SaveChanges();
 
-                _db.ChiTietGioHang.RemoveRange(cartItems);
-               _db.SaveChanges();
+                if (paymentMethod == "stripe" && !string.IsNullOrEmpty(paymentMethodId))
+                {
+                    var stripeClient = new Stripe.StripeClient("sk_test_51QHQ0IGVyUQsdJTU1qOVMdRrplEbGWsZC6fcZk9UTajsUkljyutoPhNd1uaDi8VksmDaxJc5N0F9t2j7Wp234exh00oc5Bwib3"); // Thay YOUR_SECRET_API_KEY bằng khóa bí mật của bạn
+                    var service = new PaymentIntentService(stripeClient);
+                    var options = new PaymentIntentCreateOptions
+                    {
+                        Amount = (long)(tongTienDonHang),
+                        Currency = "vnd",
+                        PaymentMethod = paymentMethodId,
+                        Confirm = true,
+                        AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+                        {
+                            Enabled = true,   // Cho phép Stripe tự động chọn phương thức thanh toán
+                            AllowRedirects = "never" // Không cho phép các phương thức yêu cầu chuyển hướng
+                        }
+                    };
 
+                    try
+                    {
+                        var paymentIntent = service.Create(options);
+                        if (paymentIntent.Status == "requires_action" && paymentIntent.NextAction.Type == "use_stripe_sdk")
+                        {
+                            return Json(new { success = false, requiresAction = true, paymentIntentClientSecret = paymentIntent.ClientSecret });
+                        }
+                        else if (paymentIntent.Status == "succeeded")
+                        {
+                            thanhToan.TrangThai = "Đã thanh toán";
+                            donHang.TrangThai = "Đã thanh toán";
+                            _db.SaveChanges();
 
-            transaction.Commit();
+                            transaction.Commit();
+                            _db.ChiTietGioHang.RemoveRange(cartItems);
+                            _db.SaveChanges();
+                            return Json(new { success = true, orderId = maDonHang });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("Lỗi Stripe: " + ex.Message);
+                        transaction.Rollback();
+                        return Json(new { success = false, message = "Lỗi thanh toán với Stripe: " + ex.Message });
+                    }
+                }
+                else
+                {
+                    _db.ChiTietGioHang.RemoveRange(cartItems);
+                    _db.SaveChanges();
 
-                Console.WriteLine("Đơn hàng đã được tạo thành công với mã: " + maDonHang);
-                return Json(new { success = true, orderId = maDonHang });
+                    transaction.Commit();
+                    return Json(new { success = true, orderId = maDonHang });
+                }
+
+                transaction.Rollback();
+                return Json(new { success = false, message = "Đã xảy ra lỗi không xác định trong quá trình đặt hàng." });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Lỗi xảy ra trong quá trình đặt hàng: " + ex.Message);
+                transaction.Rollback();
+                return Json(new { success = false, message = "Đã xảy ra lỗi trong quá trình tạo đơn hàng: " + ex.Message });
             }
         }
+    }
+
+
+
     [HttpPost]
     public ActionResult AddToCart([FromBody] Dictionary<string, JsonElement> payload)
     {

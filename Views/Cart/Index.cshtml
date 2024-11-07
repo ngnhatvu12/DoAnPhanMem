@@ -108,27 +108,72 @@
 </div>
 
 <script src="https://js.stripe.com/v3/"></script>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $("#order-button").on("click", function () {
-            $.ajax({
-                url: "/Cart/CreateOrder",
-                type: "POST",
-                success: function (response) {
-                    if (response.success) {
-                        alert("Đơn hàng của bạn đã được tạo thành công!");
-                        window.location.href = "/Order/Details/" + response.orderId; // Chuyển hướng đến chi tiết đơn hàng
-                    } else {
-                        alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại.");
-                    }
-                },
-                error: function () {
-                    alert("Đã xảy ra lỗi. Vui lòng kiểm tra lại.");
+    var stripe = Stripe('pk_test_51QHQ0IGVyUQsdJTUKqBdjNH4ZW79wTWV4LUD5oYz36anI4gCTYgceBS0Pthhyh7RO1uCWTJESYrzFH6ilmvUs8LM004IBc0Ump'); // Thay YOUR_PUBLIC_STRIPE_KEY bằng khóa công khai của Stripe
+    var elements = stripe.elements();
+    var card = elements.create('card');
+
+    $("input[name='paymentMethod']").on("change", function () {
+        if ($(this).val() === "stripe") {
+            $("#card-element").show();
+            card.mount("#card-element");
+        } else {
+            $("#card-element").hide();
+        }
+    });
+
+    $("#order-button").on("click", function () {
+        var paymentMethod = $("input[name='paymentMethod']:checked").val();
+        if (paymentMethod === "stripe") {
+            stripe.createPaymentMethod({
+                type: 'card',
+                card: card,
+                billing_details: {
+                    name: $("#name").val(),
+                    email: $("#email").val()
+                }
+            }).then(function (result) {
+                if (result.error) {
+                    alert("Lỗi thanh toán: " + result.error.message);
+                } else {
+                    createOrder(result.paymentMethod.id, "stripe");
                 }
             });
-        });
+        } else {
+            createOrder(null, paymentMethod);
+        }
     });
+
+    function createOrder(paymentMethodId, paymentMethod) {
+        $.ajax({
+            url: "/Cart/CreateOrder",
+            type: "POST",
+            data: { paymentMethodId: paymentMethodId, paymentMethod: paymentMethod },
+            success: function (response) {
+                if (response.success) {
+                    alert("Đơn hàng của bạn đã được tạo thành công!");
+                    window.location.href = "/Order/Details/" + response.orderId;
+                } else if (response.requiresAction) {
+                    stripe.confirmCardPayment(response.paymentIntentClientSecret).then(function (result) {
+                        if (result.error) {
+                            alert("Lỗi xác thực: " + result.error.message);
+                        } else {
+                            alert("Đơn hàng của bạn đã được tạo thành công!");
+                            window.location.href = "/Order/Details/" + response.orderId;
+                        }
+                    });
+                } else {
+                    alert("Đã xảy ra lỗi khi tạo đơn hàng. Vui lòng thử lại.");
+                }
+            },
+            error: function () {
+                alert("Đã xảy ra lỗi. Vui lòng kiểm tra lại.");
+            }
+        });
+    }
+
 </script>
 
 <style>
