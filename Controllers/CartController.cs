@@ -45,10 +45,10 @@ public class CartController : Controller
 
         return Json(new { success = true, cartItems = cartDetails, totalQuantity = totalQuantity });
     }
-    public IActionResult Index()
+    public IActionResult Index(string maKhachHang)
     {
         string maGioHang = HttpContext.Session.GetString("MaGioHang");
-        if (string.IsNullOrEmpty(maGioHang)) return RedirectToAction("EmptyCart"); // Điều hướng khi giỏ hàng rỗng
+        if (string.IsNullOrEmpty(maGioHang)) return RedirectToAction("EmptyCart");
 
         var cartDetails = _db.ChiTietGioHang
             .Where(ct => ct.MaGioHang == maGioHang)
@@ -57,6 +57,7 @@ public class CartController : Controller
                 MaSanPham = ct.ChiTietSanPham.MaSanPham,
                 TenSanPham = ct.ChiTietSanPham.SanPham.TenSanPham,
                 GiaBan = ct.ChiTietSanPham.SanPham.GiaBan,
+                GiaGiam = ct.ChiTietSanPham.SanPham.GiaGiam, // Sử dụng giá giảm nếu có, nếu không thì lấy giá bán
                 SoLuong = ct.SoLuong,
                 TongTien = ct.TongTien,
                 HinhAnh = string.IsNullOrEmpty(ct.ChiTietSanPham.HinhAnhBienThe) ? ct.ChiTietSanPham.SanPham.HinhAnh : ct.ChiTietSanPham.HinhAnhBienThe,
@@ -65,19 +66,39 @@ public class CartController : Controller
             })
             .ToList();
 
-        var totalQuantity = cartDetails.Sum(item => item.SoLuong);
-        var totalPrice = cartDetails.Sum(item => item.TongTien);
+        // Tính tổng số tiền và tổng số tiết kiệm
+        decimal totalPrice = cartDetails.Sum(item => item.GiaBan * item.SoLuong);
+        decimal totalDiscountPrice = cartDetails.Sum(item => item.GiaGiam * item.SoLuong);
+        decimal savings = totalPrice - totalDiscountPrice;
 
-        ViewBag.TotalQuantity = totalQuantity;
-        ViewBag.TotalPrice = totalPrice;
+        ViewBag.TotalQuantity = cartDetails.Sum(item => item.SoLuong);
+        ViewBag.TotalPrice = totalDiscountPrice;
+        ViewBag.Savings = savings;
         ViewBag.CartItems = cartDetails;
 
         // Lấy mã giảm giá từ bảng GiamGia
         var discountCodes = _db.GiamGia.ToList();
         ViewBag.DiscountCodes = discountCodes;
 
+        // Lấy thông tin khách hàng từ session
+        var maKhachHan = HttpContext.Session.GetString("MaKhachHang");
+        var customer = _db.KhachHang.FirstOrDefault(kh => kh.MaKhachHang == maKhachHan);
+        if (customer != null)
+        {
+            ViewBag.CustomerName = customer.TenKhachHang;
+            ViewBag.CustomerEmail = customer.Email;
+            ViewBag.CustomerAddress = customer.DiaChi;
+            ViewBag.CustomerPhone = customer.SoDienThoai;
+        }
+        else
+        {
+            // Điều hướng khi không tìm thấy khách hàng
+            return RedirectToAction("Error", "Home");
+        }
+
         return View();
     }
+
     public IActionResult ConfirmPayment(string maKhachHang, string maDonHang, decimal tongTien, string phuongThuc, string trangThai)
     {
         var payment = new ThanhToan
@@ -127,7 +148,7 @@ public class CartController : Controller
                     MaDonHang = maDonHang,
                     MaKhachHang = maKhachHang,
                     NgayDat = DateTime.Now,
-                    TrangThai = "Đang giao hàng",
+                    TrangThai = "Đang xử lý",
                     NgayGiao = DateTime.Now.AddDays(2),
                     DiaChiGiao = khachHang.DiaChi
                 };

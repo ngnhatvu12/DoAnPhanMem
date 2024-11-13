@@ -42,13 +42,13 @@
         <!-- Price Details Section with Separators -->
         <div class="separator"></div>
         <div class="price-details">
-            <p>Tạm tính: <span>1.122.000đ</span></p>
-            <p class="savings">Tiết kiệm: <span>483k</span></p>
+            <p>Tạm tính: <span>@String.Format("{0:N0}", ViewBag.TotalPrice)đ</span></p>
+            <p class="savings">Tiết kiệm: <span>@String.Format("{0:N0}", ViewBag.Savings)đ</span></p>
             <p>Giảm giá: <span>0đ</span></p>
             <div class="separator"></div>
             <p>Phí giao hàng: <span>Miễn phí</span></p>
             <div class="separator"></div>
-            <h3 class="total-price">Tổng: <span>1.122.000đ</span></h3>
+            <h3 class="total-price">Tổng: <span>@String.Format("{0:N0}", ViewBag.TotalPrice)đ</span></h3>
         </div>
     </div>
 
@@ -57,23 +57,23 @@
         <div class="customer-info">
             <h2>Thông tin khách hàng</h2>
             <form id="order-form">
-                <div class="form-group">
-                    <label for="name">Họ và tên</label>
-                    <input type="text" id="name" name="name" placeholder="Nhập họ tên của bạn" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="example@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="address">Địa chỉ</label>
-                    <input type="text" id="address" name="address" placeholder="Nhập địa chỉ của bạn" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Số điện thoại</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Số điện thoại của bạn" required>
-                </div>
-            </form>
+            <div class="form-group">
+                <label for="name">Họ và tên</label>
+                <input type="text" id="name" name="name" placeholder="Nhập họ tên của bạn" value="@ViewBag.CustomerName" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="example@example.com" value="@ViewBag.CustomerEmail" required>
+            </div>
+            <div class="form-group">
+                <label for="address">Địa chỉ</label>
+                <input type="text" id="address" name="address" placeholder="Nhập địa chỉ của bạn" value="@ViewBag.CustomerAddress" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Số điện thoại</label>
+                <input type="tel" id="phone" name="phone" placeholder="Số điện thoại của bạn" value="@ViewBag.CustomerPhone" required>
+            </div>
+        </form>
         </div>
         <div class="separator bold"></div>
 
@@ -110,6 +110,11 @@
 <script src="https://js.stripe.com/v3/"></script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Kiểm tra xem mã tài khoản có tồn tại trong ViewBag không
+    var maTaiKhoan = '@ViewBag.MaTaiKhoan';
+    console.log("Mã tài khoản từ Session:", maTaiKhoan);
+</script>
 <script>
     var stripe = Stripe('pk_test_51QHQ0IGVyUQsdJTUKqBdjNH4ZW79wTWV4LUD5oYz36anI4gCTYgceBS0Pthhyh7RO1uCWTJESYrzFH6ilmvUs8LM004IBc0Ump'); // Thay YOUR_PUBLIC_STRIPE_KEY bằng khóa công khai của Stripe
     var elements = stripe.elements();
@@ -154,14 +159,14 @@
             success: function (response) {
                 if (response.success) {
                     alert("Đơn hàng của bạn đã được tạo thành công!");
-                    window.location.href = "/Order/Details/" + response.orderId;
+                    window.location.href = "/Order/Detail/" + response.orderId;
                 } else if (response.requiresAction) {
                     stripe.confirmCardPayment(response.paymentIntentClientSecret).then(function (result) {
                         if (result.error) {
                             alert("Lỗi xác thực: " + result.error.message);
                         } else {
                             alert("Đơn hàng của bạn đã được tạo thành công!");
-                            window.location.href = "/Order/Details/" + response.orderId;
+                            window.location.href = "/Order/Detail/" + response.orderId;
                         }
                     });
                 } else {

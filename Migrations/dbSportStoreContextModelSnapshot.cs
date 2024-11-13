@@ -320,6 +320,29 @@ namespace DoAnPhanMem.Migrations
                     b.ToTable("Loai");
                 });
 
+            modelBuilder.Entity("DoAnPhanMem.Models.ThongBao", b =>
+                {
+                    b.Property<string>("MaThongBao")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("MaKhachHang")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("MoTa")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ThoiGian")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("MaThongBao");
+
+                    b.HasIndex("MaKhachHang");
+
+                    b.ToTable("ThongBao");
+                });
+
             modelBuilder.Entity("DonHang", b =>
                 {
                     b.Property<string>("MaDonHang")
@@ -782,6 +805,17 @@ namespace DoAnPhanMem.Migrations
                     b.Navigation("KhachHang");
 
                     b.Navigation("SanPham");
+                });
+
+            modelBuilder.Entity("DoAnPhanMem.Models.ThongBao", b =>
+                {
+                    b.HasOne("KhachHang", "KhachHang")
+                        .WithMany()
+                        .HasForeignKey("MaKhachHang")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("KhachHang");
                 });
 
             modelBuilder.Entity("DonHang", b =>

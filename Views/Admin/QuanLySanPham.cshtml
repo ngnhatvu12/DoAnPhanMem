@@ -1,4 +1,4 @@
-﻿@model List<DoAnPhanMem.ViewModels.ProductViewModel>
+﻿
 
 @{
     ViewData["Title"] = "Quản lý sản phẩm";
@@ -204,7 +204,14 @@
                                             <button class="btn btn-primary btn-sm trash" type="button" title="Xóa" onclick="myFunction(this)">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
-                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" data-toggle="modal" data-target="#ModalUP">
+                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa" data-toggle="modal" data-target="#ModalUP"
+                                                    data-masanpham="@product.MaSanPham"
+                                                    data-tensanpham="@product.TenSanPham"
+                                                    data-mota="@product.MoTa"
+                                                    data-giaban="@product.GiaBan"
+                                                    data-giagiam="@product.GiaGiam"
+                                                    data-loai="@product.TenLoai"
+                                                    data-danhmuc="@product.TenDanhMuc">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </td>
@@ -221,71 +228,61 @@
     <!--
       MODAL
     -->
-    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
-         data-keyboard="false">
+    <div class="modal fade" id="ModalUP" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-
                 <div class="modal-body">
                     <div class="row">
-                        <div class="form-group  col-md-12">
-                            <span class="thong-tin-thanh-toan">
-                                <h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
-                            </span>
+                        <div class="form-group col-md-12">
+                            <h5>Chỉnh sửa thông tin sản phẩm cơ bản</h5>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label class="control-label">Mã sản phẩm </label>
-                            <input class="form-control" type="number" value="71309005">
+                            <label class="control-label">Mã sản phẩm</label>
+                            <input id="editMaSanPham" class="form-control" type="text" readonly>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Tên sản phẩm</label>
-                            <input class="form-control" type="text" required value="Băng đô thể thao Sweat Band">
+                            <input id="editTenSanPham" class="form-control" type="text" required>
                         </div>
-                        <div class="form-group  col-md-6">
-                            <label class="control-label">Số lượng</label>
-                            <input class="form-control" type="number" required value="20">
-                        </div>
-                        <div class="form-group col-md-6 ">
-                            <label for="exampleSelect1" class="control-label">Tình trạng sản phẩm</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>Còn hàng</option>
-                                <option>Hết hàng</option>
-                                <option>Đang nhập hàng</option>
-                            </select>
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Mô tả</label>
+                            <textarea id="editMoTa" class="form-control"></textarea>
                         </div>
                         <div class="form-group col-md-6">
                             <label class="control-label">Giá bán</label>
-                            <input class="form-control" type="text" value="100.000">
+                            <input id="editGiaBan" class="form-control" type="text">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="exampleSelect1" class="control-label">Danh mục</label>
-                            <select class="form-control" id="exampleSelect1">
-                                <option>áo</option>
-                                <option>Quần</option>
-                                <option>Giày</option>
-                                <option>Mũ</option>
-                                <option>Túi-Balo</option>
-                                <option>Dụng cụ</option>
-                            </select>
+                            <label class="control-label">Giá giảm</label>
+                            <input id="editGiaGiam" class="form-control" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Loại</label>
+                            <input id="editLoai" class="form-control" type="text">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Danh mục</label>
+                            <input id="editDanhMuc" class="form-control" type="text">
                         </div>
                     </div>
-                    <BR>
-                    <a href="#" style="    float: right;
-    font-weight: 600;
-    color: #ea0000;">Chỉnh sửa sản phẩm nâng cao</a>
-                    <BR>
-                    <BR>
-                    <button class="btn btn-save" type="button">Lưu lại</button>
-                    <a class="btn btn-cancel" data-dismiss="modal" href="#">Hủy bỏ</a>
-                    <BR>
-                </div>
-                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" id="toggleVariantsBtn">Chỉnh sửa các biến thể</button>
+
+                    <!-- Container for Variants -->
+                    <div id="variantsContainer" class="mt-4" style="display: none;">
+                        <h5>Các biến thể sản phẩm</h5>
+                        <div id="variantList">
+                            <!-- Variants will be added dynamically here -->
+                        </div>
+                    </div>
+                    <button class="btn btn-save" type="button" onclick="saveChanges()">Lưu lại</button>
+                    <button class="btn btn-cancel" data-dismiss="modal">Hủy bỏ</button>
                 </div>
             </div>
         </div>
     </div>
+
     <!--
     MODAL
     -->
@@ -385,37 +382,44 @@
                 </div>
                 <div class="modal-body">
                     <form id="addProductForm">
-                        <div class="form-group">
-                            <label for="MaSanPham">Mã Sản Phẩm</label>
-                            <input type="text" id="MaSanPham" name="MaSanPham" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="TenSanPham">Tên Sản Phẩm</label>
-                            <input type="text" id="TenSanPham" name="TenSanPham" class="form-control" required>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="MaSanPham">Mã Sản Phẩm</label>
+                                <input type="text" id="MaSanPham" name="MaSanPham" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="TenSanPham">Tên Sản Phẩm</label>
+                                <input type="text" id="TenSanPham" name="TenSanPham" class="form-control" required>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="MoTa">Mô Tả</label>
-                            <input type="text" id="MoTa" name="MoTa" class="form-control">
+                            <textarea id="MoTa" name="MoTa" class="form-control" rows="3"></textarea>
                         </div>
-                        <div class="form-group">
-                            <label for="GiaBan">Giá Bán</label>
-                            <input type="number" id="GiaBan" name="GiaBan" class="form-control" step="0.01">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="GiaBan">Giá Bán</label>
+                                <input type="number" id="GiaBan" name="GiaBan" class="form-control" step="0.01">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="GiaGiam">Giá Giảm</label>
+                                <input type="number" id="GiaGiam" name="GiaGiam" class="form-control" step="0.01">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="GiaGiam">Giá Giảm</label>
-                            <input type="number" id="GiaGiam" name="GiaGiam" class="form-control" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label for="MaLoai">Loại Sản Phẩm</label>
-                            <select id="MaLoai" name="MaLoai" class="form-control">
-                                <!-- Dữ liệu danh sách loại sẽ được truyền từ controller -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="MaDanhMuc">Danh Mục</label>
-                            <select id="MaDanhMuc" name="MaDanhMuc" class="form-control">
-                                <!-- Dữ liệu danh sách danh mục sẽ được truyền từ controller -->
-                            </select>
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <label for="MaDanhMuc">Danh Mục</label>
+                                <select id="MaDanhMuc" name="MaDanhMuc" class="form-control">
+                                    
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="MaLoai">Loại Sản Phẩm</label>
+                                <select id="MaLoai" name="MaLoai" class="form-control">
+                                    
+                                </select>
+                            </div>
+
                         </div>
                         <div class="form-group">
                             <label for="HinhAnh">Hình Ảnh</label>
@@ -456,19 +460,25 @@
                     <div class="form-group">
                         <label for="MaKichThuoc_${variantCount}">Kích Thước</label>
                         <select id="MaKichThuoc_${variantCount}" name="MaKichThuoc" class="form-control">
-                            <!-- Danh sách kích thước -->
+        
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="MaMauSac_${variantCount}">Màu Sắc</label>
                         <select id="MaMauSac_${variantCount}" name="MaMauSac" class="form-control">
-                            <!-- Danh sách màu sắc -->
+       
                         </select>
+                    </div>
+                    <div class="form-group">
+                    <label for="HinhAnhBienThe_${variantCount}">Ảnh Biến Thể</label>
+                    <input type="file" id="HinhAnhBienThe_${variantCount}" name="HinhAnhBienThe" class="form-control">
                     </div>
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeVariant(${variantCount})">Xóa biến thể</button>
                 </div>
             `;
             document.getElementById("productVariants").insertAdjacentHTML("beforeend", variantHTML);
+            loadKichThuocOptions(`#MaKichThuoc_${variantCount}`);
+            loadMauSacOptions(`#MaMauSac_${variantCount}`);
         }
 
         function removeVariant(id) {
@@ -541,8 +551,282 @@
             }
         }
 
+        function loadLoaiOptions() {
+            $.ajax({
+                url: '/Admin/GetLoaiList',
+                type: 'GET',
+                success: function (data) {
+                    console.log("Data for Loai:", data); // Kiểm tra dữ liệu trả về
+
+                    var loaiSelect = $('#MaLoai');
+                    loaiSelect.empty();
+                    // Khởi tạo option mặc định
+                    var options = ['<option value="">Chọn Loại Sản Phẩm</option>'];
+
+                    // Sử dụng `map` để tạo ra các `<option>` khớp với tên thuộc tính `maLoai` và `tenLoai`
+                    options.push(...data.map(item => `<option value="${item.maLoai}">${item.tenLoai}</option>`));
+                    loaiSelect.html(options.join(''));
+                },
+                error: function (error) {
+                    console.error("Lỗi khi tải danh sách loại sản phẩm:", error);
+                }
+            });
+        }
+
+
+
+        function loadDanhMucOptions() {
+            $.ajax({
+                url: '/Admin/GetDanhMucList',
+                type: 'GET',
+                success: function (data) {
+                    console.log("Data for Danh Muc:", data); // Kiểm tra dữ liệu trả về
+
+                    var danhMucSelect = $('#MaDanhMuc');
+                    danhMucSelect.empty();
+                    // Khởi tạo option mặc định
+                    var options = ['<option value="">Chọn Danh Mục</option>'];
+
+                    // Sử dụng `map` để tạo ra các `<option>` khớp với tên thuộc tính `maDanhMuc` và `tenDanhMuc`
+                    options.push(...data.map(item => `<option value="${item.maDanhMuc}">${item.tenDanhMuc}</option>`));
+                    danhMucSelect.html(options.join(''));
+                },
+                error: function (error) {
+                    console.error("Lỗi khi tải danh sách danh mục:", error);
+                }
+            });
+        }
+
+
+        function loadKichThuocOptions(targetSelector = '#MaKichThuoc') {
+            $.ajax({
+                url: '/Admin/GetKichThuocList',
+                type: 'GET',
+                success: function (data) {
+                    console.log("Data for Kich Thuoc:", data); // Kiểm tra dữ liệu trả về
+
+                    var kichThuocSelect = $(targetSelector);
+                    kichThuocSelect.empty();
+                    // Khởi tạo option mặc định
+                    var options = ['<option value="">Chọn Kích Thước</option>'];
+                    options.push(...data.map(item => `<option value="${item.maKichThuoc}">${item.tenKichThuoc}</option>`));
+                    kichThuocSelect.html(options.join(''));
+                },
+                error: function (error) {
+                    console.error("Lỗi khi tải danh sách kích thước:", error);
+                }
+            });
+        }
+
+        function loadMauSacOptions(targetSelector = '#MaMauSac') {
+            $.ajax({
+                url: '/Admin/GetMauSacList',
+                type: 'GET',
+                success: function (data) {
+                    console.log("Data for Mau Sac:", data); // Kiểm tra dữ liệu trả về
+
+                    var mauSacSelect = $(targetSelector);
+                    mauSacSelect.empty();
+                    // Khởi tạo option mặc định
+                    var options = ['<option value="">Chọn Màu Sắc</option>'];
+                    options.push(...data.map(item => `<option value="${item.maMauSac}">${item.tenMauSac}</option>`));
+                    mauSacSelect.html(options.join(''));
+                },
+                error: function (error) {
+                    console.error("Lỗi khi tải danh sách màu sắc:", error);
+                }
+            });
+        }
+
+
+        $(document).ready(function () {
+            loadLoaiOptions();
+            loadDanhMucOptions();
+            loadKichThuocOptions();
+            loadMauSacOptions();
+        });
+
+    </script>
+    <script>
+        $(document).on("click", ".edit", function () {
+            const maSanPham = $(this).data("masanpham");
+
+            // Lấy thông tin chi tiết sản phẩm từ server
+            $.ajax({
+                url: `/Admin/GetProductDetails?maSanPham=${maSanPham}`,
+                type: 'GET',
+                success: function (data) {
+                    // Gán dữ liệu vào các ô input trong modal
+                    $("#editMaSanPham").val(data.maSanPham || '');
+                    $("#editTenSanPham").val(data.tenSanPham || '');
+                    $("#editMoTa").val(data.moTa || '');
+                    $("#editGiaBan").val(data.giaBan || '');
+                    $("#editGiaGiam").val(data.giaGiam || '');
+                    $("#editLoai").val(data.loai || '');
+                    $("#editDanhMuc").val(data.danhMuc || '');
+                },
+                error: function (error) {
+                    console.error('Lỗi khi lấy thông tin chi tiết sản phẩm:', error);
+                    alert('Không thể lấy thông tin sản phẩm. Vui lòng thử lại sau.');
+                }
+            });
+        });
+
+        async function saveChanges() {
+            const productData = {
+                MaSanPham: $("#editMaSanPham").val(),
+                TenSanPham: $("#editTenSanPham").val(),
+                MoTa: $("#editMoTa").val(),
+                GiaBan: parseFloat($("#editGiaBan").val()),
+                GiaGiam: parseFloat($("#editGiaGiam").val()),
+                TenLoai: $("#editLoai").val(),  // Gửi TenLoai thay vì MaLoai
+                TenDanhMuc: $("#editDanhMuc").val()  // Gửi TenDanhMuc thay vì MaDanhMuc
+            };
+
+            try {
+                const response = await fetch('/Admin/UpdateProduct', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(productData)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert("Cập nhật sản phẩm thành công!");
+                    location.reload();
+                } else {
+                    alert(`Lỗi: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Lỗi khi cập nhật sản phẩm:', error);
+                alert('Đã xảy ra lỗi khi cập nhật sản phẩm.');
+            }
+        }
+        let variantsVisible = false;
+
+        document.getElementById("toggleVariantsBtn").addEventListener("click", async function () {
+            const productId = $("#editMaSanPham").val();
+
+            if (!variantsVisible) {
+                try {
+                    // Fetch variants for the product from the server
+                    const response = await fetch(`/Admin/GetProductVariants?productId=${productId}`);
+                    const variants = await response.json();
+
+                    // Clear existing variant list
+                    document.getElementById("variantList").innerHTML = "";
+
+                    // Add variants dynamically
+                    variants.forEach(variant => {
+                        document.getElementById("variantList").insertAdjacentHTML('beforeend', `
+                            <div class="variant-item" data-macchitiet="${variant.MaChiTietSP}">
+                                <h6>Biến thể: ${variant.MaChiTietSP}</h6>
+                                <div class="form-group">
+                                    <label>Số lượng tồn</label>
+                                    <input type="number" class="form-control variantQuantity" value="${variant.SoLuongTon}" data-macchitiet="${variant.MaChiTietSP}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Trạng thái</label>
+                                    <input type="text" class="form-control" value="${variant.SoLuongTon > 0 ? 'Còn hàng' : 'Hết hàng'}" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Kích thước</label>
+                                    <input type="text" class="form-control variantSize" value="${variant.TenKichThuoc}" data-macchitiet="${variant.MaChiTietSP}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Màu sắc</label>
+                                    <input type="text" class="form-control variantColor" value="${variant.TenMauSac}" data-macchitiet="${variant.MaChiTietSP}">
+                                </div>
+                            </div>
+                        `);
+                    });
+
+                    // Show variants container
+                    document.getElementById("variantsContainer").style.display = "block";
+                    variantsVisible = true;
+                } catch (error) {
+                    console.error("Error fetching variants:", error);
+                    alert("Lỗi khi tải các biến thể sản phẩm.");
+                }
+            } else {
+                // Hide variants container if it's already shown
+                document.getElementById("variantsContainer").style.display = "none";
+                variantsVisible = false;
+            }
+        });
+
+        // Save function with variant support
+        async function saveChanges() {
+            const productData = {
+                MaSanPham: $("#editMaSanPham").val(),
+                TenSanPham: $("#editTenSanPham").val(),
+                MoTa: $("#editMoTa").val(),
+                GiaBan: parseFloat($("#editGiaBan").val()),
+                GiaGiam: parseFloat($("#editGiaGiam").val()),
+                TenLoai: $("#editLoai").val(),
+                TenDanhMuc: $("#editDanhMuc").val()
+            };
+
+            // Gather variant data if visible
+            const variants = [];
+            if (variantsVisible) {
+                document.querySelectorAll(".variant-item").forEach(variant => {
+                    variants.push({
+                        MaChiTietSP: variant.dataset.macchitiet,
+                        SoLuongTon: parseInt(variant.querySelector(".variantQuantity").value),
+                        TenKichThuoc: variant.querySelector(".variantSize").value,
+                        TenMauSac: variant.querySelector(".variantColor").value
+                    });
+                });
+            }
+
+            try {
+                const response = await fetch('/Admin/UpdateProductWithVariants', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productData, variants })
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert("Cập nhật sản phẩm thành công!");
+                    location.reload();
+                } else {
+                    alert(`Lỗi: ${result.message}`);
+                }
+            } catch (error) {
+                console.error('Lỗi khi cập nhật sản phẩm:', error);
+                alert('Đã xảy ra lỗi khi cập nhật sản phẩm.');
+            }
+        }
+        function loadVariants(productId) {
+            $.ajax({
+                url: `/Admin/GetProductVariants?productId=${productId}`,
+                method: 'GET',
+                success: function (data) {
+                    console.log("Received variants data:", data);
+                    renderVariants(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching variants:", error);
+                }
+            });
+        }
 
     </script>
 </body>
-
 </html>
+<style>
+    .form-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+
+        .form-row .col-md-6 {
+            flex: 1;
+        }
+
+    #addProductForm .form-group {
+        margin-bottom: 15px;
+    }
+
+</style>

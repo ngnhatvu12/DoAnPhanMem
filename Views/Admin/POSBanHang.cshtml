@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "POS Bán Hàng";
+    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -56,77 +57,65 @@
             <div class="col-md-8">
                 <div class="tile">
                     <h3 class="tile-title">Phần mềm bán hàng</h3>
-                    <input type="text" id="myInput" onkeyup="myFunction()"
-                           placeholder="Nhập mã sản phẩm hoặc tên sản phẩm để tìm kiếm...">
+
+                    <!-- Thanh tìm kiếm sản phẩm -->
+                    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Nhập mã sản phẩm hoặc tên sản phẩm để tìm kiếm...">
+
+                    <!-- Bảng sản phẩm ngẫu nhiên (4 sản phẩm) -->
+                    <h3 class="tile-title" style="margin-top:20px">Danh sách sản phẩm</h3>
                     <div class="du--lieu-san-pham">
                         <table class="table table-hover table-bordered">
                             <thead>
                                 <tr>
-
-                                    <th class="so--luong">Mã hàng</th>
-                                    <th class="so--luong">Tên sản phẩm</th>
-                                    <th class="so--luong">Ảnh</th>
-                                    <th class="so--luong" width="10">Số lượng</th>
-                                    <th class="so--luong">Giá bán</th>
-                                    <th class="so--luong text-center" style="text-align: center; vertical-align: middle;"></th>
+                                    <th>Mã hàng</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ảnh</th>
+                                    <th>Số lượng tồn</th>
+                                    <th>Giá bán</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-
-                                    <td>71309005</td>
-                                    <td>Áo thun thể thao Dry Fit </td>
-                                    <td><img src="/LayoutOgani/img/hinh14.jpg" alt="" width="50px;"></td>
-                                    <td><input class="so--luong1" type="number" value="2"></td>
-                                    <td>3.000.000 </td>
-
-                                    <td style="text-align: center; vertical-align: middle;">
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>62304003</td>
-                                    <td>Túi thể thao Gym Bag</td>
-                                    <td><img src="/LayoutOgani/img/hinh10.jpg" alt="" width="50px;"></td>
-                                    <td><input class="so--luong1" type="number" value="3"></td>
-                                    <td>1.800.000 </td>
-
-                                    <td style="text-align: center; vertical-align: middle;">
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>71304032</td>
-                                    <td>Áo tập gum Flex Fit </td>
-                                    <td><img src="/LayoutOgani/img/hinh11.jpg" alt="" width="50px;"></td>
-                                    <td><input class="so--luong1" type="number" width="30" value="1"></td>
-                                    <td>700.000 </td>
-
-                                    <td style="text-align: center; vertical-align: middle;">
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>71338008</td>
-                                    <td>Giày thể thao Cross Training</td>
-                                    <td><img src="/LayoutOgani/img/hinh13.jpg" alt="" width="50px;"></td>
-                                    <td><input class="so--luong1" type="number" width="30" value="5"></td>
-                                    <td>6.500.000 </td>
-                                    <td style="text-align: center; vertical-align: middle;">
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-
+                                @foreach (var product in (IEnumerable<dynamic>)ViewData["RandomProducts"])
+                                {
+                                    <tr>
+                                        <td>@product.MaSanPham</td>
+                                        <td>@product.TenSanPham</td>
+                                        <td><img src="/LayoutOgani/img/@product.HinhAnh" alt="" width="50px;"></td>
+                                        <td>@product.SoLuongTon</td>
+                                        <td>@String.Format("{0:N0}", product.GiaBan) đ</td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm" type="button" onclick="addToOrder('@product.MaSanPham', '@product.TenSanPham', '@product.HinhAnh', @product.GiaBan)">Thêm</button>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
-                    <div class="alert">
 
-                        <i class="fas fa-exclamation-triangle"></i> Gõ mã hoặc tên sản phẩm vào thanh tìm kiếm để thêm hàng vào đơn hàng
+                    <!-- Bảng Sản phẩm đã thêm -->
+                    <h3 class="tile-title" style="margin-top:20px">Sản phẩm đã thêm</h3>
+                    <div id="emptyMessage">
+                        Đơn hàng hiện đang trống, vui lòng thêm sản phẩm.
+                    </div>
+                    <div id="addedProductsTable" class="du--lieu-san-pham" style="display: none;">
+                        <table class="table table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Mã hàng</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Ảnh</th>
+                                    <th>Màu sắc</th>
+                                    <th>Kích thước</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá bán</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="addedProductsBody">
+                                <!-- Sản phẩm sẽ được thêm vào đây bằng JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -193,7 +182,7 @@
                             <button class="btn btn-primary luu-san-pham" type="button"> Lưu đơn hàng (F9)</button>
                             <button class="btn btn-primary luu-va-in" type="button">Lưu và in hóa đơn (F10)</button>
 
-                            <a class="btn btn-secondary luu-va-in" href="index.html">Quay về</a>
+                            <a class="btn btn-secondary luu-va-in" href="Admin/Index">Quay về</a>
                         </div>
                     </div>
                 </div>
@@ -360,6 +349,79 @@
           }
         }
     </script>
+    <script>
+        function addToOrder(maSanPham, tenSanPham, hinhAnh, giaBan) {
+            // Gọi API để lấy màu sắc và kích thước của sản phẩm
+            fetch(`/Admin/GetProductDetail?maSanPham=${maSanPham}`)
+                .then(response => response.json())
+                .then(data => {
+                    const row = document.createElement("tr");
+
+                    // Tạo danh sách màu sắc từ dữ liệu API
+                    const colorOptions = data.map(color =>
+                        `<option value="${color.MaMauSac}">${color.TenMauSac}</option>`
+                    ).join('');
+
+                    // Tạo HTML của hàng mới
+                    row.innerHTML = `
+                        <td>${maSanPham}</td>
+                        <td>${tenSanPham}</td>
+                        <td><img src="/LayoutOgani/img/${hinhAnh}" alt="" width="50px;"></td>
+                        <td>
+                            <select class="form-control colorSelect" onchange="updateSizeOptions(this, ${JSON.stringify(data)})">
+                                ${colorOptions}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control sizeSelect"></select>
+                        </td>
+                        <td><input type="number" value="1" min="1" max="10" class="quantityInput" oninput="updateTotalPrice(this, ${giaBan})"></td>
+                        <td class="priceCell">${formatCurrency(giaBan)}</td>
+                        <td><button class="btn btn-primary btn-sm trash" type="button" onclick="removeProduct(this)">Xóa</button></td>
+                    `;
+
+                    document.getElementById("addedProductsBody").appendChild(row);
+
+                    // Cập nhật danh sách kích thước ban đầu cho màu đầu tiên
+                    const initialColor = data[0];
+                    updateSizeOptions(row.querySelector('.colorSelect'), data);
+
+                    // Hiển thị bảng nếu là sản phẩm đầu tiên
+                    document.getElementById("emptyMessage").style.display = "none";
+                    document.getElementById("addedProductsTable").style.display = "block";
+                });
+        }
+
+        // Hàm để cập nhật danh sách kích thước dựa trên màu sắc được chọn
+        function updateSizeOptions(colorSelect, productData) {
+            const selectedColor = colorSelect.value;
+
+            // Lấy đối tượng màu được chọn từ productData
+            const colorData = productData.find(color => color.MaMauSac === selectedColor);
+
+            // Kiểm tra nếu colorData tồn tại và có Sizes
+            if (colorData && colorData.Sizes) {
+                // Tạo danh sách kích thước dựa trên màu sắc được chọn
+                const sizeOptions = colorData.Sizes.map(size =>
+                    `<option value="${size.MaKichThuoc}">${size.TenKichThuoc}</option>`
+                ).join('');
+
+                // Cập nhật danh sách kích thước trong ô kích thước
+                const sizeSelect = colorSelect.closest('tr').querySelector('.sizeSelect');
+                sizeSelect.innerHTML = sizeOptions;
+            } else {
+                // Nếu không có Sizes, hiển thị thông báo hoặc đặt danh sách kích thước trống
+                const sizeSelect = colorSelect.closest('tr').querySelector('.sizeSelect');
+                sizeSelect.innerHTML = '<option value="">Không có kích thước</option>';
+            }
+        }
+
+        // Hàm định dạng tiền tệ
+        function formatCurrency(amount) {
+            return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+        }
+
+</script>
 </body>
 
 </html>

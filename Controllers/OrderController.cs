@@ -16,10 +16,6 @@ namespace DoAnPhanMem.Controllers
         {
             // Lấy mã khách hàng từ session
             var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
-            if (string.IsNullOrEmpty(maKhachHang))
-            {
-                return RedirectToAction("Login", "Account");
-            }
 
             // Lấy danh sách đơn hàng của khách hàng
             var donHangs = await _db.DonHang

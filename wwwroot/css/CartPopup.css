@@ -10,7 +10,6 @@
     right: 0; /* Điều chỉnh để popup xuất hiện bên trái nút giỏ hàng */
     top: 100%;
     transform: translateX(-80%); /* Lệch sang trái */
-    transition: all 0.3s ease;
 }
 
     /* Mũi tên chỉ hướng lên nút giỏ hàng */

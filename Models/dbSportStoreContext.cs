@@ -23,6 +23,7 @@ namespace DoAnPhanMem.Models
         public DbSet<GiaoHang> GiaoHang { get; set; }
         public DbSet<GioHang> GioHang { get; set; }
         public DbSet<ChiTietGioHang> ChiTietGioHang { get; set; }
+        public DbSet<ThongBao> ThongBao { get; set; }
         public DbSet<HoaDon> HoaDon { get; set; }
         public DbSet<ChiTietHoaDon> ChiTietHoaDon { get; set; }
         public DbSet<DanhGia> DanhGia { get; set; }

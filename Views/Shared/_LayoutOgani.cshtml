@@ -127,7 +127,7 @@
                 <div class="col-md-3">
                     <div class="logo">
                         <a href="index.html">
-                            <img src="../LayoutOgani/img/logo2.png" alt="Logo" style="width:200px; height:400px">
+                            <img src="../LayoutOgani/img/logo2.png" alt="Logo" style="width:130px">
                         </a>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
                         </a>
                         <a href="javascript:void(0);" class="btn wishlist" onclick="showWishlist()">
                             <i class="fa fa-heart"></i>
-                            <span>(@Context.Session.GetInt32("SoLuongYeuThich"))</span>
+                            <span>(0)</span>
                         </a>
                     </div>
                 </div>
@@ -160,7 +160,8 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-3">
-                    <nav class="navbar bg-light">
+                    <nav class="navbar bg-light">  
+                        <h3 class="navbar-title">Danh mục sản phẩm</h3>
                         <ul class="navbar-nav">
                             <li class="nav-item">
                                 <a class="nav-link" href="#"><i class="fa fa-home"></i>Trang Chủ</a>
@@ -192,16 +193,16 @@
                 <div class="col-md-6">
                     <div class="header-slider normal-slider">
                         <div class="header-slider-item">
-                            <img src="../LayoutOgani/img/hinh2000.png" alt="Slider Image" />                             
-                                                         
+                            <img src="../LayoutOgani/img/hinh2000.png" alt="Slider Image" />
+
                         </div>
                         <div class="header-slider-item">
-                            <img src="../LayoutOgani/img/hinh3000.png" alt="Slider Image" />                                                           
-                                                        
+                            <img src="../LayoutOgani/img/hinh3000.png" alt="Slider Image" />
+
                         </div>
                         <div class="header-slider-item">
-                            <img src="../LayoutOgani/img/hinh4000.png" alt="Slider Image" />                                                       
-                               
+                            <img src="../LayoutOgani/img/hinh4000.png" alt="Slider Image" />
+
                         </div>
                     </div>
                 </div>
@@ -210,13 +211,13 @@
                         <div class="img-item">
                             <img src="../LayoutOgani/img/hinh5000.png" />
                             <a class="img-text" href="">
-                               
+
                             </a>
                         </div>
                         <div class="img-item">
                             <img src="../LayoutOgani/img/hinh6000.png" />
                             <a class="img-text" href="">
-                                
+
                             </a>
                         </div>
                     </div>
@@ -542,7 +543,7 @@
         <a href="/Cart/Details" class="btn">Xem tất cả</a>
         <button onclick="closeCartPopup()">Đóng</button>
     </div>
-    
+
     <script>
         function showWishlist() {
             const isLoggedIn = '@User.Identity.IsAuthenticated'; // Kiểm tra đăng nhập
@@ -616,11 +617,12 @@
                     console.error('Lỗi khi thêm vào danh sách yêu thích:', error);
                 });
         }
+
     </script>
     <!-- Bao gồm jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Bao gồm Bootstrap (cho modal) -->
+    <!-- Bao gồm Bootstrap (cho modal) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

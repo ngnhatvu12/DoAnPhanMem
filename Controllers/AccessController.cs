@@ -44,6 +44,7 @@ namespace DoAnPhanMem.Controllers
                         {
                             HttpContext.Session.SetString("TenKhachHang", khachHang.TenKhachHang);
                             HttpContext.Session.SetString("MaKhachHang", khachHang.MaKhachHang);
+                            Console.WriteLine("MaKhachHang từ Session: " + HttpContext.Session.GetString("MaKhachHang"));
                             var gioHang = _db.GioHang.FirstOrDefault(gh => gh.MaTaiKhoan == account.MaTaiKhoan && gh.TrangThai == "Chưa thanh toán");
 
                             if (gioHang == null)

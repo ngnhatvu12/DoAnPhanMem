@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Quản lý đơn hàng";
+    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -188,84 +189,46 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>MD0837</td>
-                                    <td>Triệu Thanh Phú</td>
-                                    <td>Dép thể thao Comfort Slide, Bóng đá Adidas</td>
-                                    <td>2</td>
-                                    <td>350.000 đ</td>
-                                    <td><span class="badge bg-success">Hoàn thành</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>MĐ8265</td>
-                                    <td>Nguyễn Thị Ngọc Cẩm</td>
-                                    <td>Giày thể thao Cross Training</td>
-                                    <td>1</td>
-                                    <td>1.300.000 đ</td>
-                                    <td><span class="badge bg-success">Hoàn thành</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>MT9835</td>
-                                    <td>Đặng Hoàng Phúc</td>
-                                    <td>Giày chạy Nike, Balo thể thao Multi-Purpose, Túi thể thao Gym Bag</td>
-                                    <td>3 </td>
-                                    <td>1.600.000 đ</td>
-                                    <td><span class="badge bg-success">Hoàn thành</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>ER3835</td>
-                                    <td>Nguyễn Thị Mỹ Yến</td>
-                                    <td>Áo thun thể thao Dry Fit</td>
-                                    <td>1 </td>
-                                    <td>1.500.000 đ</td>
-                                    <td><span class="badge bg-info">Chờ thanh toán</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>AL3947</td>
-                                    <td>Phạm Thị Ngọc</td>
-                                    <td>Áo thể thao Puma, Áo tập gym Flex Fit</td>
-                                    <td>2 </td>
-                                    <td>1.000.000 đ</td>
-                                    <td><span class="badge bg-warning">Đang giao hàng</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>QY8723</td>
-                                    <td>Ngô Thái An</td>
-                                    <td>Bình nước giữ nhiệt Sport Bottle</td>
-                                    <td>1 </td>
-                                    <td>150.000 đ</td>
-                                    <td><span class="badge bg-danger">Đã hủy</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i> </button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
+                                @foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td width="10"><input type="checkbox" name="check1" value="@order.MaDonHang"></td>
+                                        <td>@order.MaDonHang</td>
+                                        <td>@order.TenKhachHang</td>
+                                        <td>
+                                            @foreach (var detail in order.ChiTietDonHang)
+                                            {
+                                                <div class="product-detail">
+                                                    <div class="product-attribute">
+                                                        <strong>Tên:</strong> @detail.TenSanPham
+                                                    </div>
+                                                    <div class="product-attribute">
+                                                        <strong>Màu sắc:</strong> @detail.MauSac,
+                                                        <strong>Kích thước:</strong> @detail.KichThuoc,
+                                                        <strong>Số lượng:</strong> @detail.SoLuong
+                                                    </div>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td>@order.TongSoLuong</td>
+                                        <td>@string.Format("{0:C}", order.TongTien)</td>
+                                        <td><span class="badge bg-success">@order.TrangThai</span></td>
+                                        <td>
+                                            <div>
+                                            <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
+                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
+                                            </div>
+                                            <div>
+                                            <button class="btn btn-primary btn-sm" type="button" title="Duyệt" onclick="location.href='@Url.Action("DuyetDonHang", new { maDonHang = order.MaDonHang })'">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm" type="button" data-toggle="modal" data-target="#huyDonHangModal" onclick="$('#maDonHangHuy').val('@order.MaDonHang')">
+                                                <i class="fas fa-ban"></i>
+                                            </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -401,6 +364,32 @@
           $("#ModalUP").modal({ backdrop: false, keyboard: false })
         });
     </script>
+    <!-- Modal hủy đơn hàng -->
+    <div class="modal fade" id="huyDonHangModal" tabindex="-1" role="dialog" aria-labelledby="huyDonHangModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="@Url.Action("HuyDonHang")">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="huyDonHangModalLabel">Hủy đơn hàng</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="maDonHangHuy" name="maDonHang" />
+                        <div class="form-group">
+                            <label for="lyDoHuy">Lý do hủy:</label>
+                            <textarea class="form-control" id="lyDoHuy" name="lyDo" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-danger">Gửi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
