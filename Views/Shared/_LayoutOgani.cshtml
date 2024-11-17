@@ -126,8 +126,8 @@
             <div class="row align-items-center">
                 <div class="col-md-3">
                     <div class="logo">
-                        <a href="index.html">
-                            <img src="../LayoutOgani/img/logo2.png" alt="Logo" style="width:130px">
+                        <a href="/Home/Index">
+                            <img src="../LayoutOgani/img/logo2.png" alt="Logo" style="width:130px; height:400px">
                         </a>
                     </div>
                 </div>
@@ -515,26 +515,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
     <!-- Modal for displaying the product added to the wishlist -->
-    <div id="wishlistModal" class="modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Danh sách sản phẩm yêu thích</h5>
+                    <h5 class="modal-title" id="wishlistModalLabel">Danh sách yêu thích</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <ul id="wishlistItems">
-                        <!-- Danh sách sản phẩm yêu thích sẽ được thêm vào đây -->
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    <div id="wishlist-content">
+                        <!-- Nội dung danh sách yêu thích sẽ được thêm vào đây -->
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div id="cartPopup" class="cart-popup" style="display: none;">
         <h4>Giỏ hàng của bạn</h4>
         <ul id="cartItems">
@@ -543,82 +541,71 @@
         <a href="/Cart/Details" class="btn">Xem tất cả</a>
         <button onclick="closeCartPopup()">Đóng</button>
     </div>
+    <a href="javascript:void(0);" class="btn wishlist" onclick="showWishlist()">
+        <i class="fa fa-heart"></i>
+        <span id="wishlist-count">(0)</span>
+    </a>
 
     <script>
-        function showWishlist() {
-            const isLoggedIn = '@User.Identity.IsAuthenticated'; // Kiểm tra đăng nhập
-
-            if (!isLoggedIn) {
-                alert('Bạn cần đăng nhập để xem danh sách yêu thích.');
-                return;
-            }
-
-            // Nếu đã đăng nhập, lấy danh sách sản phẩm yêu thích từ server
-            fetch('/Product/GetWishlistItems')
-                .then(response => response.json())
-                .then(data => {
-                    const wishlistList = document.getElementById('wishlistItems');
-                    wishlistList.innerHTML = ''; // Xóa danh sách cũ
-
-                    // Kiểm tra dữ liệu trả về từ server
-                    if (data && data.length > 0) {
-                        data.forEach(item => {
-                            const li = document.createElement('li');
-
-                            // Nếu imageURL bị thiếu, có thể cần sửa phần server để trả về đúng giá trị
-                            const imageUrl = item.ImageUrl || '/img/no-image.png';
-                            const productName = item.Name || 'Tên không xác định';
-                            const productPrice = item.Price || 'Giá không xác định';
-
-                            li.innerHTML = `<img src="${imageUrl}" alt="${productName}" style="height: 100px;"/> ${productName} - ${productPrice}`;
-                            wishlistList.appendChild(li);
-                        });
-                    } else {
-                        wishlistList.innerHTML = '<li>Không có sản phẩm yêu thích nào.</li>';
-                    }
-
-                    // Hiển thị modal
-                    $('#wishlistModal').modal('show');
-                })
-                .catch(error => {
-                    console.error('Lỗi khi lấy danh sách yêu thích:', error);
-                });
+        function updateWishlistCount() {
+            $.get('/Home/GetWishlistCount', function (response) {
+                $('#wishlist-count').text(`(${response.count})`);
+            });
         }
 
-
-        function addToWishlist(productId) {
-            const isLoggedIn = '@User.Identity.IsAuthenticated'; // Kiểm tra đăng nhập
-
-            if (!isLoggedIn) {
-                alert('Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.');
-                return;
-            }
-
-            fetch('/Product/ThemYeuThich', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: productId })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Sản phẩm đã được thêm vào danh sách yêu thích.');
-
-                        // Cập nhật số lượng yêu thích
-                        const wishlistCount = document.querySelector('.wishlist span');
-                        wishlistCount.textContent = `(${data.wishlistCount})`;  // Giả sử server trả về số lượng mới
+        // Gọi hàm khi trang tải
+        $(document).ready(function () {
+            updateWishlistCount();
+        });
+        function showWishlist() {
+            $.get('/Home/GetWishlist', function (response) {
+                if (response.success) {
+                    $('.wishlist span').text(`(${response.data.length})`);
+                    console.log(response.data);
+                    let html = '';
+                    if (response.data.length > 0) {
+                        response.data.forEach(item => {
+                            html += `
+                                <div class="wishlist-item row align-items-center mb-3">
+                                    <div class="col-md-3">
+                                        <img src="/LayoutOgani/img/${item.HinhAnh || 'no-image.png'}" class="img-fluid" alt="${item.TenSanPham}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>${item.TenSanPham}</h5>
+                                        <p>Giá: ${item.GiaBan} đ</p>
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <button class="btn btn-danger btn-sm" onclick="removeFromWishlist('${item.MaYeuThich}')">Xóa</button>
+                                    </div>
+                                </div>
+                            `;
+                        });
                     } else {
-                        alert(data.message);
+                        html = '<p>Danh sách yêu thích trống.</p>';
                     }
-                })
-                .catch(error => {
-                    console.error('Lỗi khi thêm vào danh sách yêu thích:', error);
+                    $('#wishlist-content').html(html);
+                    $('#wishlistModal').modal('show');
+                } else {
+                    alert(response.message);
+                }
+            });
+        }
+        function removeFromWishlist(maYeuThich) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?')) {
+                $.post('/Home/RemoveFromWishlist', { maYeuThich: maYeuThich }, function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        showWishlist();
+                        updateWishlistCount(); // Cập nhật số lượng yêu thích
+                    } else {
+                        alert(response.message);
+                    }
                 });
+            }
         }
 
     </script>
+
     <!-- Bao gồm jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

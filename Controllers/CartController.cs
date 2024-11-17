@@ -178,6 +178,17 @@ public class CartController : Controller
 
                     tongTienDonHang += chiTietDonHang.GiaBan;
                     _db.ChiTietDonHang.Add(chiTietDonHang);
+                    var chiTietSanPham = _db.ChiTietSanPham.FirstOrDefault(ctsp => ctsp.MaChiTietSP == item.MaChiTietSP);
+                    if (chiTietSanPham != null)
+                    {
+                        if (chiTietSanPham.SoLuongTon < item.SoLuong)
+                        {
+                            transaction.Rollback();
+                            return Json(new { success = false, message = $"Sản phẩm {chiTietSanPham.MaChiTietSP} không đủ hàng tồn." });
+                        }
+                        chiTietSanPham.SoLuongTon -= item.SoLuong;
+                        _db.ChiTietSanPham.Update(chiTietSanPham);
+                    }
                 }
 
                 Console.WriteLine("Tổng tiền đơn hàng: " + tongTienDonHang);

@@ -44,12 +44,6 @@ namespace DoAnPhanMem.Controllers
                                        .Take(4)
                                        .ToList();
 
-            // Lấy danh sách sản phẩm yêu thích (wishlist)
-            var wishlistItems = _db.DanhSachYeuThich // Giả sử bạn có bảng Wishlist
-                                   .Include(w => w.SanPham) // Liên kết với bảng SanPham
-                                   .Select(w => w.SanPham)
-                                   .ToList();
-
             // Tạo một view model để gửi dữ liệu sang view
             var homeViewModel = new HomeViewModel
             {
@@ -57,7 +51,6 @@ namespace DoAnPhanMem.Controllers
                 YeuThichNhat = sanPhamYeuThichNhat,
                 BanChayNhat = sanPhamBanChayNhat,
                 CoTheQuanTam = sanPhamCoTheQuanTam,
-                WishlistItems = wishlistItems // Gán sản phẩm yêu thích vào view model
             };
 
             return View(homeViewModel);  // Gửi view model sang View
@@ -75,7 +68,27 @@ namespace DoAnPhanMem.Controllers
                 return NotFound();
             }
 
-            return View(sanPham);
+            // Lấy danh sách đánh giá và bình luận cho sản phẩm này
+            var danhGiaList = (from dg in _db.DanhGia
+                               join hd in _db.HoaDon on dg.MaHoaDon equals hd.MaHoaDon
+                               join dh in _db.DonHang on hd.MaDonHang equals dh.MaDonHang
+                               join kh in _db.KhachHang on dh.MaKhachHang equals kh.MaKhachHang
+                               where dg.MaSanPham == id
+                               select new DanhGiaViewModel2
+                               {
+                                   TenKhachHang = kh.TenKhachHang,
+                                   SoDiem = dg.SoDiem,
+                                   BinhLuan = dg.BinhLuan,
+                                   NgayDanhGia = dg.NgayDanhGia
+                               }).ToList();
+
+            var viewModel = new ProductDetailViewModel2
+            {
+                SanPham = sanPham,
+                DanhGiaList = danhGiaList
+            };
+
+            return View(viewModel);
         }
         public IActionResult GetVariantDetails(string maSanPham, string maMauSac, string maKichThuoc)
         {
@@ -197,6 +210,105 @@ namespace DoAnPhanMem.Controllers
             else
             {
                 return Json(new { success = false, message = "Không tìm thấy chi tiết sản phẩm cho lựa chọn của bạn." });
+            }
+        }
+
+        [HttpPost]
+        public JsonResult AddToWishlist(string maSanPham)
+        {
+            try
+            {
+                // Lấy thông tin khách hàng từ Session
+                var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
+                if (string.IsNullOrEmpty(maKhachHang))
+                {
+                    return Json(new { success = false, message = "Bạn cần đăng nhập để thêm sản phẩm vào yêu thích." });
+                }
+
+                // Kiểm tra sản phẩm đã có trong danh sách yêu thích hay chưa
+                var existingWishlist = _db.DanhSachYeuThich
+                                          .FirstOrDefault(x => x.MaSanPham == maSanPham && x.MaKhachHang == maKhachHang);
+
+                if (existingWishlist != null)
+                {
+                    return Json(new { success = false, message = "Sản phẩm đã có trong danh sách yêu thích." });
+                }
+
+                // Tạo mới mục yêu thích
+                var wishlist = new DanhSachYeuThich
+                {
+                    MaYeuThich = Guid.NewGuid().ToString(), // Tạo mã yêu thích duy nhất
+                    MaKhachHang = maKhachHang,
+                    MaSanPham = maSanPham,
+                    NgayTao = DateTime.Now
+                };
+
+                _db.DanhSachYeuThich.Add(wishlist);
+                _db.SaveChanges();
+
+                return Json(new { success = true, message = "Sản phẩm đã được thêm vào yêu thích." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Đã xảy ra lỗi: " + ex.Message });
+            }
+        }
+        public IActionResult GetWishlist()
+        {
+            // Lấy MaKhachHang từ Session
+            var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
+            if (string.IsNullOrEmpty(maKhachHang))
+            {
+                return Json(new { success = false, message = "Bạn cần đăng nhập để xem danh sách yêu thích." });
+            }
+
+            // Lấy danh sách sản phẩm yêu thích
+            var wishlist = _db.DanhSachYeuThich
+                              .Where(y => y.MaKhachHang == maKhachHang)
+                              .Join(
+                                  _db.SanPham,
+                                  yeuThich => yeuThich.MaSanPham,
+                                  sanPham => sanPham.MaSanPham,
+                                  (yeuThich, sanPham) => new
+                                  {
+                                      sanPham.TenSanPham,
+                                      sanPham.GiaBan,
+                                      sanPham.HinhAnh,
+                                      yeuThich.MaYeuThich
+                                  })
+                              .ToList();
+
+            return Json(new { success = true, data = wishlist });
+        }
+        public JsonResult GetWishlistCount()
+        {
+            var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
+
+            if (string.IsNullOrEmpty(maKhachHang))
+            {
+                return Json(new { count = 0 });
+            }
+
+            var count = _db.DanhSachYeuThich.Count(y => y.MaKhachHang == maKhachHang);
+            return Json(new { count });
+        }
+        [HttpPost]
+        public JsonResult RemoveFromWishlist(string maYeuThich)
+        {
+            try
+            {
+                var item = _db.DanhSachYeuThich.FirstOrDefault(y => y.MaYeuThich == maYeuThich);
+                if (item != null)
+                {
+                    _db.DanhSachYeuThich.Remove(item);
+                    _db.SaveChanges();
+                    return Json(new { success = true, message = "Xóa sản phẩm khỏi danh sách yêu thích thành công." });
+                }
+                return Json(new { success = false, message = "Sản phẩm không tồn tại trong danh sách yêu thích." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Đã xảy ra lỗi: {ex.Message}" });
             }
         }
 

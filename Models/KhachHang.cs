@@ -17,6 +17,7 @@ public class KhachHang
 
     [StringLength(255)]
     public string Email { get; set; }
+    public string HinhAnh { get; set; }
 
     public DateTime NgaySinh { get; set; }
 

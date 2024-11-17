@@ -76,7 +76,7 @@ else
         <h2 class="category-title">Được yêu thích nhất</h2>
         <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM002">Xem thêm</a>
         <div class="row product-category">
-            @foreach (var item in Model.YeuThichNhat)
+            @foreach (var item in Model.PhoBienNhat)
             {
                 <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product-item">
@@ -98,10 +98,9 @@ else
                             else
                             {
                                 <img src="~//img/no-image.png" alt="No Image" />
-                            }                           
+                            }
                             <div class="product-action">
                                 <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-
                                 <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
                                     <i class="fa fa-heart"></i>
                                 </a>
@@ -495,48 +494,24 @@ function updateCartCount() {
         });
 
 
+        function addToWishlist(maSanPham) {
+            $.ajax({
+                url: '/Home/AddToWishlist', // Đường dẫn tới phương thức AddToWishlist
+                type: 'POST',
+                data: { maSanPham: maSanPham },
+                success: function (response) {
+                    console.log(maSanPham);
 
-
-
-        function addToWishlist(productId) {
-            const isLoggedIn = '@User.Identity.IsAuthenticated'; // Kiểm tra đăng nhập
-
-            if (!isLoggedIn) {
-                alert('Bạn cần đăng nhập để thêm sản phẩm vào danh sách yêu thích.');
-                return;
-            }
-
-            if (!productId) {
-                console.error('Lỗi: productId bị null hoặc undefined.');
-                alert('Không thể thêm vào danh sách yêu thích. ID sản phẩm không hợp lệ.');
-                return;
-            }
-
-            console.log("Product ID:", productId); // Kiểm tra productId trong console
-
-            fetch('/Product/ThemYeuThich', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id: productId }) // Đảm bảo 'id' trùng khớp với bên C#
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Sản phẩm đã được thêm vào danh sách yêu thích.');
-
-                        // Cập nhật số lượng yêu thích
-                        const wishlistCount = document.querySelector('.wishlist span');
-                        wishlistCount.textContent = `(${data.wishlistCount})`;
+                    if (response.success) {
+                        alert(response.message); // Thông báo thành công
                     } else {
-                        alert(data.message);
+                        alert(response.message); // Thông báo lỗi (chưa đăng nhập hoặc sản phẩm đã tồn tại)
                     }
-                })
-                .catch(error => {
-                    console.error('Lỗi khi thêm vào danh sách yêu thích:', error);
-                });
+                },
+                error: function () {
+                    alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+                }
+            });
         }
-
     </script>
 }

@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Quản lý nội bộ";
+    ViewData["Title"] = "Quản lý giao hàng";
     Layout = null;
 }
 
@@ -7,7 +7,7 @@
 <html lang="en">
 
 <head>
-    <title>Danh sách đơn hàng | Quản trị Admin</title>
+    <title>Danh sách đơn giao hàng | Quản trị Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -74,8 +74,10 @@
                 </a>
             </li>
             <li>
-                <a class="app-menu__item" href="#">
-                    <i class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách hàng</span>
+                <a class="app-menu__item" @((ViewData["Title"] as string) == "Quản lý khách hàng" ? "active" : "")
+                   href="@Url.Action("QuanLyKhachHang", "Admin")">
+                    <i class='app-menu__icon bx bx-user-voice'></i>
+                    <span class="app-menu__label">Quản lý khách hàng</span>
                 </a>
             </li>
             <li>
@@ -93,7 +95,7 @@
             <li>
                 <a class="app-menu__item active" href="table-data-banned.html">
                     <i class='app-menu__icon bx bx-run'></i><span class="app-menu__label">
-                        Quản lý nội bộ
+                        Quản lý giao hàng
                     </span>
                 </a>
             </li>
@@ -128,7 +130,7 @@
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item active"><a href="#"><b>Quản lý nội bộ</b></a></li>
+                <li class="breadcrumb-item active"><a href="#"><b>Quản lý giao hàng</b></a></li>
             </ul>
             <div id="clock"></div>
         </div>
@@ -178,66 +180,38 @@
                         <table class="table table-hover table-bordered" id="sampleTable">
                             <thead>
                                 <tr>
-                                    <th width="10"><input type="checkbox" id="all"></th>
-                                    <th>Họ và Tên</th>
-                                    <th>Ngày sinh</th>
-                                    <th>Chức vụ</th>
-                                    <th>Lý do cấm</th>
-                                    <th>Tình trạng</th>
-                                    <th>Chức năng</th>
+                                    <th>Mã Giao Hàng</th>
+                                    <th>Mã Đơn Hàng</th>
+                                    <th>Tên Khách Hàng</th>
+                                    <th>Ngày Giao</th>
+                                    <th>Địa Chỉ</th>
+                                    <th>Trạng Thái</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Kiều Thái Anh</td>
-                                    <td>10/09/1998</td>
-                                    <td>Thu Ngân</td>
-                                    <td>Gian lận trong công việc đã lấy trộm tiền của công ty và thái độ không ăn năn hối lỗi</td>
-                                    <td><span class="badge bg-danger">Sa thải</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Nguyễn Thị Kim Yến</td>
-                                    <td>02/12/1999</td>
-                                    <td>Thu Ngân</td>
-                                    <td>Gian lận trong công việc đã lấy trộm tiền của công ty và thái độ không ăn năn hối lỗi</td>
-                                    <td><span class="badge bg-danger">Sa thải</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Nguyễn Hoàng Thái Nhật</td>
-                                    <td>07/02/1996</td>
-                                    <td>Quản kho</td>
-                                    <td>Tự ý thay đổi thông tin nhân viên và không báo cáo quản lý</td>
-                                    <td><span class="badge bg-warning">Khóa tài khoản</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Võ Thành Nam</td>
-                                    <td>19/09/1999</td>
-                                    <td>Dịch vụ</td>
-                                    <td>Phá hỏng 9 sản phẩm của công ty, có kháng cự khi bị bắt (bồi thường 125.000.000 đ)</td>
-                                    <td><span class="badge bg-danger">Sa thải</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
+                                @if (Model != null)
+                                {
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>@item.MaGiaoHang</td>
+                                            <td>@item.MaDonHang</td>
+                                            <td>@item.TenKhachHang</td>
+                                            <td>@item.NgayGiao?.ToString("dd/MM/yyyy")</td>
+                                            <td>@item.DiaChi</td>
+                                            <td>@item.TrangThai</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="6" class="text-center">Không có dữ liệu</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
+
                     </div>
                 </div>
             </div>

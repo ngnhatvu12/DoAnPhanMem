@@ -8,7 +8,7 @@
 <html lang="en">
 
 <head>
-    <title>Danh sách nhân viên | Quản trị Admin</title>
+    <title>Danh sách sản phẩm | Quản trị Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -73,10 +73,12 @@
                     <i class='app-menu__icon bx bx-id-card'></i>
                     <span class="app-menu__label">Quản lý nhân viên</span>
                 </a>
-            </li>
-            <a class="app-menu__item " href="#">
-                <i class='app-menu__icon bx bx-user-voice'></i><span class="app-menu__label">Quản lý khách hàng</span>
-            </a>
+            <li>
+                <a class="app-menu__item" @((ViewData["Title"] as string) == "Quản lý khách hàng" ? "active" : "")
+                   href="@Url.Action("QuanLyKhachHang", "Admin")">
+                    <i class='app-menu__icon bx bx-user-voice'></i>
+                    <span class="app-menu__label">Quản lý khách hàng</span>
+                </a>
             </li>
             <li>
                 <a class="app-menu__item active" href="table-data-product.html">
@@ -90,10 +92,10 @@
                 </a>
             </li>
             <li>
-                <a class="app-menu__item@((ViewData["Title"] as string) == "Quản lý nội bộ" ? "active" : "")"
-                   asp-controller="Admin" asp-action="QuanLyNoiBo">
+                <a class="app-menu__item@((ViewData["Title"] as string) == "Quản lý giao hàng" ? "active" : "")"
+                   asp-controller="Admin" asp-action="QuanLyGiaoHang">
                     <i class='app-menu__icon bx bx-run'></i><span class="app-menu__label">
-                        Quản lý nội bộ
+                        Quản lý giao hàng
                     </span>
                 </a>
             </li>

@@ -4,158 +4,242 @@
     ViewData["Title"] = "Đơn Hàng Của Bạn";
     Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
 }
+<div class="my-account-header page-title normal-title ">
+    <div class="page-title-inner flex-row container
+	 text-left">
+        <div class="flex-col flex-grow medium-text-center">
 
+            <h1 class="uppercase mb-0">TÀI KHOẢN CỦA TÔI</h1>
+            <small class="uppercase">Đơn hàng</small>
+        </div>
+    </div>
+</div>
 <div class="container order-container my-5">
     <h2 class="text-center mb-4">Đơn Hàng Của Bạn</h2>
+    <div class="row">
+        <!-- Left Column for Order Status Options -->
+        <div class="col-md-3 order-status p-3">
+            <h5 class="mb-3">Trạng thái đơn hàng</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đang xử lý" })">Chờ xác nhận</a></li>
+                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Chờ lấy hàng" })">Chờ lấy hàng</a></li>
+                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đang giao hàng" })">Đang giao</a></li>
+                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đã hoàn thành" })">Đã giao</a></li>
+                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đã hủy" })">Đã hủy</a></li>
+                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Trả hàng" })">Trả hàng</a></li>
+            </ul>
+        </div>
 
-    @if (!Model.Any())
-    {
-        <p class="text-center">Bạn chưa có đơn hàng nào.</p>
-    }
-    else
-    {
-        foreach (var donHang in Model)
-        {
-            <div class="order-card shadow-sm">
-                <div class="order-header">
-                    <h4>Mã đơn hàng: <span>@donHang.MaDonHang</span></h4>
-                    <p>Ngày đặt: <strong>@donHang.NgayDat.ToString("dd/MM/yyyy")</strong></p>
-                    <p>Trạng thái: <span class="badge @GetStatusClass(donHang.TrangThai)">@donHang.TrangThai</span></p>
-                </div>
+        <!-- Right Column for Order Details -->
+        <div class="col-md-9">
+            @if (!Model.Any())
+            {
+                <p class="text-center">Bạn chưa có đơn hàng nào.</p>
+            }
+            else
+            {
+                foreach (var donHang in Model)
+                {
+                    <div class="order-card mb-4 p-4 shadow-sm">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h5>Mã đơn hàng: <a href="#">@donHang.MaDonHang</a></h5>
+                                <p class="mb-0">Ngày đặt: <strong>@donHang.NgayDat.ToString("dd/MM/yyyy")</strong></p>
+                            </div>
+                            <span class="badge @GetStatusClass(donHang.TrangThai)">@donHang.TrangThai</span>
+                        </div>
 
-                <div class="order-info">
-                    <p><strong>Ngày giao dự kiến:</strong> @donHang.NgayGiao?.ToString("dd/MM/yyyy")</p>
-                    <p><strong>Địa chỉ giao hàng:</strong> @donHang.DiaChiGiao</p>
-                </div>
+                        <div class="order-info">
+                            <p><strong>Ngày giao dự kiến:</strong> @donHang.NgayGiao?.ToString("dd/MM/yyyy")</p>
+                            <p><strong>Địa chỉ giao hàng:</strong> @donHang.DiaChiGiao</p>
+                        </div>
 
-                <div class="payment-info">
-                    <h5>Thông tin thanh toán</h5>
-                    <p><strong>Phương thức:</strong> @donHang.ThanhToan.PhuongThuc</p>
-                    <p><strong>Trạng thái thanh toán:</strong> @donHang.ThanhToan.TrangThai</p>
-                    <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", donHang.ThanhToan.TongTien) VND</p>
-                </div>
+                        <div class="payment-info mb-3">
+                            <h6 class="mb-1">Thông tin thanh toán</h6>
+                            <p><strong>Phương thức:</strong> @donHang.ThanhToan.PhuongThuc</p>
+                            <p><strong>Trạng thái thanh toán:</strong> @donHang.ThanhToan.TrangThai</p>
+                            <p><strong>Tổng tiền:</strong> @String.Format("{0:N0}", donHang.ThanhToan.TongTien) VND</p>
+                        </div>
 
-                <div class="product-details mt-3">
-                    <h5>Chi tiết sản phẩm</h5>
-                    <table class="table table-striped table-borderless">
-                        <thead>
-                            <tr>
-                                <th>Hình ảnh</th>
-                                <th>Sản phẩm</th>
-                                <th>Số lượng</th>
-                                <th>Giá bán</th>
-                                <th>Tổng tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var chiTiet in donHang.ChiTietDonHang)
-                            {
-                                <tr>
-                                    <td>
-                                        <img src="~/LayoutOgani/img/@chiTiet.HinhAnh" alt="Ảnh sản phẩm" class="product-image">
-                                    </td>
-                                    <td>@chiTiet.SanPham</td>
-                                    <td>@chiTiet.SoLuong</td>
-                                    <td>@String.Format("{0:N0}", chiTiet.GiaBan) VND</td>
-                                    <td>@String.Format("{0:N0}", chiTiet.SoLuong * chiTiet.GiaBan) VND</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+                        <div class="product-details">
+                            <h6 class="mb-1">Chi tiết sản phẩm</h6>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Hình ảnh</th>
+                                        <th>Sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá bán</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Đánh giá</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var chiTiet in donHang.ChiTietDonHang)
+                                    {
+                                        <tr>
+                                            <td><img src="~/LayoutOgani/img/@chiTiet.HinhAnh" alt="Ảnh sản phẩm" class="product-image"></td>
+                                            <td>@chiTiet.SanPham</td>
+                                            <td>@chiTiet.SoLuong</td>
+                                            <td>@String.Format("{0:N0}", chiTiet.GiaBan) VND</td>
+                                            <td>@String.Format("{0:N0}", chiTiet.SoLuong * chiTiet.GiaBan) VND</td>
+                                            <td>
+                                                 @if (donHang.TrangThai == "Đã hoàn thành")  
+                                                  {
+                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ratingModal" 
+                                                    data-product-id="@chiTiet.MaSanPham" 
+                                                    data-product-name="@chiTiet.SanPham" 
+                                                    data-product-image="@chiTiet.HinhAnh"
+                                                    data-mahoadon="@donHang.MaHoaDon">
+                                                    Đánh giá
+                                                    </button>
+                                                  }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal đánh giá sản phẩm -->
+<div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ratingModalLabel">Đánh giá sản phẩm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-        }
-    }
+            <div class="modal-body">
+                <form id="ratingForm" action="/Order/GhiDanhGia" method="post">
+                    <!-- Các trường ẩn để lưu thông tin cần thiết -->
+                    <input type="hidden" name="MaKhachHang" id="MaKhachHang">
+                    <input type="hidden" name="MaHoaDon" id="MaHoaDon">
+                    <input type="hidden" name="MaSanPham" id="MaSanPham">
+                    <input type="hidden" name="SoDiem" id="SoDiem">
+
+
+                    <div class="mb-3">
+                        <label for="productName" class="form-label">Tên sản phẩm</label>
+                        <input type="text" class="form-control" id="productName" disabled>
+                    </div>
+                    <div class="mb-3">
+                        <label for="productImage" class="form-label">Hình ảnh sản phẩm</label>
+                        <img id="productImage" class="img-fluid" src="" alt="Hình ảnh sản phẩm">
+                    </div>
+                    <!-- Đánh giá bằng sao -->
+                    <div class="mb-3">
+                        <label class="form-label">Đánh giá</label>
+                        <div class="rating">
+                            <input type="radio" name="SoDiem" value="5" id="rating-5"><label for="rating-5">⭐</label>
+                            <input type="radio" name="SoDiem" value="4" id="rating-4"><label for="rating-4">⭐</label>
+                            <input type="radio" name="SoDiem" value="3" id="rating-3"><label for="rating-3">⭐</label>
+                            <input type="radio" name="SoDiem" value="2" id="rating-2"><label for="rating-2">⭐</label>
+                            <input type="radio" name="SoDiem" value="1" id="rating-1"><label for="rating-1">⭐</label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="review" class="form-label">Nhận xét</label>
+                        <textarea class="form-control" id="review" name="BinhLuan" rows="3" required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Gửi đánh giá</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
-    /* Container styles */
+    .normal-title {
+        background-color: #f7f7f7;
+        border-bottom: 1px solid #ececec;
+        border-top: 1px solid #ececec;
+    }
+
+        .normal-title .page-title-inner {
+            padding-bottom: 15px;
+            padding-top: 15px;
+        }
+
+    .flex-grow {
+        flex: 1;
+    }
+
+    /* Container styling */
     .order-container {
-        max-width: 800px;
+        max-width: 3000px;
         margin: auto;
     }
 
-    /* Order Card styles */
-    .order-card {
-        background-color: #fff;
-        padding: 20px;
-        margin-bottom: 25px;
-        border: 1px solid #eaeaea;
+    /* Order Status styling */
+    .order-status {
+        background-color: #f1f4f9;
         border-radius: 8px;
     }
 
-    /* Header styles */
-    .order-header {
-        background-color: #f5f5f5;
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 15px;
+        .order-status h5 {
+            font-weight: 600;
+            color: #495057;
+        }
+
+    .list-group-item {
+        background-color: transparent;
+        padding: 10px 15px;
+        border: none;
+        color: #007bff;
+        font-weight: 500;
     }
 
-        .order-header h4 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 5px;
+        .list-group-item:hover {
+            background-color: #e9ecef;
         }
 
-        .order-header span {
-            font-weight: 500;
-            color: #007bff;
-        }
+    /* Order Card styling */
+    .order-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        border: 1px solid #e2e6ea;
+    }
 
-    /* Badge styling based on status */
+    /* Badge styling for status */
     .badge {
-        padding: 5px 10px;
+        padding: 6px 12px;
         border-radius: 12px;
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 600;
     }
 
     .badge-success {
         background-color: #28a745;
-        color: #fff;
+        color: #ffffff;
     }
 
     .badge-warning {
         background-color: #ffc107;
-        color: #333;
+        color: #333333;
     }
 
     .badge-danger {
         background-color: #dc3545;
-        color: #fff;
+        color: #ffffff;
     }
 
-    /* Order info and payment info */
-    .order-info, .payment-info, .product-details {
-        margin-bottom: 15px;
-    }
-
-        .order-info p, .payment-info p {
-            margin: 0;
-            font-size: 14px;
-        }
-
-        .payment-info h5, .product-details h5 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-    /* Table styling */
+    /* Product Details Table styling */
     .table {
-        margin-top: 10px;
         font-size: 14px;
+        margin-top: 10px;
     }
 
         .table th {
             font-weight: 600;
-            color: #666;
-        }
-
-        .table td {
-            vertical-align: middle;
+            color: #666666;
         }
 
     .product-image {
@@ -165,11 +249,90 @@
         border-radius: 5px;
     }
 
-    /* Utility classes for spacing */
-    .mt-3 {
-        margin-top: 1rem !important;
+    .rating {
+        display: flex;
+        flex-direction: row;
+        font-size: 2rem;
     }
+
+        .rating label {
+            color: lightgray; /* Màu xám cho sao chưa chọn */
+            cursor: pointer;
+            font-size: 2rem;
+        }
+
+        .rating input[type="radio"] {
+            display: none; /* Ẩn input radio */
+        }
+
+        /* Đổi màu khi hover hoặc chọn */
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: gold; /* Sao chuyển vàng khi hover */
+        }
+
+        .rating input[type="radio"]:checked ~ label {
+            color: lightgray; /* Sao bên phải của sao đã chọn sẽ về lại màu xám */
+        }
+
+        .rating input[type="radio"]:checked + label,
+        .rating input[type="radio"]:checked + label ~ label {
+            color: gold; /* Sao đã chọn và các sao bên trái sẽ chuyển vàng */
+        }
+
 </style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Gắn sự kiện khi modal mở
+        var ratingModal = document.getElementById('ratingModal');
+        ratingModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget; // Nút đã kích hoạt modal
+
+            // Lấy thông tin từ thuộc tính data của nút
+            var maHoaDon = button.getAttribute('data-mahoadon');
+            var productId = button.getAttribute('data-product-id');
+            var productName = button.getAttribute('data-product-name');
+            var productImage = button.getAttribute('data-product-image');
+            console.log(productId)
+            console.log("Mã Hóa Đơn:", maHoaDon);
+            // Gán thông tin vào các trường trong modal
+            document.getElementById('MaHoaDon').value = maHoaDon;
+            document.getElementById('MaSanPham').value = productId;
+            document.getElementById('productName').value = productName;
+            document.getElementById('productImage').src = "/LayoutOgani/img/" + productImage;
+
+   
+        });
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        var ratingInputs = document.querySelectorAll('.rating input[type="radio"]');
+
+        // Lắng nghe sự kiện thay đổi trên mỗi sao
+        ratingInputs.forEach(function (input) {
+            input.addEventListener("change", function () {
+                const selectedValue = this.value;
+                console.log("Điểm đánh giá:", selectedValue); // Kiểm tra giá trị khi chọn
+
+                // Đặt điểm vào form khi gửi
+                let soDiemInput = document.getElementById("SoDiem");
+                if (!soDiemInput) {
+                    // Nếu không có phần tử input với id "SoDiem", tạo phần tử mới và thêm vào form
+                    soDiemInput = document.createElement("input");
+                    soDiemInput.type = "hidden";
+                    soDiemInput.name = "SoDiem";
+                    soDiemInput.id = "SoDiem";
+                    document.getElementById("ratingForm").appendChild(soDiemInput);
+                }
+                soDiemInput.value = selectedValue;
+            });
+        });
+    });
+
+</script>
+
 
 @functions {
     private string GetStatusClass(string status)

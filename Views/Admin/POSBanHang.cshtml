@@ -127,8 +127,7 @@
                             <label class="control-label">Họ tên khách hàng</label>
                             <input class="form-control" type="text" placeholder="Tìm kiếm khách hàng">
                         </div>
-                        <div class="form-group  col-md-2">
-                            <label style="text-align: center;" class="control-label">Tạo mới</label>
+                        <div class="form-group  col-md-2" style="margin-top: 30px">
                             <button class="btn btn-primary btn-them" data-toggle="modal" data-target="#exampleModalCenter">
                                 <i class="fas fa-user-plus"></i>
                             </button>
@@ -187,7 +186,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     </main>
 
@@ -350,78 +348,137 @@
         }
     </script>
     <script>
+        let globalProductData = {};
+
         function addToOrder(maSanPham, tenSanPham, hinhAnh, giaBan) {
-            // Gọi API để lấy màu sắc và kích thước của sản phẩm
             fetch(`/Admin/GetProductDetail?maSanPham=${maSanPham}`)
                 .then(response => response.json())
                 .then(data => {
+                    globalProductData[maSanPham] = data;
+
                     const row = document.createElement("tr");
 
-                    // Tạo danh sách màu sắc từ dữ liệu API
                     const colorOptions = data.map(color =>
-                        `<option value="${color.MaMauSac}">${color.TenMauSac}</option>`
+                        `<option value="${color.maMauSac}">${color.tenMauSac}</option>`
                     ).join('');
 
-                    // Tạo HTML của hàng mới
                     row.innerHTML = `
-                        <td>${maSanPham}</td>
-                        <td>${tenSanPham}</td>
-                        <td><img src="/LayoutOgani/img/${hinhAnh}" alt="" width="50px;"></td>
-                        <td>
-                            <select class="form-control colorSelect" onchange="updateSizeOptions(this, ${JSON.stringify(data)})">
-                                ${colorOptions}
-                            </select>
-                        </td>
-                        <td>
-                            <select class="form-control sizeSelect"></select>
-                        </td>
-                        <td><input type="number" value="1" min="1" max="10" class="quantityInput" oninput="updateTotalPrice(this, ${giaBan})"></td>
-                        <td class="priceCell">${formatCurrency(giaBan)}</td>
-                        <td><button class="btn btn-primary btn-sm trash" type="button" onclick="removeProduct(this)">Xóa</button></td>
-                    `;
+                            <td>${maSanPham}</td>
+                            <td>${tenSanPham}</td>
+                            <td><img src="/LayoutOgani/img/${hinhAnh}" alt="" width="50px;"></td>
+                            <td>
+                                <select class="form-control colorSelect" onchange="updateSizeOptions(this, '${maSanPham}')">
+                                    ${colorOptions}
+                                </select>
+                            </td>
+                            <td>
+                                <select class="form-control sizeSelect"></select>
+                            </td>
+                            <td><input type="number" value="1" min="1" max="10" class="quantityInput" oninput="updateTotalPrice(this, ${giaBan})"></td>
+                            <td class="priceCell">${formatCurrency(giaBan)}</td>
+                            <td><button class="btn btn-primary btn-sm trash" type="button" onclick="removeProduct(this)">Xóa</button></td>
+                        `;
 
                     document.getElementById("addedProductsBody").appendChild(row);
 
-                    // Cập nhật danh sách kích thước ban đầu cho màu đầu tiên
-                    const initialColor = data[0];
-                    updateSizeOptions(row.querySelector('.colorSelect'), data);
+                    updateSizeOptions(row.querySelector('.colorSelect'), maSanPham);
 
-                    // Hiển thị bảng nếu là sản phẩm đầu tiên
                     document.getElementById("emptyMessage").style.display = "none";
                     document.getElementById("addedProductsTable").style.display = "block";
+
+                    // Cập nhật tạm tính sau khi thêm sản phẩm
+                    updateSubtotal();
                 });
         }
 
-        // Hàm để cập nhật danh sách kích thước dựa trên màu sắc được chọn
-        function updateSizeOptions(colorSelect, productData) {
+        function updateSizeOptions(colorSelect, maSanPham) {
             const selectedColor = colorSelect.value;
+            const productData = globalProductData[maSanPham];
+            const colorData = productData.find(color => color.maMauSac === selectedColor);
 
-            // Lấy đối tượng màu được chọn từ productData
-            const colorData = productData.find(color => color.MaMauSac === selectedColor);
-
-            // Kiểm tra nếu colorData tồn tại và có Sizes
-            if (colorData && colorData.Sizes) {
-                // Tạo danh sách kích thước dựa trên màu sắc được chọn
-                const sizeOptions = colorData.Sizes.map(size =>
-                    `<option value="${size.MaKichThuoc}">${size.TenKichThuoc}</option>`
+            if (colorData && colorData.sizes) {
+                const sizeOptions = colorData.sizes.map(size =>
+                    `<option value="${size.maKichThuoc}">${size.tenKichThuoc}</option>`
                 ).join('');
-
-                // Cập nhật danh sách kích thước trong ô kích thước
                 const sizeSelect = colorSelect.closest('tr').querySelector('.sizeSelect');
                 sizeSelect.innerHTML = sizeOptions;
             } else {
-                // Nếu không có Sizes, hiển thị thông báo hoặc đặt danh sách kích thước trống
                 const sizeSelect = colorSelect.closest('tr').querySelector('.sizeSelect');
                 sizeSelect.innerHTML = '<option value="">Không có kích thước</option>';
             }
         }
 
-        // Hàm định dạng tiền tệ
+        function removeProduct(button) {
+            const row = button.closest("tr");
+            row.remove();
+
+            if (document.getElementById("addedProductsBody").children.length === 0) {
+                document.getElementById("emptyMessage").style.display = "block";
+                document.getElementById("addedProductsTable").style.display = "none";
+            }
+
+            // Cập nhật lại tạm tính sau khi xóa sản phẩm
+            updateSubtotal();
+        }
+
+        function updateTotalPrice(input, unitPrice) {
+            const quantity = parseInt(input.value) || 1;
+            const totalPrice = unitPrice * quantity;
+            const priceCell = input.closest("tr").querySelector(".priceCell");
+            priceCell.textContent = formatCurrency(totalPrice);
+
+            // Cập nhật lại tạm tính khi số lượng thay đổi
+            updateSubtotal();
+        }
+
+        function updateSubtotal() {
+            let subtotal = 0;
+            const priceCells = document.querySelectorAll(".priceCell");
+
+            priceCells.forEach(cell => {
+                const priceText = cell.textContent.replace(/[^0-9]/g, '');
+                subtotal += parseInt(priceText) || 0;
+            });
+
+            document.querySelector(".control-all-money-tamtinh").textContent = "= " + formatCurrency(subtotal);
+
+            // Cập nhật tổng cộng thanh toán khi có thay đổi tạm tính
+            updateTotalPayment();
+        }
+
+        function updateTotalPayment() {
+            const subtotal = parseInt(document.querySelector(".control-all-money-tamtinh").textContent.replace(/[^0-9]/g, '')) || 0;
+            const discount = parseInt(document.querySelector(".form-group input[type='number']").value) || 0;
+            const totalPayment = subtotal - discount;
+
+            document.querySelector(".control-all-money-total").textContent = "= " + formatCurrency(totalPayment);
+
+            // Cập nhật số tiền nợ
+            updateRemainingAmount();
+        }
+
+        function updateRemainingAmount() {
+            const totalPayment = parseInt(document.querySelector(".control-all-money-total").textContent.replace(/[^0-9]/g, '')) || 0;
+            const customerPayment = parseInt(document.querySelector(".form-group input[type='number']:nth-of-type(2)").value) || 0;
+            const remainingAmount = totalPayment - customerPayment;
+
+            document.querySelector(".control-all-money").textContent = remainingAmount < 0
+                ? "= 0 VNĐ (Thừa " + formatCurrency(Math.abs(remainingAmount)) + ")"
+                : "= " + formatCurrency(remainingAmount) + " VNĐ";
+        }
+
+        // Cập nhật khi thay đổi giá trị ô giảm giá
+        document.querySelector(".form-group input[type='number']").addEventListener("input", updateTotalPayment);
+
+        // Cập nhật khi thay đổi giá trị ô khách hàng đưa tiền
+        document.querySelector(".form-group input[type='number']:nth-of-type(2)").addEventListener("input", updateRemainingAmount);
+
         function formatCurrency(amount) {
             return amount.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
         }
+    </script>
 
-</script>
+
 </body>
 
 </html>
