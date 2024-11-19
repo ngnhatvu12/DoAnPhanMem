@@ -251,7 +251,7 @@ else
 </div>
 
 
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function checkLoginAndOpenModal(productId) {
             $.ajax({
@@ -481,11 +481,13 @@ function updateCartCount() {
         }
 
 
-        // Đóng popup khi click bên ngoài
-        $(document).on('click', function (event) {
-            if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
-                $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
-            }
+        $(document).ready(function () {
+            // Đóng popup khi click bên ngoài
+            $(document).on('click', function (event) {
+                if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
+                    $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
+                }
+            });
         });
 
         // Đảm bảo popup không bị xóa khi nhấn vào nó

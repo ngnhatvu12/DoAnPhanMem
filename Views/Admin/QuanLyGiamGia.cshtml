@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Bảng kê lương";
+    ViewData["Title"] = "Quản lý giảm giá";
     Layout = null;
 }
 
@@ -7,7 +7,7 @@
 <html lang="en">
 
 <head>
-    <title>Danh sách đơn hàng | Quản trị Admin</title>
+    <title>Danh sách phiếu giảm giá | Quản trị Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -102,7 +102,7 @@
             </li>
             <li>
                 <a class="app-menu__item active" href="table-data-money.html">
-                    <i class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Bảng kê lương</span>
+                    <i class='app-menu__icon bx bx-dollar'></i><span class="app-menu__label">Quản lý giảm giá</span>
                 </a>
             </li>
             <li>
@@ -130,7 +130,7 @@
     <main class="app-content">
         <div class="app-title">
             <ul class="app-breadcrumb breadcrumb side">
-                <li class="breadcrumb-item active"><a href="#"><b>Bảng kê lương</b></a></li>
+                <li class="breadcrumb-item active"><a href="#"><b>Quản lý giảm giá</b></a></li>
             </ul>
             <div id="clock"></div>
         </div>
@@ -140,10 +140,8 @@
                     <div class="tile-body">
                         <div class="row element-button">
                             <div class="col-sm-2">
-
-                                <a class="btn btn-add btn-sm" href="form-add-tien-luong.html" title="Thêm">
-                                    <i class="fas fa-plus"></i>
-                                    Tạo mới
+                                <a class="btn btn-add btn-sm" href="#" data-toggle="modal" data-target="#addDiscountModal" title="Thêm">
+                                    <i class="fas fa-plus"></i> Tạo mới
                                 </a>
                             </div>
                             <div class="col-sm-2">
@@ -180,184 +178,42 @@
                         <table class="table table-hover table-bordered" id="sampleTable">
                             <thead>
                                 <tr>
-                                    <th width="10"><input type="checkbox" id="all"></th>
-                                    <th>Tên nhân viên</th>
-                                    <th>Giới Tính</th>
-                                    <th>Chức vụ</th>
-                                    <th>Tiền lương</th>
-                                    <th>Trừ lương</th>
-                                    <th>Tiền thưởng</th>
-                                    <th>Tổng nhận</th>
-                                    <th>Trạng thái</th>
-                                    <th>Chức năng</th>
+                                    <th>Mã Giảm Giá</th>
+                                    <th>Ngày Tạo</th>
+                                    <th>Mức Giảm Giá (%)</th>
+                                    <th>Điều Kiện</th>
+                                    <th>Ngày Hết Hiệu Lực</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Hồ Thị Thanh Ngân</td>
-                                    <td>Nữ</td>
-                                    <td>Bán hàng</td>
-                                    <td>7.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>7.500.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Trần Khả Ái</td>
-                                    <td>Nữ</td>
-                                    <td>Bán hàng</td>
-                                    <td>7.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>1.000.000 đ</td>
-                                    <td>8.500.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Phạm Thu Cúc</td>
-                                    <td>Nữ</td>
-                                    <td>Thu ngân</td>
-                                    <td>7.000.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>7.000.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Trần Anh Khoa</td>
-                                    <td>Nam</td>
-                                    <td>Tư vấn</td>
-                                    <td>7.000.000 đ</td>
-                                    <td>Không</td>
-                                    <td>500.000 đ</td>
-                                    <td>7.500.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Nguyễn Thành Nhân</td>
-                                    <td>Nam</td>
-                                    <td>Bảo trì</td>
-                                    <td>9.000.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>9.000.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Nguyễn Đặng Trọng Nhân</td>
-                                    <td>Nam</td>
-                                    <td>Dịch vụ</td>
-                                    <td>6.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>6.500.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Nguyễn Thị Mai</td>
-                                    <td>Nữ</td>
-                                    <td>Tư vấn</td>
-                                    <td>7.000.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>7.000.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Trương Nguyễn Trà My</td>
-                                    <td>Nữ</td>
-                                    <td>Thu ngân</td>
-                                    <td>7.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>500.000 đ</td>
-                                    <td>8.000.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Nguyễn Nhật Tân</td>
-                                    <td>Nam</td>
-                                    <td>Quản kho</td>
-                                    <td>8.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>8.500.000 đ</td>
-                                    <td><span class="badge bg-success">Đã nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Lâm Nguyễn Tuân</td>
-                                    <td>Nam</td>
-                                    <td>Quản kho</td>
-                                    <td>8.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>8.500.000 đ</td>
-                                    <td><span class="badge bg-danger">Chưa nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td width="10"><input type="checkbox" name="check1" value="1"></td>
-                                    <td>Hồ Thanh Toàn</td>
-                                    <td>Nam</td>
-                                    <td>Quản kho</td>
-                                    <td>8.500.000 đ</td>
-                                    <td>Không</td>
-                                    <td>Không</td>
-                                    <td>8.500.000 đ</td>
-                                    <td><span class="badge bg-danger">Chưa nhận tiền</span></td>
-                                    <td>
-                                        <button class="btn btn-primary btn-sm trash" type="button" title="Xóa"><i class="fas fa-trash-alt"></i></button>
-                                        <button class="btn btn-primary btn-sm edit" type="button" title="Sửa"><i class="fa fa-edit"></i></button>
-                                    </td>
-                                </tr>
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.MaGiamGia</td>
+                                        <td>@item.NgayTao.ToString("dd/MM/yyyy")</td>
+                                        <td>@item.MucGiamGia</td>
+                                        <td>@item.DieuKien</td>
+                                        <td>@item.NgayHieuLuc.ToString("dd/MM/yyyy")</td>
+                                        <td>
+                                            @if (item.NgayHieuLuc < DateTime.Now)
+                                            {
+                                                <span class="badge bg-danger">Hết hiệu lực</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Còn hiệu lực</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-primary btn-sm edit" type="button" title="Sửa">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                            <button class="btn btn-danger btn-sm delete" type="button" title="Xóa">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
@@ -365,6 +221,46 @@
             </div>
         </div>
     </main>
+    <!-- Modal -->
+    <div class="modal fade" id="addDiscountModal" tabindex="-1" aria-labelledby="addDiscountModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="addDiscountForm" method="post">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addDiscountModalLabel">Thêm Mã Giảm Giá</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="maGiamGia" class="form-label">Mã Giảm Giá</label>
+                            <input type="text" id="maGiamGia" name="maGiamGia" class="form-control" readonly value="@Guid.NewGuid().ToString().Substring(0, 8).ToUpper()">
+                        </div>
+                        <div class="mb-3">
+                            <label for="ngayTao" class="form-label">Ngày Tạo</label>
+                            <input type="text" id="ngayTao" name="ngayTao" class="form-control" readonly value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        </div>
+                        <div class="mb-3">
+                            <label for="mucGiamGia" class="form-label">Mức Giảm Giá (%)</label>
+                            <input type="number" id="mucGiamGia" name="mucGiamGia" class="form-control" min="0" step="0.01" placeholder="Nhập mức giảm giá">
+                        </div>
+                        <div class="mb-3">
+                            <label for="dieuKien" class="form-label">Điều Kiện</label>
+                            <textarea id="dieuKien" name="dieuKien" class="form-control" rows="3" placeholder="Nhập điều kiện áp dụng"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ngayHieuLuc" class="form-label">Ngày Hết Hiệu Lực</label>
+                            <input type="date" id="ngayHieuLuc" name="ngayHieuLuc" class="form-control">
+                            <small class="form-text text-muted">Ngày hết hiệu lực phải lớn hơn ngày tạo.</small>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <!-- Essential javascripts for application to work-->
     <script src="/js/jquery-3.2.1.min.js"></script>
     <script src="/js/popper.min.js"></script>
@@ -492,6 +388,37 @@
         $("#show-emp").on("click", function () {
           $("#ModalUP").modal({ backdrop: false, keyboard: false })
         });
+
+        document.getElementById('addDiscountForm').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn form submit mặc định
+
+            const ngayTao = new Date(document.getElementById('ngayTao').value);
+            const ngayHieuLuc = new Date(document.getElementById('ngayHieuLuc').value);
+
+            if (ngayHieuLuc <= ngayTao) {
+                alert('Ngày hết hiệu lực phải lớn hơn ngày tạo.');
+                return;
+            }
+
+            // Dữ liệu hợp lệ, gửi form
+            const formData = new FormData(this);
+
+            fetch('/Admin/Create', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Thêm mã giảm giá thành công!');
+                        location.reload(); // Reload trang sau khi thêm thành công
+                    } else {
+                        alert('Đã xảy ra lỗi: ' + data.message);
+                    }
+                })
+                .catch(error => console.error('Lỗi:', error));
+        });
+
     </script>
 </body>
 

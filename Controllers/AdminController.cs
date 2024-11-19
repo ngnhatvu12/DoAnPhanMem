@@ -296,12 +296,51 @@ namespace DoAnPhanMem.Controllers
 
             return View(giaoHangList);
         }
-        public IActionResult BangKeLuong()
+        public IActionResult QuanLyGiamGia()
         {
-            ViewData["Title"] = "Bảng kê lương";
-            // Action này sẽ trả về view cho trang Quản lý nhân viên
-            return View();
+            ViewData["Title"] = "Quản lý giảm giá";
+            var giamGiaList = _db.GiamGia
+                        .Select(gg => new GiamGiaViewModel
+                        {
+                            MaGiamGia = gg.MaGiamGia,
+                            NgayTao = gg.NgayTao,
+                            MucGiamGia = gg.MucGiamGia,
+                            DieuKien = gg.DieuKien,
+                            NgayHieuLuc = gg.NgayHieuLuc
+                        }).ToList();
+
+            return View(giamGiaList);
         }
+        [HttpPost]
+        public IActionResult Create(GiamGiaViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var giamGia = new GiamGia
+                    {
+                        MaGiamGia = model.MaGiamGia,
+                        NgayTao = model.NgayTao,
+                        MucGiamGia = model.MucGiamGia,
+                        DieuKien = model.DieuKien,
+                        NgayHieuLuc = model.NgayHieuLuc
+                    };
+
+                    _db.GiamGia.Add(giamGia);
+                    _db.SaveChanges();
+
+                    return Json(new { success = true });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = ex.Message });
+                }
+            }
+
+            return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
+        }
+
         public IActionResult BaoCaoDoanhThu()
         {
             ViewData["Title"] = "Báo cáo doanh thu";
@@ -542,6 +581,66 @@ namespace DoAnPhanMem.Controllers
             }
 
             return Json(variants);
+        }
+
+        [HttpGet]
+        public IActionResult GetProductReviews(string maSanPham)
+        {
+            // Lấy thông tin chi tiết sản phẩm
+            var product = (from sp in _db.SanPham
+                           join dm in _db.DanhMuc on sp.MaDanhMuc equals dm.MaDanhMuc
+                           where sp.MaSanPham == maSanPham
+                           select new ProductViewModel
+                           {
+                               MaSanPham = sp.MaSanPham,
+                               TenSanPham = sp.TenSanPham,
+                               MoTa = sp.MoTa,
+                               GiaBan = sp.GiaBan,
+                               GiaGiam = sp.GiaGiam,
+                               HinhAnh = sp.HinhAnh,
+                               TenDanhMuc = dm.TenDanhMuc,
+                               SoLuong = _db.ChiTietSanPham
+                                            .Where(ct => ct.MaSanPham == sp.MaSanPham)
+                                            .Sum(ct => ct.SoLuongTon),
+                               TinhTrang = _db.ChiTietSanPham
+                                            .Where(ct => ct.MaSanPham == sp.MaSanPham)
+                                            .Any(ct => ct.SoLuongTon > 0) ? "Còn hàng" : "Hết hàng"
+                           }).FirstOrDefault();
+
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Sản phẩm không tồn tại." });
+            }
+
+            // Lấy danh sách đánh giá
+            var danhGia = (from dg in _db.DanhGia
+                           join hd in _db.HoaDon on dg.MaHoaDon equals hd.MaHoaDon
+                           join dh in _db.DonHang on hd.MaDonHang equals dh.MaDonHang
+                           join kh in _db.KhachHang on dh.MaKhachHang equals kh.MaKhachHang
+                           where dg.MaSanPham == maSanPham
+                           select new
+                           {
+                               TenKhachHang = kh.TenKhachHang,
+                               SoDiem = dg.SoDiem,
+                               BinhLuan = dg.BinhLuan,
+                               NgayDanhGia = dg.NgayDanhGia,
+                               MaDanhGia = dg.MaDanhGia
+                           }).ToList();
+
+            return Json(new { success = true, product, danhGia });
+        }
+        [HttpPost]
+        public IActionResult DeleteReview(string maDanhGia)
+        {
+            var review = _db.DanhGia.Find(maDanhGia);
+            if (review == null)
+            {
+                return Json(new { success = false, message = "Đánh giá không tồn tại." });
+            }
+
+            _db.DanhGia.Remove(review);
+            _db.SaveChanges();
+            return Json(new { success = true, message = "Xóa đánh giá thành công." });
         }
 
 

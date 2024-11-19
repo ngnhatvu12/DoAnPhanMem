@@ -10,7 +10,6 @@
 
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/Detail.css" /> <!-- Thay đổi đường dẫn nếu cần -->
-    <link rel="stylesheet" href="~/LayoutOgani/css/another-Detail.css" /> <!-- CSS khác nếu cần -->
     <!-- Favicon -->
     <link href="../LayoutOgani/img/favicon.ico" rel="icon">
 
@@ -147,7 +146,7 @@
                         </a>
                         <a href="javascript:void(0);" class="btn wishlist" onclick="showWishlist()">
                             <i class="fa fa-heart"></i>
-                            <span>(0)</span>
+                            <span id="wishlist-count">(0)</span>
                         </a>
                     </div>
                 </div>
@@ -518,9 +517,9 @@
     <div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="wishlistModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="wishlistModalLabel">Danh sách yêu thích</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -532,6 +531,7 @@
             </div>
         </div>
     </div>
+
 
     <div id="cartPopup" class="cart-popup" style="display: none;">
         <h4>Giỏ hàng của bạn</h4>
@@ -549,47 +549,58 @@
     <script>
         function updateWishlistCount() {
             $.get('/Home/GetWishlistCount', function (response) {
-                $('#wishlist-count').text(`(${response.count})`);
-            });
-        }
-
-        // Gọi hàm khi trang tải
-        $(document).ready(function () {
-            updateWishlistCount();
-        });
-        function showWishlist() {
-            $.get('/Home/GetWishlist', function (response) {
                 if (response.success) {
-                    $('.wishlist span').text(`(${response.data.length})`);
-                    console.log(response.data);
-                    let html = '';
-                    if (response.data.length > 0) {
-                        response.data.forEach(item => {
-                            html += `
-                                <div class="wishlist-item row align-items-center mb-3">
-                                    <div class="col-md-3">
-                                        <img src="/LayoutOgani/img/${item.HinhAnh || 'no-image.png'}" class="img-fluid" alt="${item.TenSanPham}">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h5>${item.TenSanPham}</h5>
-                                        <p>Giá: ${item.GiaBan} đ</p>
-                                    </div>
-                                    <div class="col-md-3 text-right">
-                                        <button class="btn btn-danger btn-sm" onclick="removeFromWishlist('${item.MaYeuThich}')">Xóa</button>
-                                    </div>
-                                </div>
-                            `;
-                        });
-                    } else {
-                        html = '<p>Danh sách yêu thích trống.</p>';
-                    }
-                    $('#wishlist-content').html(html);
-                    $('#wishlistModal').modal('show');
+                    // Hiển thị số lượng sản phẩm ngay khi đăng nhập
+                    $('.wishlist span').text(`(${response.count})`);
                 } else {
-                    alert(response.message);
+                    $('.wishlist span').text('(0)');
                 }
             });
         }
+
+        function showWishlist() {
+            $.get('/Home/GetWishlist', function (response) {
+                if (response.success) {
+                    // Cập nhật số lượng sản phẩm yêu thích
+                    $('.wishlist span').text(`(${response.data.length})`);
+
+                    // Kiểm tra nếu danh sách yêu thích không rỗng
+                    let html = '';
+                    if (response.data.length > 0) {
+                        html = response.data.map(item => {
+                            const hinhAnh = item.hinhAnh || 'no-image.png';
+                            const tenSanPham = item.tenSanPham || 'Không rõ tên sản phẩm';
+                            const giaBan = item.giaBan ? item.giaBan.toLocaleString() : '0';
+                            const maYeuThich = item.maYeuThich || '';
+
+                            return `
+                                <div class="wishlist-item row align-items-center">
+                                    <div class="col-md-3">
+                                        <img src="/LayoutOgani/img/${hinhAnh}" alt="${tenSanPham}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>${tenSanPham}</h5>
+                                        <p>Giá: ${giaBan} đ</p>
+                                    </div>
+                                    <div class="col-md-3 text-right">
+                                        <button class="btn btn-danger btn-sm" onclick="removeFromWishlist('${maYeuThich}')">Xóa</button>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('');
+                    } else {
+                        html = '<p>Danh sách yêu thích trống.</p>';
+                    }
+
+                    // Hiển thị danh sách sản phẩm yêu thích trong modal
+                    $('#wishlist-content').html(html);
+                    $('#wishlistModal').modal('show');
+                } else {
+                    alert(response.message); // Hiển thị thông báo lỗi nếu có
+                }
+            });
+        }
+
         function removeFromWishlist(maYeuThich) {
             if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?')) {
                 $.post('/Home/RemoveFromWishlist', { maYeuThich: maYeuThich }, function (response) {
@@ -604,6 +615,10 @@
             }
         }
 
+        // Gọi hàm để hiển thị tổng số sản phẩm ngay khi trang tải
+        $(document).ready(function () {
+            updateWishlistCount();
+        });
     </script>
 
     <!-- Bao gồm jQuery -->
@@ -613,5 +628,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        /* Ảnh trong danh sách yêu thích */
+        .wishlist-item img {
+            width: 100%;
+            height: 150px; /* Chiều cao cố định */
+            object-fit: cover; /* Ảnh sẽ được cắt vừa khung */
+            border-radius: 5px;
+        }
+
+        /* Căn chỉnh danh sách */
+        .wishlist-item {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+            .wishlist-item:last-child {
+                border-bottom: none;
+            }
+
+            .wishlist-item h5 {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .wishlist-item p {
+                margin: 0;
+                color: #666;
+            }
+
+            .wishlist-item .btn {
+                font-size: 14px;
+            }
+
+    </style>
 </body>
 </html>

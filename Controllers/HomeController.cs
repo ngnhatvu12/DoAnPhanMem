@@ -81,11 +81,23 @@ namespace DoAnPhanMem.Controllers
                                    BinhLuan = dg.BinhLuan,
                                    NgayDanhGia = dg.NgayDanhGia
                                }).ToList();
+            var chiTietSanPhamList = (from ctp in _db.ChiTietSanPham
+                                      join kt in _db.KichThuoc on ctp.MaKichThuoc equals kt.MaKichThuoc
+                                      join ms in _db.MauSac on ctp.MaMauSac equals ms.MaMauSac
+                                      where ctp.MaSanPham == id
+                                      select new ChiTietSanPhamViewModel
+                                      {
+                                          MaChiTietSP = ctp.MaChiTietSP,
+                                          TenKichThuoc = kt.TenKichThuoc,
+                                          TenMauSac = ms.TenMauSac,
+                                          HinhAnhBienThe = ctp.HinhAnhBienThe
+                                      }).ToList();
 
             var viewModel = new ProductDetailViewModel2
             {
                 SanPham = sanPham,
-                DanhGiaList = danhGiaList
+                DanhGiaList = danhGiaList,
+                ChiTietSanPhamList = chiTietSanPhamList
             };
 
             return View(viewModel);
