@@ -73,7 +73,10 @@ app.MapControllerRoute(
     name: "productDetail",
     pattern: "product/{id}",
     defaults: new { controller = "Home", action = "ProductDetail" });
-
+app.MapControllerRoute(
+    name: "Category",
+    pattern: "Category/{action}/{id?}",
+    defaults: new { controller = "Category", action = "Index" });
 // Cấu hình route cho Admin
 app.MapControllerRoute(
     name: "admin",

@@ -94,19 +94,20 @@
                                             @Context.Session.GetString("TenKhachHang") <!-- Hiển thị tên khách hàng từ session -->
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a href="/Access/Logout" class="dropdown-item">Thông tin cá nhân</a>
+                                            <a href="/Access/Profile" class="dropdown-item">Thông tin cá nhân</a>
+                                            <a href="/Access/Notification" class="dropdown-item">Thông báo</a>
                                             <a href="/Order/Detail" class="dropdown-item">Đơn hàng của bạn</a>
-                                            <a href="/Access/Logout" class="dropdown-item">Hóa đơn của bạn</a>
+                                            <a href="/Invoice/Detail" class="dropdown-item">Hóa đơn của bạn</a>
                                             <a href="/Access/Logout" class="dropdown-item">Đăng xuất</a>
                                         </div>
                                     }
                                     else
                                     {
                                         <!-- Nếu người dùng chưa đăng nhập -->
-                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN NGƯỜI DÙNG</a>
                                         <div class="dropdown-menu">
-                                            <a href="/Access/Login" class="dropdown-item">Login</a>
-                                            <a href="/Access/Register" class="dropdown-item">Register</a>
+                                            <a href="/Access/Login" class="dropdown-item">ĐĂNG NHẬP</a>
+                                            <a href="/Access/Register" class="dropdown-item">ĐĂNG KÝ</a>
                                         </div>
                                     }
                                 </div>
@@ -132,7 +133,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="search">
-                        <form asp-controller="Category" asp-action="TimKiem" method="get">
+                        <form asp-controller="Home" asp-action="TimKiem" method="get">
                             <input type="text" name="keyword" placeholder="Search" />
                             <button type="submit"><i class="fa fa-search"></i></button>
                         </form>
@@ -232,12 +233,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-6">
-                    <h1>Subscribe Our Newsletter</h1>
+                    <h1>ĐĂNG KÝ ĐỂ NHẬN ĐƯỢC CÁC ƯU ĐÃI MỚI NHẤT</h1>
                 </div>
                 <div class="col-md-6">
                     <div class="form">
-                        <input type="email" value="Your email here">
-                        <button>Submit</button>
+                        <input type="email" value="Nhập emal của bạn">
+                        <button>Gửi</button>
                     </div>
                 </div>
             </div>
@@ -319,12 +320,12 @@
     <!-- Review End -->
     <!-- Footer-->
     <footer class="site-footer mobile--hidden">
-        <div class="container">
+        <div class="container" style="max-width: 100%">
             <div class="site-footer__inner">
                 <div class="site-footer__sidebar">
                     <div>
                         <h4 class="site-footer__title">
-                            COOLMATE lắng nghe bạn!
+                            VIBLO lắng nghe bạn!
                         </h4>
                         <p class="site-footer__description" style="margin-bottom: 30px;">
                             Chúng tôi luôn trân trọng và mong đợi nhận được mọi ý kiến đóng góp từ
@@ -358,8 +359,8 @@
                                     Email
                                 </span>
                                 <p class="footer-info__desciption">
-                                    <a href="mailto: Cool@coolmate.me">
-                                        Cool@coolmate.me
+                                    <a href="mailto: Cool@viblo.me">
+                                        Cool@viblo.me
                                     </a>
                                 </p>
                             </div>
@@ -384,7 +385,7 @@
                 <div class="site-footer__menu">
                     <div class="footer-menu">
                         <div class="footer-menu__item">
-                            <h4 class="footer-menu__title">COOLCLUB</h4>
+                            <h4 class="footer-menu__title">VIBLOCLUB</h4>
                             <ul>
                                 <li>
                                     <a href="/account/register?itm_source=footerm">Đăng kí thành viên</a>
@@ -410,7 +411,7 @@
                                     <a href="/page/dich-vu-giao-hang-coolmate">Chính sách giao hàng</a>
                                 </li>
                             </ul>
-                            <h4 class="footer-menu__title">Coolmate.me</h4>
+                            <h4 class="footer-menu__title">Viblo.me</h4>
                             <ul>
                                 <li>
                                     <a href="/page/changelog?itm_source=footer">Lịch sử thay đổi website</a>
@@ -447,15 +448,15 @@
                                     <a href="http://online.gov.vn/(X(1)S(sgmttobbtsiaq3l5itoicxhw))/Home/WebDetails/53184?AspxAutoDetectCookieSupport=1" target="_blank">Đăng ký bản quyền</a>
                                 </li>
                             </ul>
-                            <h4 class="footer-menu__title">Về COOLMATE</h4>
+                            <h4 class="footer-menu__title">Về VIBLO</h4>
                             <ul>
                                 <li>
-                                    <a href="/lp/coolmate-101?itm_source=footer">Coolmate 101</a>
+                                    <a href="/lp/coolmate-101?itm_source=footer">Viblo 101</a>
                                 </li>
                                 <li>
                                     <a href="/page/11-dich-vu-tai-coolmate-co-the-ban-chua-biet?itm_source=footer">DVKH xuất sắc</a>
                                 </li>
-                                <li><a href="/page/coolmate-story?itm_source=footer"> Câu chuyện về Coolmate</a></li>
+                                <li><a href="/page/coolmate-story?itm_source=footer"> Câu chuyện về Viblo</a></li>
                                 <li><a href="/page/san-pham-coolmate-duoc-san-xuat-nhu-the-nao?itm_source=footer">Nhà máy</a></li>
                                 <li>
                                     <a href="/collection/care-and-share?itm_source=footer">Care &amp; Share</a>
@@ -541,11 +542,6 @@
         <a href="/Cart/Details" class="btn">Xem tất cả</a>
         <button onclick="closeCartPopup()">Đóng</button>
     </div>
-    <a href="javascript:void(0);" class="btn wishlist" onclick="showWishlist()">
-        <i class="fa fa-heart"></i>
-        <span id="wishlist-count">(0)</span>
-    </a>
-
     <script>
         function updateWishlistCount() {
             $.get('/Home/GetWishlistCount', function (response) {

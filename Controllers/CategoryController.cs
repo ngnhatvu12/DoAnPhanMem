@@ -13,50 +13,63 @@ namespace DoAnPhanMem.Controllers
         {
             _db = db;
         }
-        // Phương thức tìm kiếm sản phẩm
-        [HttpGet]
-        public IActionResult TimKiem(string keyword)
-        {
-            // Kiểm tra nếu không có từ khóa
-            if (string.IsNullOrEmpty(keyword))
-            {
-                return View(new List<SanPham>()); // Trả về view rỗng
-            }
 
-            // Tìm sản phẩm theo tên gần giống với từ khóa tìm kiếm
-            var ketQuaTimKiem = _db.SanPham
-                .Where(sp => sp.TenSanPham.Contains(keyword))
-                .ToList();
-
-            // Trả về view cùng với danh sách sản phẩm tìm kiếm được
-            return View(ketQuaTimKiem);
-        }
         // Phương thức lấy danh sách sản phẩm theo danh mục
-        public IActionResult SanPhamTheoDanhMuc(string maDanhMuc)
+        public IActionResult SanPhamTheoDanhMuc(string maDanhMuc, decimal? minPrice, decimal? maxPrice, string maLoai = null, string maMauSac = null, string maKichThuoc = null)
         {
-            // Kiểm tra mã danh mục hợp lệ
+            // Kiểm tra danh mục hợp lệ
             if (string.IsNullOrEmpty(maDanhMuc))
             {
                 return NotFound("Danh mục không tồn tại.");
             }
 
-            // Lấy danh sách chi tiết sản phẩm theo mã danh mục
-            var sanPhamTheoDanhMuc = _db.SanPham // Liên kết với bảng Sản Phẩm
-                .Where(ctsp => ctsp.MaDanhMuc == maDanhMuc)
-                .ToList();
+            // Truy vấn cơ bản dựa vào danh mục
+            var query = _db.SanPham
+                .Include(sp => sp.ChiTietSanPham) // Bao gồm thông tin chi tiết sản phẩm
+                .Where(sp => sp.MaDanhMuc == maDanhMuc);
 
-            if (sanPhamTheoDanhMuc == null || !sanPhamTheoDanhMuc.Any())
+            // Lọc theo giá (nếu cung cấp)
+            if (minPrice.HasValue)
             {
-                return NotFound("Không có sản phẩm nào trong danh mục này.");
+                query = query.Where(sp => sp.GiaBan >= minPrice.Value);
+            }
+            if (maxPrice.HasValue)
+            {
+                query = query.Where(sp => sp.GiaBan <= maxPrice.Value);
             }
 
-            // Trả về view cùng với dữ liệu sản phẩm
-            return View("Index", sanPhamTheoDanhMuc);
+            // Lọc theo loại sản phẩm (mặc định tất cả nếu `maLoai` là null hoặc rỗng)
+            if (!string.IsNullOrEmpty(maLoai))
+            {
+                query = query.Where(sp => sp.MaLoai == maLoai);
+            }
 
-            // Thêm một return mặc định để đảm bảo tất cả các đường dẫn đều trả về giá trị
-            // (mặc dù phương thức này sẽ không bao giờ tới đây)
-            return View();
+            // Lọc theo màu sắc (mặc định tất cả nếu `maMauSac` là null hoặc rỗng)
+            if (!string.IsNullOrEmpty(maMauSac))
+            {
+                query = query.Where(sp => sp.ChiTietSanPham.Any(ct => ct.MaMauSac == maMauSac));
+            }
+
+            // Lọc theo kích thước (mặc định tất cả nếu `maKichThuoc` là null hoặc rỗng)
+            if (!string.IsNullOrEmpty(maKichThuoc))
+            {
+                query = query.Where(sp => sp.ChiTietSanPham.Any(ct => ct.MaKichThuoc == maKichThuoc));
+            }
+
+            // Thực hiện truy vấn và trả kết quả
+            var sanPhamTheoDanhMuc = query.ToList();
+
+            // Truyền dữ liệu cho ViewBag để hiển thị trong giao diện lọc
+            ViewBag.DanhSachLoai = _db.Loai.ToList();
+            ViewBag.DanhSachMauSac = _db.MauSac.ToList();
+            ViewBag.DanhSachKichThuoc = _db.KichThuoc.ToList();
+            ViewBag.MaDanhMuc = maDanhMuc; // Lưu lại mã danh mục
+
+            // Trả về giao diện cùng với dữ liệu
+            return View("Index", sanPhamTheoDanhMuc);
         }
+
+
 
         [HttpPost]
         public IActionResult ThemYeuThich(string id)

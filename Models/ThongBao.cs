@@ -13,5 +13,6 @@ namespace DoAnPhanMem.Models
         public KhachHang KhachHang { get; set; }
         public string MoTa { get; set; }
         public DateTime ThoiGian { get; set; }
+        public int TrangThai { get; set; } = 0;
     }
 }

@@ -11,12 +11,58 @@
 }
 
 
-@if (!Model.PhoBienNhat.Any() && !Model.YeuThichNhat.Any() && !Model.BanChayNhat.Any() && !Model.CoTheQuanTam.Any())
+@if (!Model.PhoBienNhat.Any() && !Model.YeuThichNhat.Any() && !Model.BanChayNhat.Any() && !Model.CoTheQuanTam.Any() && !Model.GợiÝ.Any())
 {
     <p>Không có sản phẩm nào để hiển thị.</p>
 }
 else
 {
+    // Hiển thị phần Gợi ý cho bạn nếu có sản phẩm gợi ý
+    if (Model.GợiÝ.Any())
+    {
+        <h4>Gợi ý cho bạn</h4>
+        <div class="row">
+            @foreach (var item in Model.GợiÝ)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="product-item">
+                        <div class="product-title">
+                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
+                            <div class="ratting">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa -star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            </div>
+                        </div>
+                        <div class="product-image">
+                            @if (!string.IsNullOrEmpty(item.HinhAnh))
+                            {
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                            }
+                            else
+                            {
+                                <img src="~/img/no-image.png" alt="No Image" />
+                            }
+                            <div class="product-action">
+                                <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                                <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
+                                    <i class="fa fa-heart"></i>
+                                </a>
+                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="product-price">
+                            <h3><span>đ</span>@item.GiaBan</h3>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}
     <div class="home-page-container">
         <!-- Banner full width for "Phổ biến nhất" -->
         <div class="banner-container">
@@ -60,7 +106,7 @@ else
                         </div>
                         <div class="product-price">
                             <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>
                 </div>
@@ -109,7 +155,7 @@ else
                         </div>
                         <div class="product-price">
                             <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>
                 </div>
@@ -156,7 +202,7 @@ else
                         </div>
                         <div class="product-price">
                             <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>
                 </div>
@@ -203,7 +249,7 @@ else
                         </div>
                         <div class="product-price">
                             <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Buy Now</a>
+                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>
                 </div>

@@ -1,0 +1,148 @@
+﻿@model KhachHang
+@{
+    Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>
+        Quản Lý Thông Tin Cá Nhân - Sports Store
+    </title>
+    <script src="https://cdn.tailwindcss.com">
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+                 font-family: 'Roboto', sans-serif;
+             }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="min-h-screen flex flex-col">
+        <main class="flex-grow container mx-auto py-8" style="max-width: 100%">
+            <div class="flex flex-col md:flex-row md:space-x-8">
+                <!-- Sidebar -->
+                <aside class="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md">
+                    <div class="flex flex-col items-center">
+                        <img alt="User avatar"
+                             class="rounded-full mb-4"
+                             height="150"
+                             src="@(!string.IsNullOrEmpty(Model.HinhAnh) ? Model.HinhAnh : "/LayoutOgani/img/noimg.jpg")"
+                             width="150"
+                             id="avatarPreview" />
+                        <h2 class="text-xl font-semibold mb-4">
+                            Account Management
+                        </h2>
+                    </div>
+                    <ul class="space-y-2">
+                        <li>
+                            <a class="block py-2 px-4 rounded hover:bg-gray-200" href="#">
+                                Personal Information
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block py-2 px-4 rounded hover:bg-gray-200" href="#">
+                                Order History
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block py-2 px-4 rounded hover:bg-gray-200" href="#">
+                                Wishlist
+                            </a>
+                        </li>
+                        <li>
+                            <a class="block py-2 px-4 rounded hover:bg-gray-200" href="#">
+                                Settings
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+                <!-- Main Panel -->
+                <section class="w-full md:w-3/4 bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-semibold mb-6">
+                        Quản Lý Thông Tin Cá Nhân
+                    </h2>
+                    <form asp-action="Profile" class="space-y-4" enctype="multipart/form-data" method="post">
+                        <input asp-for="MaKhachHang" type="hidden" />
+                        <!-- Tên khách hàng -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                Họ và tên
+                            </label>
+                            <input asp-for="TenKhachHang" class="w-full p-2 border border-gray-300 rounded" />
+                            <span asp-validation-for="TenKhachHang" class="text-red-500 text-sm">
+                            </span>
+                        </div>
+                        <!-- Email -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                Email
+                            </label>
+                            <input asp-for="Email" class="w-full p-2 border border-gray-300 rounded" type="email" />
+                            <span asp-validation-for="Email" class="text-red-500 text-sm">
+                            </span>
+                        </div>
+                        <!-- Số điện thoại -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                Số điện thoại
+                            </label>
+                            <input asp-for="SoDienThoai" class="w-full p-2 border border-gray-300 rounded" />
+                            <span asp-validation-for="SoDienThoai" class="text-red-500 text-sm">
+                            </span>
+                        </div>
+                        <!-- Ngày sinh -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                Ngày sinh
+                            </label>
+                            <input asp-for="NgaySinh" class="w-full p-2 border border-gray-300 rounded" type="date" />
+                            <span asp-validation-for="NgaySinh" class="text-red-500 text-sm">
+                            </span>
+                        </div>
+                        <!-- Địa chỉ -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                Địa chỉ
+                            </label>
+                            <textarea asp-for="DiaChi" class="w-full p-2 border border-gray-300 rounded"></textarea>
+                            <span asp-validation-for="DiaChi" class="text-red-500 text-sm">
+                            </span>
+                        </div>
+                        <!-- Đặc quyền -->
+                        <div class="mb-4">
+                            <label class="block text-gray-700 font-semibold mb-2">
+                                Đặc quyền
+                            </label>
+                            <input asp-for="DacQuyen" class="w-full p-2 border border-gray-300 rounded" />
+                            <span asp-validation-for="DacQuyen" class="text-red-500 text-sm">
+                            </span>
+                        </div>
+                        <!-- Nút Lưu -->
+                        <div class="flex justify-end">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" type="submit">
+                                Lưu thông tin
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+<script>
+    function previewImage(input) {
+        const preview = document.getElementById('avatarPreview');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+

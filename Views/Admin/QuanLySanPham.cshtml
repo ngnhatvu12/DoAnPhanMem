@@ -769,7 +769,7 @@
                     // Fetch variants for the product from the server
                     const response = await fetch(`/Admin/GetProductVariants?productId=${productId}`);
                     const variants = await response.json();
-
+                    console.log("Fetched variants:", variants);
                     // Clear existing variant list
                     document.getElementById("variantList").innerHTML = "";
 

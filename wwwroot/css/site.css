@@ -2156,12 +2156,11 @@ h2 {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding-bottom: 35px;
 }
 
 .site-footer__menu {
     flex: 1;
-    padding-right: 50px;
+    padding-left: 50px;
     min-width: 200px;
 }
 
@@ -2193,7 +2192,7 @@ h2 {
 
 .site-footer__btn {
     align-items: center;
-    background: #2f5acf;
+    background: #ffffff;
     border: 0;
     border-radius: 16px;
     font-size: 14px;

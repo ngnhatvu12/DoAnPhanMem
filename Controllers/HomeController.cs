@@ -17,7 +17,23 @@ namespace DoAnPhanMem.Controllers
             _logger = logger;
             _db = db; // Gán dbSportStoreContext vào trường
         }
+        [HttpGet]
+        public IActionResult TimKiem(string keyword)
+        {
+            // Kiểm tra nếu không có từ khóa
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return View(new List<SanPham>()); // Trả về view rỗng
+            }
 
+            // Tìm sản phẩm theo tên gần giống với từ khóa tìm kiếm
+            var ketQuaTimKiem = _db.SanPham
+                .Where(sp => sp.TenSanPham.Contains(keyword))
+                .ToList();
+            HttpContext.Response.Cookies.Append("SearchKeyword", keyword);
+            // Trả về view cùng với danh sách sản phẩm tìm kiếm được
+            return View(ketQuaTimKiem);
+        }
         public IActionResult Index()
         {
             // Lấy toàn bộ danh sách sản phẩm từ bảng SanPham
@@ -44,6 +60,13 @@ namespace DoAnPhanMem.Controllers
                                        .Take(4)
                                        .ToList();
 
+            // Lấy từ khóa tìm kiếm từ cookie
+            string searchKeyword = HttpContext.Request.Cookies["SearchKeyword"];
+
+            // Lấy sản phẩm gợi ý nếu có từ khóa
+            var sanPhamGoiY = string.IsNullOrEmpty(searchKeyword) ? new List<SanPham>() :
+                lstSanPham.Where(sp => sp.TenSanPham.Contains(searchKeyword)).Take(4).ToList();
+
             // Tạo một view model để gửi dữ liệu sang view
             var homeViewModel = new HomeViewModel
             {
@@ -51,11 +74,18 @@ namespace DoAnPhanMem.Controllers
                 YeuThichNhat = sanPhamYeuThichNhat,
                 BanChayNhat = sanPhamBanChayNhat,
                 CoTheQuanTam = sanPhamCoTheQuanTam,
+                GợiÝ = sanPhamGoiY // Thêm sản phẩm gợi ý vào view model
             };
 
             return View(homeViewModel);  // Gửi view model sang View
         }
-
+        private List<SanPham> GetSuggestedProducts(string keyword)
+        {
+            return _db.SanPham
+                .Where(sp => sp.TenSanPham.Contains(keyword))
+                .Take(4)
+                .ToList();
+        }
         public IActionResult ProductDetail(string id)
         {
             // Lấy chi tiết sản phẩm từ bảng SanPham

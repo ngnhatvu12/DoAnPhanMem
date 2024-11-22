@@ -708,7 +708,7 @@ namespace DoAnPhanMem.Controllers
                 MaDonHang = donHang.MaDonHang,
                 TongTien = tongTien, // Lấy tổng tiền của đơn hàng đã tính ở trên
                 NgayLap = DateTime.Now, // Ngày lập hóa đơn là ngày hiện tại
-                TrangThai = "Đã lưu"
+                TrangThai = "Đã hoàn thành"
             };
             _db.HoaDon.Add(hoaDon);
 

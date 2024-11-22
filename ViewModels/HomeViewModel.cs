@@ -7,5 +7,6 @@
         public List<SanPham> BanChayNhat { get; set; }
         public List<SanPham> CoTheQuanTam { get; set; }
         public List<SanPham> WishlistItems { get; set; }
+        public List<SanPham> GợiÝ { get; set; }
     }
 }
