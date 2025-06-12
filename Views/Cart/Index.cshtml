@@ -38,12 +38,10 @@
             <input type="text" placeholder="Nhập mã giảm giá" class="discount-input">
             <button class="apply-discount">Áp dụng</button>
         </div>
-
-        <!-- Price Details Section with Separators -->
         <div class="separator"></div>
         <div class="price-details">
             <p>Tạm tính: <span>@String.Format("{0:N0}", ViewBag.TotalPrice)đ</span></p>
-            <p class="savings">Tiết kiệm: <span>@String.Format("{0:N0}", ViewBag.Savings)đ</span></p>
+            <p class="savings">Tiết kiệm: <span>0đ</span></p>
             <p>Giảm giá: <span>0đ</span></p>
             <div class="separator"></div>
             <p>Phí giao hàng: <span>Miễn phí</span></p>
@@ -178,6 +176,38 @@
             }
         });
     }
+    $(document).ready(function () {
+        $(".apply-discount").click(function () {
+            var maGiamGia = $(".discount-input").val();
+
+            if (maGiamGia.trim() === "") {
+                alert("Vui lòng nhập mã giảm giá.");
+                return;
+            }
+
+            $.ajax({
+                url: "/Cart/ApplyDiscount",
+                type: "POST",
+                data: { maGiamGia: maGiamGia },
+                success: function (response) {
+                    if (response.success) {
+                        // Cập nhật giảm giá và tổng tiền
+                        $(".savings span").text(response.discountAmount.toLocaleString() + "đ");
+                        var currentTotal = parseInt($(".total-price span").text().replace(/,/g, ""));
+                        var newTotal = currentTotal - response.discountAmount;
+                        $(".total-price span").text(newTotal.toLocaleString() + "đ");
+
+                        alert("Áp dụng mã giảm giá thành công!");
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Có lỗi xảy ra. Vui lòng thử lại.");
+                }
+            });
+        });
+    });
 
 </script>
 

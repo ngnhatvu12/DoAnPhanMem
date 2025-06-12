@@ -98,6 +98,24 @@ public class CartController : Controller
 
         return View();
     }
+    [HttpPost]
+    public IActionResult ApplyDiscount(string maGiamGia)
+    {
+        var discount = _db.GiamGia.FirstOrDefault(g => g.MaGiamGia == maGiamGia);
+        if (discount == null)
+        {
+            return Json(new { success = false, message = "Mã giảm giá không hợp lệ." });
+        }
+
+        // Kiểm tra điều kiện và ngày hiệu lực
+        if (discount.NgayHieuLuc > DateTime.Now)
+        {
+            return Json(new { success = false, message = "Mã giảm giá chưa có hiệu lực." });
+        }
+
+        // Trả về mức giảm giá
+        return Json(new { success = true, discountAmount = discount.MucGiamGia });
+    }
 
     public IActionResult ConfirmPayment(string maKhachHang, string maDonHang, decimal tongTien, string phuongThuc, string trangThai)
     {
