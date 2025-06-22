@@ -4,43 +4,44 @@
     ViewData["Title"] = "Đơn Hàng Của Bạn";
     Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
 }
-<div class="my-account-header page-title normal-title ">
-    <div class="page-title-inner flex-row container
-	 text-left">
-        <div class="flex-col flex-grow medium-text-center">
 
-            <h1 class="uppercase mb-0">TÀI KHOẢN CỦA TÔI</h1>
-            <small class="uppercase">Đơn hàng</small>
+<div class="container order-container my-5" style="max-width:100%">
+    <h2 class="text-center mb-4">Đơn Hàng Của Bạn</h2>
+    <div class="order-tabs">
+        <div class="tabs-header">
+            <div class="tabs-container">
+                <div class="tab-nav">
+                    <a href="@Url.Action("Detail", "Order", new { status = "Đang xử lý" })" class="tab-link active" data-status="Đang xử lý">Chờ xác nhận</a>
+                    <a href="@Url.Action("Detail", "Order", new { status = "Chờ lấy hàng" })" class="tab-link" data-status="Chờ lấy hàng">Chờ lấy hàng</a>
+                    <a href="@Url.Action("Detail", "Order", new { status = "Đang giao hàng" })" class="tab-link" data-status="Đang giao hàng">Đang giao</a>
+                    <a href="@Url.Action("Detail", "Order", new { status = "Đã hoàn thành" })" class="tab-link" data-status="Đã hoàn thành">Đã giao</a>
+                    <a href="@Url.Action("Detail", "Order", new { status = "Đã hủy" })" class="tab-link" data-status="Đã hủy">Đã hủy</a>
+                    <a href="@Url.Action("Detail", "Order", new { status = "Trả hàng" })" class="tab-link" data-status="Trả hàng">Trả hàng</a>
+                    <div class="tab-indicator"></div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="container order-container my-5">
-    <h2 class="text-center mb-4">Đơn Hàng Của Bạn</h2>
+    <!-- Order Content (giữ nguyên phần này) -->
     <div class="row">
-        <!-- Left Column for Order Status Options -->
-        <div class="col-md-3 order-status p-3">
-            <h5 class="mb-3">Trạng thái đơn hàng</h5>
-            <ul class="list-group">
-                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đang xử lý" })">Chờ xác nhận</a></li>
-                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Chờ lấy hàng" })">Chờ lấy hàng</a></li>
-                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đang giao hàng" })">Đang giao</a></li>
-                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đã hoàn thành" })">Đã giao</a></li>
-                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Đã hủy" })">Đã hủy</a></li>
-                <li class="list-group-item"><a href="@Url.Action("Detail", "Order", new { status = "Trả hàng" })">Trả hàng</a></li>
-            </ul>
-        </div>
-
-        <!-- Right Column for Order Details -->
-        <div class="col-md-9">
+        <div class="col-12">
             @if (!Model.Any())
             {
-                <p class="text-center">Bạn chưa có đơn hàng nào.</p>
+                <div class="empty-order">
+                    <div class="empty-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h4>Bạn chưa có đơn hàng nào</h4>
+                    <p>Hãy khám phá cửa hàng của chúng tôi và tìm sản phẩm yêu thích!</p>
+                    <a href="/" class="btn btn-primary">Mua sắm ngay</a>
+                </div>
             }
             else
             {
                 foreach (var donHang in Model)
                 {
                     <div class="order-card mb-4 p-4 shadow-sm">
+                        <!-- Giữ nguyên nội dung đơn hàng -->
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <h5>Mã đơn hàng: <a href="#">@donHang.MaDonHang</a></h5>
@@ -84,16 +85,16 @@
                                             <td>@String.Format("{0:N0}", chiTiet.GiaBan) VND</td>
                                             <td>@String.Format("{0:N0}", chiTiet.SoLuong * chiTiet.GiaBan) VND</td>
                                             <td>
-                                                 @if (donHang.TrangThai == "Đã hoàn thành")  
-                                                  {
-                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ratingModal" 
-                                                    data-product-id="@chiTiet.MaSanPham" 
-                                                    data-product-name="@chiTiet.SanPham" 
-                                                    data-product-image="@chiTiet.HinhAnh"
-                                                    data-mahoadon="@donHang.MaHoaDon">
-                                                    Đánh giá
+                                                @if (donHang.TrangThai == "Đã hoàn thành")
+                                                {
+                                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ratingModal"
+                                                            data-product-id="@chiTiet.MaSanPham"
+                                                            data-product-name="@chiTiet.SanPham"
+                                                            data-product-image="@chiTiet.HinhAnh"
+                                                            data-mahoadon="@donHang.MaHoaDon">
+                                                        Đánh giá
                                                     </button>
-                                                  }
+                                                }
                                             </td>
                                         </tr>
                                     }
@@ -105,9 +106,9 @@
             }
         </div>
     </div>
-
 </div>
 
+<!-- Modal đánh giá sản phẩm (giữ nguyên) -->
 <!-- Modal đánh giá sản phẩm -->
 <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -157,133 +158,256 @@
 </div>
 
 <style>
-    .normal-title {
-        background-color: #f7f7f7;
-        border-bottom: 1px solid #ececec;
-        border-top: 1px solid #ececec;
+    .order-page-container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px 10px;
     }
 
-        .normal-title .page-title-inner {
-            padding-bottom: 15px;
-            padding-top: 15px;
-        }
-
-    .flex-grow {
-        flex: 1;
-    }
-
-    /* Container styling */
-    .order-container {
-        max-width: 3000px;
-        margin: auto;
-    }
-
-    /* Order Status styling */
-    .order-status {
-        background-color: #f1f4f9;
-        border-radius: 8px;
-    }
-
-        .order-status h5 {
-            font-weight: 600;
-            color: #495057;
-        }
-
-    .list-group-item {
-        background-color: transparent;
-        padding: 10px 15px;
-        border: none;
-        color: #007bff;
-        font-weight: 500;
-    }
-
-        .list-group-item:hover {
-            background-color: #e9ecef;
-        }
-
-    /* Order Card styling */
-    .order-card {
-        background-color: #ffffff;
-        border-radius: 10px;
-        border: 1px solid #e2e6ea;
-    }
-
-    /* Badge styling for status */
-    .badge {
-        padding: 6px 12px;
-        border-radius: 12px;
-        font-size: 13px;
+    .order-title {
+        font-size: 28px;
         font-weight: 600;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
     }
 
-    .badge-success {
-        background-color: #28a745;
-        color: #ffffff;
+    /* Tab Navigation */
+    .order-tabs {
+        margin-bottom: 30px;
     }
 
-    .badge-warning {
-        background-color: #ffc107;
-        color: #333333;
+    .tabs-header {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
-    .badge-danger {
-        background-color: #dc3545;
-        color: #ffffff;
+    .tabs-container {
+        min-width: fit-content;
     }
 
-    /* Product Details Table styling */
-    .table {
+    .tab-nav {
+        display: flex;
+        position: relative;
+        border-bottom: 1px solid #e0e0e0;
+        justify-content: space-around
+    }
+
+    .tab-link {
+        padding: 12px 20px;
+        font-size: 20px;
+        font-weight: 500;
+        color: #555;
+        text-decoration: none;
+        position: relative;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+    }
+
+        .tab-link:hover {
+            color: #2c7be5;
+        }
+
+        .tab-link.active {
+            color: #2c7be5;
+        }
+
+    .tab-indicator {
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        height: 2px;
+        background-color: #2c7be5;
+        transition: all 0.3s ease;
+        width: 100px; /* Default width */
+    }
+    /* Empty Order State */
+    .empty-order {
+        text-align: center;
+        padding: 50px 20px;
+        background: #f9f9f9;
+        border-radius: 10px;
+    }
+
+    .empty-icon {
+        font-size: 60px;
+        color: #ccc;
+        margin-bottom: 20px;
+    }
+
+    .empty-order h4 {
+        font-size: 20px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .empty-order p {
+        color: #777;
+        margin-bottom: 20px;
+    }
+    /* Giữ nguyên các style cũ */
+    .order-card {
+        border-radius: 8px;
+        border: 1px solid #e0e6ed;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        margin-bottom: 15px;
+    }
+
+        .order-card h5 {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+
+    .order-info p, .payment-info p {
+        margin-bottom: 8px;
         font-size: 14px;
-        margin-top: 10px;
+    }
+
+    .payment-info h6 {
+        font-size: 15px;
+        color: #2c3e50;
+        font-weight: 600;
+        padding-bottom: 5px;
+        border-bottom: 1px solid #eee;
+    }
+
+    /* Table improvements */
+    .table {
+        font-size: 13px;
     }
 
         .table th {
+            background-color: #f8f9fa;
             font-weight: 600;
-            color: #666666;
+            color: #4a5568;
         }
 
     .product-image {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 5px;
+        width: 60px;
+        height: 60px;
+        object-fit: contain;
+        border-radius: 4px;
+        border: 1px solid #eee;
+        background: #fff;
+        padding: 2px;
     }
 
+    /* Badge improvements */
+    .badge {
+        padding: 6px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Rating stars */
     .rating {
         display: flex;
-        flex-direction: row;
-        font-size: 2rem;
+        flex-direction: row-reverse;
+        justify-content: flex-start;
     }
 
-        .rating label {
-            color: lightgray; /* Màu xám cho sao chưa chọn */
-            cursor: pointer;
-            font-size: 2rem;
-        }
-
         .rating input[type="radio"] {
-            display: none; /* Ẩn input radio */
+            display: none;
         }
 
-        /* Đổi màu khi hover hoặc chọn */
-        .rating label:hover,
-        .rating label:hover ~ label {
-            color: gold; /* Sao chuyển vàng khi hover */
+        .rating label {
+            color: #ddd;
+            font-size: 20px;
+            padding: 0 3px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .rating input[type="radio"]:checked ~ label {
-            color: lightgray; /* Sao bên phải của sao đã chọn sẽ về lại màu xám */
+            .rating input[type="radio"]:checked ~ label,
+            .rating label:hover,
+            .rating label:hover ~ label {
+                color: #f39c12;
+            }
+
+    /* Empty state */
+    .text-center {
+        padding: 30px;
+        background: #FFFFFF;
+        border-radius: 8px;
+        color: #000000;
+    }
+
+    /* Modal improvements */
+    .modal-content {
+        border-radius: 10px;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #eee;
+    }
+
+    .modal-title {
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    /* Responsive adjustments */
+    @@media (max-width: 768px) {
+        .col-md-3, .col-md-9 {
+            padding-left: 10px;
+            padding-right: 10px;
         }
 
-        .rating input[type="radio"]:checked + label,
-        .rating input[type="radio"]:checked + label ~ label {
-            color: gold; /* Sao đã chọn và các sao bên trái sẽ chuyển vàng */
+        .order-status {
+            margin-bottom: 20px;
         }
 
+        .table {
+            font-size: 12px;
+        }
+
+        .product-image {
+            width: 40px;
+            height: 40px;
+        }
+    }
 </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Xác định tab active ban đầu dựa trên URL
+    document.addEventListener('DOMContentLoaded', function () {
+        // Lấy status từ URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status') || 'Đang xử lý';
 
+        // Tìm tab tương ứng
+        const tabs = document.querySelectorAll('.tab-link');
+        tabs.forEach(tab => {
+            if (tab.dataset.status === status) {
+                tab.classList.add('active');
+
+                // Di chuyển indicator
+                const indicator = document.querySelector('.tab-indicator');
+                indicator.style.width = tab.offsetWidth + 'px';
+                indicator.style.left = tab.offsetLeft + 'px';
+            } else {
+                tab.classList.remove('active');
+            }
+        });
+
+        // Thêm sự kiện hover cho tab
+        tabs.forEach(tab => {
+            tab.addEventListener('mouseenter', function () {
+                if (!this.classList.contains('active')) {
+                    this.style.color = '#2c7be5';
+                }
+            });
+
+            tab.addEventListener('mouseleave', function () {
+                if (!this.classList.contains('active')) {
+                    this.style.color = '#555';
+                }
+            });
+        });
+    });
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Gắn sự kiện khi modal mở
@@ -304,7 +428,7 @@
             document.getElementById('productName').value = productName;
             document.getElementById('productImage').src = "/LayoutOgani/img/" + productImage;
 
-   
+
         });
     });
     document.addEventListener("DOMContentLoaded", function () {

@@ -64,8 +64,8 @@
                     <div class="navbar-nav mr-auto">
                         <a href="index.html" class="nav-item nav-link active">Trang chủ</a>
                         <a href="product-list.html" class="nav-item nav-link">Sản phẩm</a>
-                        <a href="product-detail.html" class="nav-item nav-link">Đồ thể thao</a>
-                        <a href="cart.html" class="nav-item nav-link">Đồ lót</a>
+                        <a href="product-detail.html" class="nav-item nav-link">Tin tức</a>
+                        <a href="cart.html" class="nav-item nav-link">Khuyến mãi</a>
                         <a href="checkout.html" class="nav-item nav-link">Dụng cụ thể thao</a>
                         <a href="my-account.html" class="nav-item nav-link">Sản phẩm mới</a>
                         <div class="nav-item dropdown">
@@ -104,8 +104,8 @@
                                         <!-- Nếu người dùng chưa đăng nhập -->
                                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
                                         <div class="dropdown-menu">
-                                            <a href="/Access/Login" class="dropdown-item">Login</a>
-                                            <a href="/Access/Register" class="dropdown-item">Register</a>
+                                            <a href="/Access/Login" class="dropdown-item">ĐĂNG NHẬP</a>
+                                            <a href="/Access/Register" class="dropdown-item">ĐĂNG KÝ</a>
                                         </div>
                                     }
                                 </div>
@@ -132,7 +132,7 @@
                 <div class="col-md-6">
                     <div class="search">
                         <form asp-controller="Home" asp-action="TimKiem" method="get">
-                            <input type="text" name="keyword" placeholder="Search" />
+                            <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm" />
                             <button type="submit"><i class="fa fa-search"></i></button>
                         </form>
                     </div>
@@ -156,31 +156,11 @@
    
    
     @RenderBody()
-    <!-- Featured Product End -->
-    <!-- Newsletter Start -->
-    <div class="newsletter">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-6">
-                    <h1>Subscribe Our Newsletter</h1>
-                </div>
-                <div class="col-md-6">
-                    <div class="form">
-                        <input type="email" value="Your email here">
-                        <button>Submit</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Newsletter End -->
-    <!-- Recent Product Start -->
-    <!-- Recent Product End -->
-    <!-- Review Start -->
-    <!-- Review End -->
+
+    <!-- Footer-->
     <!-- Footer-->
     <footer class="site-footer mobile--hidden">
-        <div class="container" style="max-width: 100%">
+        <div class="container" style="max-width: 100%; flex-wrap: wrap">
             <div class="site-footer__inner">
                 <div class="site-footer__sidebar">
                     <div>

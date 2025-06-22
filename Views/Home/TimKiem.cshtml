@@ -13,7 +13,7 @@
 else
 {
     <div class="product-search-results">
-        <div class="row">
+        <div class="row" style="justify-content:flex-start; margin-left:5px; margin-right:5px">
             @foreach (var item in Model)
             {
                 <div class="col-lg-3 col-md-4 col-sm-6">
@@ -31,7 +31,7 @@ else
                         <div class="product-image">
                             @if (!string.IsNullOrEmpty(item.HinhAnh))
                             {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" />
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px;" />
                             }
                             else
                             {
@@ -44,7 +44,7 @@ else
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.GiaBan</h3>
+                            <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
                             <a class="btn" href="#" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>

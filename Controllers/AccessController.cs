@@ -106,7 +106,7 @@ namespace DoAnPhanMem.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(model); // Trả lại View nếu dữ liệu không hợp lệ
+                return View(model); 
             }
 
             var khachHang = _db.KhachHang.FirstOrDefault(kh => kh.MaKhachHang == model.MaKhachHang);
@@ -114,22 +114,14 @@ namespace DoAnPhanMem.Controllers
             {
                 return NotFound("Không tìm thấy thông tin khách hàng.");
             }
-
-            // Xử lý cập nhật hình ảnh
             if (avatarUpload != null)
             {
-                // Đường dẫn thư mục lưu ảnh
                 string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/LayoutOgani/img");
-                // Đường dẫn ảnh cũ
                 string oldImagePath = Path.Combine(uploadPath, Path.GetFileName(khachHang.HinhAnh));
-
-                // Xóa ảnh cũ nếu tồn tại
                 if (!string.IsNullOrEmpty(khachHang.HinhAnh) && System.IO.File.Exists(oldImagePath))
                 {
                     System.IO.File.Delete(oldImagePath);
                 }
-
-                // Lưu ảnh mới
                 string newFileName = Guid.NewGuid().ToString() + Path.GetExtension(avatarUpload.FileName);
                 string newFilePath = Path.Combine(uploadPath, newFileName);
 
@@ -137,17 +129,12 @@ namespace DoAnPhanMem.Controllers
                 {
                     avatarUpload.CopyTo(stream);
                 }
-
-                // Cập nhật đường dẫn ảnh vào DB
                 khachHang.HinhAnh = "/LayoutOgani/img/" + newFileName;
             }
             else if (string.IsNullOrEmpty(khachHang.HinhAnh))
             {
-                // Nếu không có ảnh, sử dụng ảnh mặc định
                 khachHang.HinhAnh = "/LayoutOgani/img/noimg.jpg";
             }
-
-            // Cập nhật các thông tin khác
             khachHang.TenKhachHang = model.TenKhachHang;
             khachHang.Email = model.Email;
             khachHang.SoDienThoai = model.SoDienThoai;
@@ -155,7 +142,7 @@ namespace DoAnPhanMem.Controllers
             khachHang.DiaChi = model.DiaChi;
             khachHang.DacQuyen = model.DacQuyen;
 
-            _db.SaveChanges(); // Lưu thay đổi vào cơ sở dữ liệu
+            _db.SaveChanges(); 
 
             ViewBag.Message = "Cập nhật thông tin thành công!";
             return View(khachHang);

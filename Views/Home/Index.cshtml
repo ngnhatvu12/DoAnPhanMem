@@ -3,10 +3,11 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
-    <link href="~/css/Item.css" rel="stylesheet">;
+    <link href="~/css/Item.css" rel="stylesheet">
+    ;
     <script src="~/js/site.js"></script>
     <link rel="stylesheet" href="~/css/CartPopup.css" />
-    
+
 
 }
 
@@ -17,11 +18,10 @@
 }
 else
 {
-    // Hiển thị phần Gợi ý cho bạn nếu có sản phẩm gợi ý
     if (Model.GợiÝ.Any())
     {
-        <h4>Gợi ý cho bạn</h4>
-        <div class="row">
+        <h4 style="margin-left:15px">Gợi ý cho bạn</h4>
+        <div class="row" style="justify-content:flex-start; margin-left:5px">
             @foreach (var item in Model.GợiÝ)
             {
                 <div class="col-lg-3 col-md-4 col-sm-6">
@@ -30,7 +30,7 @@ else
                             <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
                             <div class="ratting">
                                 <i class="fa fa-star"></i>
-                                <i class="fa fa -star"></i>
+                                <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
                                 <i class="fa fa-star"></i>
@@ -39,7 +39,7 @@ else
                         <div class="product-image">
                             @if (!string.IsNullOrEmpty(item.HinhAnh))
                             {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
                             }
                             else
                             {
@@ -54,7 +54,7 @@ else
                             </div>
                         </div>
                         <div class="product-price">
-                            <h3><span>đ</span>@item.GiaBan</h3>
+                            <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
                             <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
                         </div>
                     </div>
@@ -63,200 +63,200 @@ else
         </div>
     }
 }
-    <div class="home-page-container">
-        <!-- Banner full width for "Phổ biến nhất" -->
-        <div class="banner-container">
-            <img src="~/LayoutOgani/img/banner-pho-bien-nhat.jpg" alt="Phổ biến nhất" class="full-width-banner">
-        </div>
-        <!-- Phổ biến nhất Section -->
-        <h2 class="category-title">Phổ biến nhất</h2>
-        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM001">Xem thêm</a>
-        <div class="row product-category">
-            @foreach (var item in Model.PhoBienNhat)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product-item">
-                        <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
-                            <div class="ratting">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                        </div>
-                        <div class="product-image">
-                            @if (!string.IsNullOrEmpty(item.HinhAnh))
-                            {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
-                            }
-                            else
-                            {
-                                <img src="~//img/no-image.png" alt="No Image" />
-                            }                           
-                            <div class="product-action">
-                                <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-
-                                <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
-                                    <i class="fa fa-heart"></i>
-                                </a>
-                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-price">
-                            <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
-                        </div>
-                    </div>
-                </div>
-            }
-
-        </div>
-       
-        <!-- Banner for "Được yêu thích nhất" -->
-        <div class="banner-container">
-            <img src="~/LayoutOgani/img/banner-yeu-thich-nhat.jpg" alt="Được yêu thích nhất" class="full-width-banner">
-        </div>
-        <!-- Được yêu thích nhất Section -->
-        <h2 class="category-title">Được yêu thích nhất</h2>
-        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM002">Xem thêm</a>
-        <div class="row product-category">
-            @foreach (var item in Model.PhoBienNhat)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product-item">
-                        <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
-                            <div class="ratting">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                        </div>
-                        <div class="product-image">
-                            @if (!string.IsNullOrEmpty(item.HinhAnh))
-                            {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
-                            }
-                            else
-                            {
-                                <img src="~//img/no-image.png" alt="No Image" />
-                            }
-                            <div class="product-action">
-                                <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-                                <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
-                                    <i class="fa fa-heart"></i>
-                                </a>
-                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-price">
-                            <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-        
-        <!-- Banner for "Bán chạy nhất" -->
-        <div class="banner-container">
-            <img src="~/LayoutOgani/img/banner-ban-chay-nhat.jpg" alt="Bán chạy nhất" class="full-width-banner">
-        </div>
-        <!-- Bán chạy nhất Section -->
-        <h2 class="category-title">Bán chạy nhất</h2>
-        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM003">Xem thêm</a>
-        <div class="row product-category">
-            @foreach (var item in Model.BanChayNhat)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product-item">
-                        <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
-
-                            <div class="ratting">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                        </div>
-                        <div class="product-image">
-                            @if (!string.IsNullOrEmpty(item.HinhAnh))
-                            {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
-                            }
-                            else
-                            {
-                                <img src="~//img/no-image.png" alt="No Image" />
-                            }
-                            <div class="product-action">
-                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
-                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-price">
-                            <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-        
-        <!-- Banner for "Có thể bạn quan tâm" -->
-        <div class="banner-container">
-            <img src="~/LayoutOgani/img/banner-co-the-ban-quan-tam.jpg" alt="Có thể bạn quan tâm" class="full-width-banner">
-        </div>
-        <!-- Có thể bạn quan tâm Section -->
-        <h2 class="category-title">Có thể bạn quan tâm</h2>
-        <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM004">Xem thêm</a>
-        <div class="row product-category">
-            @foreach (var item in Model.CoTheQuanTam)
-            {
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product-item">
-                        <div class="product-title">
-                            <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
-
-                            <div class="ratting">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                        </div>
-                        <div class="product-image">
-                            @if (!string.IsNullOrEmpty(item.HinhAnh))
-                            {
-                                <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
-                            }
-                            else
-                            {
-                                <img src="~//img/no-image.png" alt="No Image" />
-                            }
-                            <div class="product-action">
-                                <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
-                                <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
-                                <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
-                            </div>
-                        </div>
-                        <div class="product-price">
-                            <h3><span>đ</span>@item.GiaBan</h3>
-                            <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>      
+<div class="home-page-container">
+    <!-- Banner full width for "Phổ biến nhất" -->
+    <div class="banner-container">
+        <img src="~/LayoutOgani/img/banner-pho-bien-nhat.jpg" alt="Phổ biến nhất" class="full-width-banner">
     </div>
-    <!-- Modal thêm vào giỏ hàng -->
+    <!-- Phổ biến nhất Section -->
+    <h2 class="category-title">Phổ biến nhất</h2>
+    <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM001">Xem thêm</a>
+    <div class="row product-category">
+        @foreach (var item in Model.PhoBienNhat)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
+                        }
+                        else
+                        {
+                            <img src="~//img/no-image.png" alt="No Image" />
+                        }
+                        <div class="product-action">
+                            <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+
+                            <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
+                                <i class="fa fa-heart"></i>
+                            </a>
+                            <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
+                        <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+    <!-- Banner for "Được yêu thích nhất" -->
+    <div class="banner-container">
+        <img src="~/LayoutOgani/img/banner-yeu-thich-nhat.jpg" alt="Được yêu thích nhất" class="full-width-banner">
+    </div>
+    <!-- Được yêu thích nhất Section -->
+    <h2 class="category-title">Được yêu thích nhất</h2>
+    <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM002">Xem thêm</a>
+    <div class="row product-category">
+        @foreach (var item in Model.PhoBienNhat)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
+                        }
+                        else
+                        {
+                            <img src="~//img/no-image.png" alt="No Image" />
+                        }
+                        <div class="product-action">
+                            <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                            <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')" tabindex="-1">
+                                <i class="fa fa-heart"></i>
+                            </a>
+                            <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
+                        <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Banner for "Bán chạy nhất" -->
+    <div class="banner-container">
+        <img src="~/LayoutOgani/img/banner-ban-chay-nhat.jpg" alt="Bán chạy nhất" class="full-width-banner">
+    </div>
+    <!-- Bán chạy nhất Section -->
+    <h2 class="category-title">Bán chạy nhất</h2>
+    <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM003">Xem thêm</a>
+    <div class="row product-category">
+        @foreach (var item in Model.BanChayNhat)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
+
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
+                        }
+                        else
+                        {
+                            <img src="~//img/no-image.png" alt="No Image" />
+                        }
+                        <div class="product-action">
+                            <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                            <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                            <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
+                        <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Banner for "Có thể bạn quan tâm" -->
+    <div class="banner-container">
+        <img src="~/LayoutOgani/img/banner-co-the-ban-quan-tam.jpg" alt="Có thể bạn quan tâm" class="full-width-banner">
+    </div>
+    <!-- Có thể bạn quan tâm Section -->
+    <h2 class="category-title">Có thể bạn quan tâm</h2>
+    <a class="btn btn-see-more" href="/Category/SanPhamTheoDanhMuc?maDanhMuc=DM004">Xem thêm</a>
+    <div class="row product-category">
+        @foreach (var item in Model.CoTheQuanTam)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <div class="product-item">
+                    <div class="product-title">
+                        <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })" tabindex="-1">@item.TenSanPham</a>
+
+                        <div class="ratting">
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                            <i class="fa fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="product-image">
+                        @if (!string.IsNullOrEmpty(item.HinhAnh))
+                        {
+                            <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
+                        }
+                        else
+                        {
+                            <img src="~//img/no-image.png" alt="No Image" />
+                        }
+                        <div class="product-action">
+                            <a href="#" tabindex="-1"><i class="fa fa-cart-plus"></i></a>
+                            <a href="#" tabindex="-1"><i class="fa fa-heart"></i></a>
+                            <a href="#" tabindex="-1"><i class="fa fa-search"></i></a>
+                        </div>
+                    </div>
+                    <div class="product-price">
+                        <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
+                        <a class="btn" href="" tabindex="-1"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- Modal thêm vào giỏ hàng -->
 <div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -270,7 +270,7 @@ else
                 <input type="hidden" id="productId" value="" />
                 <img id="productImage" src="" alt="Product Image" style="width: 100%; height: auto;">
                 <p id="productPrice">Giá: 0 đ</p>
-                 <p id="productQuantity">Số lượng tồn: 0</p>
+                <p id="productQuantity">Số lượng tồn: 0</p>
                 <div>
                     <label for="colorSelect">Màu sắc:</label>
                     <select id="colorSelect" class="form-control">
@@ -297,27 +297,42 @@ else
 </div>
 
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function checkLoginAndOpenModal(productId) {
-            $.ajax({
-                url: '/Home/CheckLoginStatus',
-                type: 'GET',
-                success: function (response) {
-                    if (response.isLoggedIn) {
-                        // Người dùng đã đăng nhập, mở modal thêm sản phẩm vào giỏ hàng
-                        openAddToCartModal(productId);
-                    } else {
-                        // Người dùng chưa đăng nhập, yêu cầu họ đăng nhập
-                        alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
-                        window.location.href = '/Access/Login';
-                    }
-                },
-                error: function () {
-                    console.error("Không thể kiểm tra trạng thái đăng nhập.");
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animated');
+                    observer.unobserve(entry.target); // Dừng quan sát sau khi animated
                 }
             });
-        }
+        }, { threshold: 0.1 });
+
+        // Áp dụng cho tất cả banner
+        document.querySelectorAll('.banner-container').forEach(banner => {
+            observer.observe(banner);
+        });
+    });
+    function checkLoginAndOpenModal(productId) {
+        $.ajax({
+            url: '/Home/CheckLoginStatus',
+            type: 'GET',
+            success: function (response) {
+                if (response.isLoggedIn) {
+                    // Người dùng đã đăng nhập, mở modal thêm sản phẩm vào giỏ hàng
+                    openAddToCartModal(productId);
+                } else {
+                    // Người dùng chưa đăng nhập, yêu cầu họ đăng nhập
+                    alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
+                    window.location.href = '/Access/Login';
+                }
+            },
+            error: function () {
+                console.error("Không thể kiểm tra trạng thái đăng nhập.");
+            }
+        });
+    }
     let selectedProductDetailId = null;
     function openAddToCartModal(productId) {
         $('#productId').val(productId);
@@ -333,16 +348,16 @@ else
                     $('#productImage').attr('src', '/LayoutOgani/img/' + response.hinhAnh);
 
                     // Cập nhật tùy chọn màu sắc
-                     let colorOptionsHtml = response.colorOptions.map(option => 
-                    `<option value="${option.maMauSac}" data-image="${option.hinhAnhBienThe}">${option.tenMauSac}</option>`
-                     ).join('');
-                     $('#colorSelect').html(colorOptionsHtml);
+                    let colorOptionsHtml = response.colorOptions.map(option =>
+                        `<option value="${option.maMauSac}" data-image="${option.hinhAnhBienThe}">${option.tenMauSac}</option>`
+                    ).join('');
+                    $('#colorSelect').html(colorOptionsHtml);
 
                     // Cập nhật tùy chọn kích thước
-                     let sizeOptionsHtml = response.sizeOptions.map(option => 
-                    `<option value="${option.maKichThuoc}">${option.tenKichThuoc}</option>`
-                     ).join('');
-                     $('#sizeSelect').html(sizeOptionsHtml);
+                    let sizeOptionsHtml = response.sizeOptions.map(option =>
+                        `<option value="${option.maKichThuoc}">${option.tenKichThuoc}</option>`
+                    ).join('');
+                    $('#sizeSelect').html(sizeOptionsHtml);
                     // Thêm sự kiện onchange cho colorSelect để cập nhật hình ảnh biến thể
                     $('#colorSelect').on('change', function () {
                         const selectedImage = $(this).find(':selected').data('image');
@@ -350,10 +365,10 @@ else
                             $('#productImage').attr('src', '/LayoutOgani/img/' + selectedImage);
                         }
                     });
-                     // Thêm sự kiện onchange cho colorSelect và sizeSelect để cập nhật số lượng tồn kho
-                $('#colorSelect, #sizeSelect').on('change', function () {
-                    updateQuantity(productId); // gọi hàm updateQuantity để cập nhật số lượng tồn kho
-                });
+                    // Thêm sự kiện onchange cho colorSelect và sizeSelect để cập nhật số lượng tồn kho
+                    $('#colorSelect, #sizeSelect').on('change', function () {
+                        updateQuantity(productId); // gọi hàm updateQuantity để cập nhật số lượng tồn kho
+                    });
                     $('#addToCartModal').modal('show');
                 } else {
                     alert(response.message || "Không thể tải thông tin sản phẩm");
@@ -366,200 +381,223 @@ else
     }
 
     function updateQuantity(productId) {
-    const selectedColor = $('#colorSelect').val();
-    const selectedSize = $('#sizeSelect').val();
+        const selectedColor = $('#colorSelect').val();
+        const selectedSize = $('#sizeSelect').val();
 
-    $.ajax({
-        url: '/Home/GetProductQuantity',
-        type: 'GET',
-        data: { productId: productId, colorId: selectedColor, sizeId: selectedSize },
-        success: function (response) {
-            if (response.success) {
-                $('#productQuantity').text('Số lượng tồn: ' + response.soLuongTon);
-                $('#addToCartButton').prop('disabled', response.soLuongTon === 0);
+        $.ajax({
+            url: '/Home/GetProductQuantity',
+            type: 'GET',
+            data: { productId: productId, colorId: selectedColor, sizeId: selectedSize },
+            success: function (response) {
+                if (response.success) {
+                    $('#productQuantity').text('Số lượng tồn: ' + response.soLuongTon);
+                    $('#addToCartButton').prop('disabled', response.soLuongTon === 0);
 
-                if (response.soLuongTon === 0) {
+                    if (response.soLuongTon === 0) {
+                        $('#productQuantity').text('Đã hết hàng');
+                    }
+                } else {
                     $('#productQuantity').text('Đã hết hàng');
+                    $('#addToCartButton').prop('disabled', true);
                 }
-            } else {
+            },
+            error: function (err) {
+                console.error("Lỗi AJAX:", err);
                 $('#productQuantity').text('Đã hết hàng');
                 $('#addToCartButton').prop('disabled', true);
             }
-        },
-        error: function (err) {
-            console.error("Lỗi AJAX:", err);
-            $('#productQuantity').text('Đã hết hàng');
-            $('#addToCartButton').prop('disabled', true);
-        }
-    });
-}
+        });
+    }
 
 
-        // Mảng lưu trữ sản phẩm trong giỏ hàng
-let cartItems = [];
+    // Mảng lưu trữ sản phẩm trong giỏ hàng
+    let cartItems = [];
 
-        // Hàm thêm sản phẩm vào giỏ hàng
+    // Hàm thêm sản phẩm vào giỏ hàng
     function addToCart() {
-    const productId = $('#productId').val();
-    const selectedColor = $('#colorSelect').val();
-    const selectedSize = $('#sizeSelect').val();
-    const quantity = parseInt($('#quantityInput').val());
+        const productId = $('#productId').val();
+        const selectedColor = $('#colorSelect').val();
+        const selectedSize = $('#sizeSelect').val();
+        const quantity = parseInt($('#quantityInput').val());
 
-    $.ajax({
-        url: '/Home/GetProductDetailId',
-        type: 'POST',
-        data: { productId: productId, colorId: selectedColor, sizeId: selectedSize },
-        success: function (response) {
-            if (response.success) {
-                const maChiTietSP = response.maChiTietSP;
-                console.log("Mã chi tiết sản phẩm:", maChiTietSP); // In kiểm tra mã chi tiết sản phẩm
-                $.ajax({
-                    url: '/Cart/AddToCart',
-                    type: 'POST',
-                    data: JSON.stringify({ maChiTietSP: maChiTietSP, soLuong: quantity }),
-                    contentType: 'application/json',
-                    success: function (addResponse) {
-                        if (addResponse.success) {
-                            alert("Thêm vào giỏ hàng thành công!");
-                            updateCartCount();
-                        } else {
-                            alert(addResponse.message || "Không thể thêm vào giỏ hàng.");
+        $.ajax({
+            url: '/Home/GetProductDetailId',
+            type: 'POST',
+            data: { productId: productId, colorId: selectedColor, sizeId: selectedSize },
+            success: function (response) {
+                if (response.success) {
+                    const maChiTietSP = response.maChiTietSP;
+                    console.log("Mã chi tiết sản phẩm:", maChiTietSP); // In kiểm tra mã chi tiết sản phẩm
+                    $.ajax({
+                        url: '/Cart/AddToCart',
+                        type: 'POST',
+                        data: JSON.stringify({ maChiTietSP: maChiTietSP, soLuong: quantity }),
+                        contentType: 'application/json',
+                        success: function (addResponse) {
+                            if (addResponse.success) {
+                                alert("Thêm vào giỏ hàng thành công!");
+                                updateCartCount();
+                            } else {
+                                alert(addResponse.message || "Không thể thêm vào giỏ hàng.");
+                            }
+                        },
+                        error: function (error) {
+                            console.error("Lỗi khi thêm sản phẩm vào giỏ hàng.", error);
+                            alert("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.");
                         }
-                    },
-                    error: function (error) {
-                        console.error("Lỗi khi thêm sản phẩm vào giỏ hàng.", error);
-                        alert("Đã xảy ra lỗi khi thêm sản phẩm vào giỏ hàng.");
-                    }
-                });
-            } else {
-                alert("Không tìm thấy chi tiết sản phẩm cho lựa chọn của bạn.");
+                    });
+                } else {
+                    alert("Không tìm thấy chi tiết sản phẩm cho lựa chọn của bạn.");
+                }
+            },
+            error: function (error) {
+                console.error("Lỗi khi tìm mã chi tiết sản phẩm.", error);
+                alert("Đã xảy ra lỗi khi tìm mã chi tiết sản phẩm.");
             }
-        },
-        error: function (error) {
-            console.error("Lỗi khi tìm mã chi tiết sản phẩm.", error);
-            alert("Đã xảy ra lỗi khi tìm mã chi tiết sản phẩm.");
-        }
-    });
-}
+        });
+    }
 
 
 
-// Hàm cập nhật số lượng hiển thị trên nút giỏ hàng
-function updateCartCount() {
+    // Hàm cập nhật số lượng hiển thị trên nút giỏ hàng
+    function updateCartCount() {
+        $.ajax({
+            url: '/Cart/GetCartDetails',
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    const itemCount = response.totalQuantity;
+                    $('.cart span').text(`(${itemCount})`);
+                }
+            },
+            error: function (error) {
+                console.error("Lỗi khi lấy số lượng giỏ hàng.", error);
+            }
+        });
+    }
+    function openCartPopup() {
     $.ajax({
         url: '/Cart/GetCartDetails',
-        type: 'GET',
+        method: 'GET',
         success: function (response) {
             if (response.success) {
-                const itemCount = response.totalQuantity;
-                $('.cart span').text(`(${itemCount})`);
-            }
-        },
-        error: function (error) {
-            console.error("Lỗi khi lấy số lượng giỏ hàng.", error);
-        }
-    });
-}
+                console.log(response.cartItems); // Kiểm tra toàn bộ dữ liệu cartItems từ server
+                let cartItems = response.cartItems;
+                let totalQuantity = response.totalQuantity; // Tổng số lượng từ response
 
+                $('.cart-popup').remove();
 
-        function openCartPopup() {
-            $.ajax({
-                url: '/Cart/GetCartDetails',
-                method: 'GET',
-                success: function (response) {
-                    if (response.success) {
-                        console.log(response.cartItems); // Kiểm tra toàn bộ dữ liệu cartItems từ server
-                        let cartItems = response.cartItems;
-                        let totalQuantity = response.totalQuantity; // Tổng số lượng từ response
-
-                        $('.cart-popup').remove();
-
-                        let cartHtml = `<div class="cart-popup">
+                let cartHtml = `<div class="cart-popup">
                                             <h5>${totalQuantity} sản phẩm</h5>
                                             <a href="#" onclick="viewCartDetails()">Xem tất cả</a>
                                             <ul>`;
 
-                        // Sử dụng map và join để tạo ra các phần tử HTML cho mỗi sản phẩm
-                        cartHtml += cartItems.map(item => {
-                            const formattedPrice = (item.giaBan || 0).toLocaleString(); // Định dạng giá tiền
-                            return `<li>
+                // Sử dụng map và join để tạo ra các phần tử HTML cho mỗi sản phẩm
+                cartHtml += cartItems.map(item => {
+                    const formattedPrice = (item.giaBan || 0).toLocaleString(); // Định dạng giá tiền
+                    return `<li>
                                         <img src="/LayoutOgani/img/${item.hinhAnh || 'default-image.jpg'}" alt="${item.tenSanPham || 'Sản phẩm'}">
                                         <div>
                                             <h6>${item.tenSanPham || 'Sản phẩm không tên'}</h6>
-                                            <p>${item.mauSac || 'N/A'} / ${item.kichThuoc || 'N/A'}</p>
+                                            <p>Màu sắc: ${item.mauSac || 'N/A'}</p>
+                                            <p>Kích thước: ${item.kichThuoc || 'N/A'}</p>
                                             <p>${formattedPrice} đ x${item.soLuong || 1}</p>
                                         </div>
                                         <button onclick="removeCartItem('${item.maSanPham}', '${item.mauSac}', '${item.kichThuoc}')">X</button>
                                      </li>`;
-                        }).join(""); // join("") để nối tất cả các phần tử lại thành chuỗi HTML
+                }).join(""); // join("") để nối tất cả các phần tử lại thành chuỗi HTML
 
-                        cartHtml += `</ul></div>`;
+                cartHtml += `</ul></div>`;
 
-                        console.log(cartHtml); // Kiểm tra nội dung của cartHtml
+                console.log(cartHtml); // Kiểm tra nội dung của cartHtml
 
-                        // Thêm cartHtml vào body
-                        $('body').append(cartHtml);
+                // Thêm cartHtml vào body
+                $('body').append(cartHtml);
 
-                        // Định vị trí cho popup
-                        const cartButton = $('.btn.cart');
-                        const buttonOffset = cartButton.offset();
+                // Định vị trí cho popup
+                const cartButton = $('.btn.cart');
+                const buttonOffset = cartButton.offset();
 
-                        $('.cart-popup').css({
-                            top: buttonOffset.top + cartButton.outerHeight() + 10,
-                            left: buttonOffset.left
-                        });
-                    }
-                }
-            });
+                $('.cart-popup').css({
+                    top: buttonOffset.top + cartButton.outerHeight() + 10,
+                    left: buttonOffset.left
+                });
+            }
         }
+    });
+}
+
+function removeCartItem(maSanPham, mauSac, kichThuoc) {
+    // Xử lý xóa sản phẩm khỏi giỏ hàng
+    openCartPopup();
+}
 
 
+// Hàm xem chi tiết giỏ hàng
+function viewCartDetails() {
+    window.location.href = '/Cart/Index';
+}
 
-        function removeCartItem(maSanPham, mauSac, kichThuoc) {
-            // Xử lý xóa sản phẩm khỏi giỏ hàng
-            openCartPopup();
+
+$(document).ready(function () {
+    // Đóng popup khi click bên ngoài
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
+            $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
         }
+    });
+});
+
+// Đảm bảo popup không bị xóa khi nhấn vào nó
+$(document).on('click', '.cart-popup', function (event) {
+    event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
+}); 
+
+    // Prevent closing when clicking inside popup
+    $('#cartPopup').on('click', function (e) {
+        e.stopPropagation();
+    });
 
 
-        // Hàm xem chi tiết giỏ hàng
-        function viewCartDetails() {
-            window.location.href = '/Cart/Index';
-        }
+    // Hàm xem chi tiết giỏ hàng
+    function viewCartDetails() {
+        window.location.href = '/Cart/Index';
+    }
 
 
-        $(document).ready(function () {
-            // Đóng popup khi click bên ngoài
-            $(document).on('click', function (event) {
-                if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
-                    $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
-                }
-            });
+    $(document).ready(function () {
+        // Đóng popup khi click bên ngoài
+        $(document).on('click', function (event) {
+            if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
+                $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
+            }
         });
+    });
 
-        // Đảm bảo popup không bị xóa khi nhấn vào nó
-        $(document).on('click', '.cart-popup', function (event) {
-            event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
-        });
+    // Đảm bảo popup không bị xóa khi nhấn vào nó
+    $(document).on('click', '.cart-popup', function (event) {
+        event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
+    });
 
 
-        function addToWishlist(maSanPham) {
-            $.ajax({
-                url: '/Home/AddToWishlist', // Đường dẫn tới phương thức AddToWishlist
-                type: 'POST',
-                data: { maSanPham: maSanPham },
-                success: function (response) {
-                    console.log(maSanPham);
+    function addToWishlist(maSanPham) {
+        $.ajax({
+            url: '/Home/AddToWishlist', // Đường dẫn tới phương thức AddToWishlist
+            type: 'POST',
+            data: { maSanPham: maSanPham },
+            success: function (response) {
+                console.log(maSanPham);
 
-                    if (response.success) {
-                        alert(response.message); // Thông báo thành công
-                    } else {
-                        alert(response.message); // Thông báo lỗi (chưa đăng nhập hoặc sản phẩm đã tồn tại)
-                    }
-                },
-                error: function () {
-                    alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+                if (response.success) {
+                    alert(response.message); // Thông báo thành công
+                } else {
+                    alert(response.message); // Thông báo lỗi (chưa đăng nhập hoặc sản phẩm đã tồn tại)
                 }
-            });
-        }
-    </script>
+            },
+            error: function () {
+                alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+            }
+        });
+    }
+</script>
 }

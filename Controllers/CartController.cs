@@ -45,6 +45,7 @@ public class CartController : Controller
 
         return Json(new { success = true, cartItems = cartDetails, totalQuantity = totalQuantity });
     }
+
     public IActionResult Index(string maKhachHang)
     {
         string maGioHang = HttpContext.Session.GetString("MaGioHang");

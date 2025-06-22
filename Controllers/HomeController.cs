@@ -10,74 +10,58 @@ namespace DoAnPhanMem.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly dbSportStoreContext _db; // Thêm trường để lưu dbSportStoreContext
+        private readonly dbSportStoreContext _db; 
 
-        public HomeController(ILogger<HomeController> logger, dbSportStoreContext db) // Nhận dbSportStoreContext qua constructor
+        public HomeController(ILogger<HomeController> logger, dbSportStoreContext db) 
         {
             _logger = logger;
-            _db = db; // Gán dbSportStoreContext vào trường
+            _db = db; 
         }
         [HttpGet]
         public IActionResult TimKiem(string keyword)
         {
-            // Kiểm tra nếu không có từ khóa
             if (string.IsNullOrEmpty(keyword))
             {
-                return View(new List<SanPham>()); // Trả về view rỗng
+                return View(new List<SanPham>());
             }
-
-            // Tìm sản phẩm theo tên gần giống với từ khóa tìm kiếm
             var ketQuaTimKiem = _db.SanPham
                 .Where(sp => sp.TenSanPham.Contains(keyword))
                 .ToList();
             HttpContext.Response.Cookies.Append("SearchKeyword", keyword);
-            // Trả về view cùng với danh sách sản phẩm tìm kiếm được
             return View(ketQuaTimKiem);
         }
         public IActionResult Index()
         {
-            // Lấy toàn bộ danh sách sản phẩm từ bảng SanPham
-            var lstSanPham = _db.SanPham.ToList(); // Lấy tất cả sản phẩm
-
-            // Lọc sản phẩm theo danh mục
+            var lstSanPham = _db.SanPham.ToList();
             var sanPhamPhoBienNhat = lstSanPham
-                                      .Where(sp => sp.MaDanhMuc == "DM001") // DM001 là mã danh mục Phổ biến nhất
+                                      .Where(sp => sp.MaDanhMuc == "DM001") 
                                       .Take(4)
                                       .ToList();
-
             var sanPhamYeuThichNhat = lstSanPham
-                                       .Where(sp => sp.MaDanhMuc == "DM002") // DM002 là mã danh mục Được yêu thích nhất
+                                       .Where(sp => sp.MaDanhMuc == "DM002") 
                                        .Take(4)
                                        .ToList();
-
             var sanPhamBanChayNhat = lstSanPham
-                                      .Where(sp => sp.MaDanhMuc == "DM003") // DM003 là mã danh mục Bán chạy nhất
+                                      .Where(sp => sp.MaDanhMuc == "DM003") 
                                       .Take(4)
                                       .ToList();
-
             var sanPhamCoTheQuanTam = lstSanPham
-                                       .Where(sp => sp.MaDanhMuc == "DM004") // DM004 là mã danh mục Có thể bạn quan tâm
+                                       .Where(sp => sp.MaDanhMuc == "DM004") 
                                        .Take(4)
                                        .ToList();
-
-            // Lấy từ khóa tìm kiếm từ cookie
             string searchKeyword = HttpContext.Request.Cookies["SearchKeyword"];
-
-            // Lấy sản phẩm gợi ý nếu có từ khóa
             var sanPhamGoiY = string.IsNullOrEmpty(searchKeyword) ? new List<SanPham>() :
                 lstSanPham.Where(sp => sp.TenSanPham.Contains(searchKeyword)).Take(4).ToList();
-
-            // Tạo một view model để gửi dữ liệu sang view
             var homeViewModel = new HomeViewModel
             {
                 PhoBienNhat = sanPhamPhoBienNhat,
                 YeuThichNhat = sanPhamYeuThichNhat,
                 BanChayNhat = sanPhamBanChayNhat,
                 CoTheQuanTam = sanPhamCoTheQuanTam,
-                GợiÝ = sanPhamGoiY // Thêm sản phẩm gợi ý vào view model
+                GợiÝ = sanPhamGoiY
             };
 
-            return View(homeViewModel);  // Gửi view model sang View
+            return View(homeViewModel);
         }
         private List<SanPham> GetSuggestedProducts(string keyword)
         {
@@ -88,17 +72,13 @@ namespace DoAnPhanMem.Controllers
         }
         public IActionResult ProductDetail(string id)
         {
-            // Lấy chi tiết sản phẩm từ bảng SanPham
             var sanPham = _db.SanPham
                             .FirstOrDefault(sp => sp.MaSanPham == id);
-
             if (sanPham == null)
             {
                 _logger.LogWarning("Không tìm thấy sản phẩm.");
                 return NotFound();
             }
-
-            // Lấy danh sách đánh giá và bình luận cho sản phẩm này
             var danhGiaList = (from dg in _db.DanhGia
                                join hd in _db.HoaDon on dg.MaHoaDon equals hd.MaHoaDon
                                join dh in _db.DonHang on hd.MaDonHang equals dh.MaDonHang
@@ -151,7 +131,6 @@ namespace DoAnPhanMem.Controllers
                 hinhAnhBienThe = chiTietSanPham.HinhAnhBienThe
             });
         }
-
         public IActionResult Privacy()
         {
             return View();
@@ -165,14 +144,11 @@ namespace DoAnPhanMem.Controllers
         [HttpGet]
         public IActionResult GetProductDetails(string id)
         {
-            // Lấy thông tin sản phẩm từ bảng `SanPham`
             var product = _db.SanPham.FirstOrDefault(sp => sp.MaSanPham == id);
             if (product == null)
             {
                 return Json(new { success = false, message = "Không tìm thấy sản phẩm." });
             }
-
-            // Lấy các biến thể của sản phẩm từ bảng `ChiTietSanPham`
             var productVariants = _db.ChiTietSanPham
                                      .Where(ct => ct.MaSanPham == id)
                                      .Select(ct => new
@@ -182,8 +158,6 @@ namespace DoAnPhanMem.Controllers
                                          MaKichThuoc = ct.MaKichThuoc
                                      })
                                      .ToList();
-
-            // Lấy các tùy chọn màu sắc có sẵn dựa trên biến thể của sản phẩm
             var colorOptions = productVariants
                                 .GroupBy(v => v.MaMauSac)
                                 .Select(g => new
@@ -193,8 +167,6 @@ namespace DoAnPhanMem.Controllers
                                     HinhAnhBienThe = g.First().HinhAnhBienThe
                                 })
                                 .ToList();
-
-            // Lấy danh sách kích thước
             var sizeOptions = productVariants
                               .GroupBy(v => v.MaKichThuoc)
                               .Select(g => new
@@ -219,7 +191,6 @@ namespace DoAnPhanMem.Controllers
         [HttpGet]
         public IActionResult GetProductQuantity(string productId, string colorId, string sizeId)
         {
-            // Tìm sản phẩm theo mã, màu sắc và kích thước
             var productVariant = _db.ChiTietSanPham
                                     .FirstOrDefault(ct => ct.MaSanPham == productId &&
                                                           ct.MaMauSac == colorId &&
@@ -260,14 +231,11 @@ namespace DoAnPhanMem.Controllers
         {
             try
             {
-                // Lấy thông tin khách hàng từ Session
                 var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
                 if (string.IsNullOrEmpty(maKhachHang))
                 {
                     return Json(new { success = false, message = "Bạn cần đăng nhập để thêm sản phẩm vào yêu thích." });
                 }
-
-                // Kiểm tra sản phẩm đã có trong danh sách yêu thích hay chưa
                 var existingWishlist = _db.DanhSachYeuThich
                                           .FirstOrDefault(x => x.MaSanPham == maSanPham && x.MaKhachHang == maKhachHang);
 
@@ -279,7 +247,7 @@ namespace DoAnPhanMem.Controllers
                 // Tạo mới mục yêu thích
                 var wishlist = new DanhSachYeuThich
                 {
-                    MaYeuThich = Guid.NewGuid().ToString(), // Tạo mã yêu thích duy nhất
+                    MaYeuThich = Guid.NewGuid().ToString(), 
                     MaKhachHang = maKhachHang,
                     MaSanPham = maSanPham,
                     NgayTao = DateTime.Now
