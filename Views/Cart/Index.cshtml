@@ -78,16 +78,32 @@
         <!-- Payment Method Outside of Customer Info Section -->
         <div class="payment-method">
             <h3>Hình thức thanh toán</h3>
-            <label>
-                <input type="radio" name="paymentMethod" value="bank_transfer" checked> Chuyển khoản ngân hàng
-            </label><br>
-            <label>
-                <input type="radio" name="paymentMethod" value="cod"> Thanh toán khi nhận hàng (COD)
-            </label><br>
-            <label>
-                <input type="radio" name="paymentMethod" value="stripe"> Thanh toán qua Stripe
-            </label><br>
-            <div id="card-element" style="margin-top: 20px; display: none;"></div>
+            <div class="payment-options">
+                <label class="payment-option active">
+                    <input type="radio" name="paymentMethod" value="bank_transfer" checked>
+                    <div class="option-content">
+                        <span class="option-icon">🏦</span>
+                        <span class="option-text">Chuyển khoản ngân hàng</span>
+                    </div>
+                </label>
+
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="cod">
+                    <div class="option-content">
+                        <span class="option-icon">📦</span>
+                        <span class="option-text">Thanh toán khi nhận hàng (COD)</span>
+                    </div>
+                </label>
+
+                <label class="payment-option">
+                    <input type="radio" name="paymentMethod" value="stripe">
+                    <div class="option-content">
+                        <span class="option-icon">💳</span>
+                        <span class="option-text">Thanh toán qua Stripe</span>
+                    </div>
+                </label>
+            </div>
+            <div id="card-element" class="stripe-card-element"></div>
         </div>
     </div>
 </div>
@@ -208,7 +224,29 @@
             });
         });
     });
+    document.querySelectorAll('.payment-option input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', function () {
+            // Remove active class from all options
+            document.querySelectorAll('.payment-option').forEach(option => {
+                option.classList.remove('active');
+            });
 
+            // Add active class to selected option
+            this.closest('.payment-option').classList.add('active');
+
+            // Handle Stripe card element visibility
+            const stripeElement = document.querySelector('.stripe-card-element');
+            if (this.value === 'stripe') {
+                stripeElement.style.display = 'block';
+            } else {
+                stripeElement.style.display = 'none';
+            }
+        });
+    });
+
+    // Initialize with first option active
+    document.querySelector('.payment-option input[type="radio"]:checked')
+        .closest('.payment-option').classList.add('active');
 </script>
 
 <style>

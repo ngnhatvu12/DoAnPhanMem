@@ -476,56 +476,80 @@ else
         });
     }
     function openCartPopup() {
-    $.ajax({
-        url: '/Cart/GetCartDetails',
-        method: 'GET',
-        success: function (response) {
-            if (response.success) {
-                console.log(response.cartItems); // Kiểm tra toàn bộ dữ liệu cartItems từ server
-                let cartItems = response.cartItems;
-                let totalQuantity = response.totalQuantity; // Tổng số lượng từ response
+        $.ajax({
+            url: '/Cart/GetCartDetails',
+            method: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    let cartItems = response.cartItems;
+                    let totalQuantity = response.totalQuantity;
 
-                $('.cart-popup').remove();
+                    $('.cart-popup').remove();
 
-                let cartHtml = `<div class="cart-popup">
-                                            <h5>${totalQuantity} sản phẩm</h5>
-                                            <a href="#" onclick="viewCartDetails()">Xem tất cả</a>
-                                            <ul>`;
+                    let cartHtml = `<div class="cart-popup">
+                        <div class="cart-popup-header">
+                            <h4 class="cart-title">Giỏ hàng của bạn <span class="badge">${totalQuantity}</span></h4>
+                            <button class="close-btn" onclick="closeCartPopup()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="cart-items-container">
+                            <ul>`;
 
-                // Sử dụng map và join để tạo ra các phần tử HTML cho mỗi sản phẩm
-                cartHtml += cartItems.map(item => {
-                    const formattedPrice = (item.giaBan || 0).toLocaleString(); // Định dạng giá tiền
-                    return `<li>
-                                        <img src="/LayoutOgani/img/${item.hinhAnh || 'default-image.jpg'}" alt="${item.tenSanPham || 'Sản phẩm'}">
-                                        <div>
-                                            <h6>${item.tenSanPham || 'Sản phẩm không tên'}</h6>
-                                            <p>Màu sắc: ${item.mauSac || 'N/A'}</p>
-                                            <p>Kích thước: ${item.kichThuoc || 'N/A'}</p>
-                                            <p>${formattedPrice} đ x${item.soLuong || 1}</p>
-                                        </div>
-                                        <button onclick="removeCartItem('${item.maSanPham}', '${item.mauSac}', '${item.kichThuoc}')">X</button>
-                                     </li>`;
-                }).join(""); // join("") để nối tất cả các phần tử lại thành chuỗi HTML
+                    cartHtml += cartItems.map(item => {
+                        const formattedPrice = (item.giaBan || 0).toLocaleString('vi-VN') + '₫';
+                        return `<li>
+                            <img src="/LayoutOgani/img/${item.hinhAnh || 'default-image.jpg'}" alt="${item.tenSanPham || 'Sản phẩm'}">
+                            <div class="item-info">
+                                <h6>${item.tenSanPham || 'Sản phẩm không tên'}</h6>
+                                <p>Màu sắc: ${item.mauSac || 'N/A'}</p>
+                                <p>Kích thước: ${item.kichThuoc || 'N/A'}</p>
+                                <p>${formattedPrice} × ${item.soLuong || 1}</p>
+                            </div>
+                            <button onclick="removeCartItem('${item.maSanPham}', '${item.mauSac}', '${item.kichThuoc}')">X</button>
+                        </li>`;
+                    }).join("");
 
-                cartHtml += `</ul></div>`;
+                    cartHtml += `</ul>
+                        </div>
+                        <div class="cart-popup-footer">
+                            <div class="cart-summary">
+                                <span>Tổng cộng:</span>
+                                <span class="total-price">${(response.totalPrice || 0).toLocaleString('vi-VN')}₫</span>
+                            </div>
+                            <div class="cart-actions">
+                                <button class="btn checkout-btn" onclick="viewCartDetails()">Thanh toán</button>
+                            </div>
+                        </div>
+                    </div>`;
 
-                console.log(cartHtml); // Kiểm tra nội dung của cartHtml
+                    $('body').append(cartHtml);
 
-                // Thêm cartHtml vào body
-                $('body').append(cartHtml);
+                    // Định vị trí cho popup
+                    const cartButton = $('.btn.cart');
+                    const buttonOffset = cartButton.offset();
 
-                // Định vị trí cho popup
-                const cartButton = $('.btn.cart');
-                const buttonOffset = cartButton.offset();
+                    $('.cart-popup').css({
+                        top: buttonOffset.top + cartButton.outerHeight() + 10,
+                        left: buttonOffset.left - 350
+                    });
 
-                $('.cart-popup').css({
-                    top: buttonOffset.top + cartButton.outerHeight() + 10,
-                    left: buttonOffset.left
-                });
+                    // Hiệu ứng xuất hiện
+                    setTimeout(() => {
+                        $('.cart-popup').addClass('show');
+                    }, 10);
+                }
             }
-        }
-    });
-}
+        });
+    }
+
+    // Hàm viewCartDetails giữ nguyên từ code cũ
+    function viewCartDetails() {
+        window.location.href = "/Cart/Details";
+    }
 
 function removeCartItem(maSanPham, mauSac, kichThuoc) {
     // Xử lý xóa sản phẩm khỏi giỏ hàng

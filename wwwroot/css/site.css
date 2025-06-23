@@ -437,7 +437,7 @@ h2 {
     .header .navbar {
         padding: 0;
         height: 100%;
-        max-height: 400px;
+        max-height: 460px;
         overflow: hidden;
         background: #ffffff !important;
         border: 2px solid #574cff; /* Viền màu xanh */
@@ -533,7 +533,7 @@ h2 {
     flex-wrap: wrap;
     align-items: center;
     height: 100%;
-    max-height: 400px;
+    max-height: 460px;
     overflow: hidden;
     background: #ffffff;
     gap: 5px;

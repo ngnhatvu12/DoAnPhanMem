@@ -35,17 +35,15 @@
                     support@email.com
                 </div>
                 <div class="col-sm-6">
-                    <p class="mona-html">
-                        <strong>Miễn phí vận chuyển toàn quốc</strong>
-                        với <strong>
-                            <span data-text-color="secondary">
-                                tất cả hóa đơn
-                            </span>
-                        </strong>
-                        từ 500.000 VNĐ <strong>
-                            <span data-text-color="secondary"></span>
-                        </strong>
-                    </p>
+                    <strong>Miễn phí vận chuyển toàn quốc</strong>
+                    với <strong>
+                        <span data-text-color="secondary">
+                            tất cả hóa đơn
+                        </span>
+                    </strong>
+                    từ 500.000 VNĐ <strong>
+                        <span data-text-color="secondary"></span>
+                    </strong>
                 </div>
             </div>
         </div>
@@ -93,16 +91,17 @@
                                             @Context.Session.GetString("TenKhachHang") <!-- Hiển thị tên khách hàng từ session -->
                                         </a>
                                         <div class="dropdown-menu">
-                                            <a href="/Access/Logout" class="dropdown-item">Thông tin cá nhân</a>
-                                            <a href="/Access/Logout" class="dropdown-item">Đơn hàng của bạn</a>
-                                            <a href="/Access/Logout" class="dropdown-item">Hóa đơn của bạn</a>
+                                            <a href="/Access/Profile" class="dropdown-item">Thông tin cá nhân</a>
+                                            <a href="/Access/Notification" class="dropdown-item">Thông báo</a>
+                                            <a href="/Order/Detail" class="dropdown-item">Đơn hàng của bạn</a>
+                                            <a href="/Invoice/Detail" class="dropdown-item">Hóa đơn của bạn</a>
                                             <a href="/Access/Logout" class="dropdown-item">Đăng xuất</a>
                                         </div>
                                     }
                                     else
                                     {
                                         <!-- Nếu người dùng chưa đăng nhập -->
-                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">User Account</a>
+                                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">TÀI KHOẢN NGƯỜI DÙNG</a>
                                         <div class="dropdown-menu">
                                             <a href="/Access/Login" class="dropdown-item">ĐĂNG NHẬP</a>
                                             <a href="/Access/Register" class="dropdown-item">ĐĂNG KÝ</a>
@@ -139,13 +138,13 @@
                 </div>
                 <div class="col-md-3">
                     <div class="user">
-                        <a href="wishlist.html" class="btn wishlist">
-                            <i class="fa fa-heart"></i>
-                            <span>(0)</span>
-                        </a>
-                        <a href="cart.html" class="btn cart">
+                        <a href="javascript:void(0);" class="btn cart" onclick="openCartPopup()">
                             <i class="fa fa-shopping-cart"></i>
                             <span>(0)</span>
+                        </a>
+                        <a href="javascript:void(0);" class="btn wishlist" onclick="showWishlist()">
+                            <i class="fa fa-heart"></i>
+                            <span id="wishlist-count">(0)</span>
                         </a>
                     </div>
                 </div>
@@ -349,5 +348,175 @@
 
     <!-- Template Javascript -->
     <script src="../LayoutOgani/js/main.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+    <!-- Modal for displaying the product added to the wishlist -->
+    <div class="modal fade" id="wishlistModal" tabindex="-1" role="dialog" aria-labelledby="wishlistModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="wishlistModalLabel">Danh sách yêu thích</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="wishlist-content">
+                        <!-- Nội dung danh sách yêu thích sẽ được thêm vào đây -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="cartPopup" class="cart-popup" style="display: none;">
+        <div class="cart-popup-header">
+            <h4 class="cart-title">Giỏ hàng của bạn <span class="badge">3</span></h4>
+            <button class="close-btn" onclick="closeCartPopup()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+
+        <div class="cart-items-container">
+            <ul id="cartItems">
+                <!-- Items will be populated here -->
+            </ul>
+        </div>
+
+        <div class="cart-popup-footer">
+            <div class="cart-summary">
+                <span>Tổng cộng:</span>
+                <span class="total-price">1.250.000₫</span>
+            </div>
+            <div class="cart-actions">
+                <a href="/Cart/Details" class="btn view-cart-btn">Xem giỏ hàng</a>
+                <button class="btn checkout-btn">Thanh toán</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        function updateWishlistCount() {
+            $.get('/Home/GetWishlistCount', function (response) {
+                if (response.success) {
+                    // Hiển thị số lượng sản phẩm ngay khi đăng nhập
+                    $('.wishlist span').text(`(${response.count})`);
+                } else {
+                    $('.wishlist span').text('(0)');
+                }
+            });
+        }
+
+        function showWishlist() {
+            $.get('/Home/GetWishlist', function (response) {
+                if (response.success) {
+                    // Cập nhật số lượng sản phẩm yêu thích
+                    $('.wishlist span').text(`(${response.data.length})`);
+
+                    // Kiểm tra nếu danh sách yêu thích không rỗng
+                    let html = '';
+                    if (response.data.length > 0) {
+                        html = response.data.map(item => {
+                            const hinhAnh = item.hinhAnh || 'no-image.png';
+                            const tenSanPham = item.tenSanPham || 'Không rõ tên sản phẩm';
+                            const giaBan = item.giaBan ? item.giaBan.toLocaleString() : '0';
+                            const maYeuThich = item.maYeuThich || '';
+
+                            return `
+                                                <div class="wishlist-item row align-items-center">
+                                                    <div class="col-md-3">
+                                                        <img src="/LayoutOgani/img/${hinhAnh}" alt="${tenSanPham}">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h5>${tenSanPham}</h5>
+                                                        <p>Giá: ${giaBan} đ</p>
+                                                    </div>
+                                                    <div class="col-md-3 text-right">
+                                                        <button class="btn btn-danger btn-sm" onclick="removeFromWishlist('${maYeuThich}')">Xóa</button>
+                                                    </div>
+                                                </div>
+                                            `;
+                        }).join('');
+                    } else {
+                        html = '<p>Danh sách yêu thích trống.</p>';
+                    }
+
+                    // Hiển thị danh sách sản phẩm yêu thích trong modal
+                    $('#wishlist-content').html(html);
+                    $('#wishlistModal').modal('show');
+                } else {
+                    alert(response.message); // Hiển thị thông báo lỗi nếu có
+                }
+            });
+        }
+
+        function removeFromWishlist(maYeuThich) {
+            if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này khỏi danh sách yêu thích?')) {
+                $.post('/Home/RemoveFromWishlist', { maYeuThich: maYeuThich }, function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        showWishlist();
+                        updateWishlistCount(); // Cập nhật số lượng yêu thích
+                    } else {
+                        alert(response.message);
+                    }
+                });
+            }
+        }
+
+        // Gọi hàm để hiển thị tổng số sản phẩm ngay khi trang tải
+        $(document).ready(function () {
+            updateWishlistCount();
+        });
+    </script>
+
+    <!-- Bao gồm jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bao gồm Bootstrap (cho modal) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        /* Ảnh trong danh sách yêu thích */
+        .wishlist-item img {
+            width: 100%;
+            height: 150px; /* Chiều cao cố định */
+            object-fit: cover; /* Ảnh sẽ được cắt vừa khung */
+            border-radius: 5px;
+        }
+
+        /* Căn chỉnh danh sách */
+        .wishlist-item {
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+            .wishlist-item:last-child {
+                border-bottom: none;
+            }
+
+            .wishlist-item h5 {
+                font-size: 18px;
+                font-weight: bold;
+            }
+
+            .wishlist-item p {
+                margin: 0;
+                color: #666;
+            }
+
+            .wishlist-item .btn {
+                font-size: 14px;
+            }
+
+    </style>
 </body>
 </html>
