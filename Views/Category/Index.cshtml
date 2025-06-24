@@ -76,7 +76,7 @@
         else
         {
             <div class="product-category-page">
-                <div class="row">
+                <div class="row" style="justify-content: flex-start">
                     @foreach (var item in Model)
                     {
                         <div class="col-lg-4 col-md-6 col-sm-6">
@@ -94,7 +94,7 @@
                                 <div class="product-image">
                                     @if (!string.IsNullOrEmpty(item.HinhAnh))
                                     {
-                                        <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:320px !important" />
+                                        <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
                                     }
                                     else
                                     {

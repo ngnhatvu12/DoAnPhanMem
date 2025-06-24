@@ -40,7 +40,6 @@ public class CartController : Controller
         }
 
 
-        // Tính tổng số lượng của tất cả sản phẩm trong giỏ hàng
         var totalQuantity = cartDetails.Sum(item => item.SoLuong);
 
         return Json(new { success = true, cartItems = cartDetails, totalQuantity = totalQuantity });
@@ -58,7 +57,7 @@ public class CartController : Controller
                 MaSanPham = ct.ChiTietSanPham.MaSanPham,
                 TenSanPham = ct.ChiTietSanPham.SanPham.TenSanPham,
                 GiaBan = ct.ChiTietSanPham.SanPham.GiaBan,
-                GiaGiam = ct.ChiTietSanPham.SanPham.GiaGiam, // Sử dụng giá giảm nếu có, nếu không thì lấy giá bán
+                GiaGiam = ct.ChiTietSanPham.SanPham.GiaGiam, 
                 SoLuong = ct.SoLuong,
                 TongTien = ct.TongTien,
                 HinhAnh = string.IsNullOrEmpty(ct.ChiTietSanPham.HinhAnhBienThe) ? ct.ChiTietSanPham.SanPham.HinhAnh : ct.ChiTietSanPham.HinhAnhBienThe,
@@ -67,7 +66,6 @@ public class CartController : Controller
             })
             .ToList();
 
-        // Tính tổng số tiền và tổng số tiết kiệm
         decimal totalPrice = cartDetails.Sum(item => item.GiaBan * item.SoLuong);
         decimal totalDiscountPrice = cartDetails.Sum(item => item.GiaGiam * item.SoLuong);
         decimal savings = totalPrice - totalDiscountPrice;

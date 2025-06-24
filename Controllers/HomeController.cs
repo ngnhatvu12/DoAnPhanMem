@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Diagnostics;
+using PagedList.Core;
 
 namespace DoAnPhanMem.Controllers
 {
@@ -243,8 +244,6 @@ namespace DoAnPhanMem.Controllers
                 {
                     return Json(new { success = false, message = "Sản phẩm đã có trong danh sách yêu thích." });
                 }
-
-                // Tạo mới mục yêu thích
                 var wishlist = new DanhSachYeuThich
                 {
                     MaYeuThich = Guid.NewGuid().ToString(), 
@@ -265,14 +264,11 @@ namespace DoAnPhanMem.Controllers
         }
         public IActionResult GetWishlist()
         {
-            // Lấy MaKhachHang từ Session
             var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
             if (string.IsNullOrEmpty(maKhachHang))
             {
                 return Json(new { success = false, message = "Bạn cần đăng nhập để xem danh sách yêu thích." });
             }
-
-            // Lấy danh sách sản phẩm yêu thích
             var wishlist = _db.DanhSachYeuThich
                               .Where(y => y.MaKhachHang == maKhachHang)
                               .Join(
@@ -321,6 +317,54 @@ namespace DoAnPhanMem.Controllers
                 return Json(new { success = false, message = $"Đã xảy ra lỗi: {ex.Message}" });
             }
         }
+        public IActionResult ProductType(string maLoai, string danhMuc, int? page, string sortOrder)
+        {
+            int pageNumber = page ?? 1;
+            int pageSize = 12;
 
+            // Xây dựng query
+            IQueryable<SanPham> query = _db.SanPham.Where(p => p.MaLoai == maLoai);
+
+            if (!string.IsNullOrEmpty(danhMuc))
+            {
+                query = query.Where(p => p.MaDanhMuc == danhMuc);
+            }
+
+            switch (sortOrder)
+            {
+                case "price_asc":
+                    query = query.OrderBy(p => p.GiaBan);
+                    break;
+                case "price_desc":
+                    query = query.OrderByDescending(p => p.GiaBan);
+                    break;
+                case "name_asc":
+                    query = query.OrderBy(p => p.TenSanPham);
+                    break;
+                default:
+                    query = query.OrderBy(p => p.TenSanPham);
+                    break;
+            }
+
+            // Sử dụng constructor đúng của PagedList
+            var pagedProducts = new PagedList<SanPham>(query, pageNumber, pageSize);
+
+            var productType = _db.Loai.Find(maLoai);
+            if (productType == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy loại sản phẩm";
+                return RedirectToAction("Index", "Home");
+            }
+
+            ViewBag.ProductTypeName = productType.TenLoai;
+            ViewBag.MaLoai = maLoai;
+            ViewBag.Categories = _db.DanhMuc.ToList();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.PriceAscSort = "price_asc";
+            ViewBag.PriceDescSort = "price_desc";
+            ViewBag.NameSort = "name_asc";
+
+            return View(pagedProducts);
+        }
     }
 }

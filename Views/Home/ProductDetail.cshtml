@@ -3,41 +3,41 @@
 @{
     ViewData["Title"] = Model.SanPham.TenSanPham;
     Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
-
+             <link rel="stylesheet" href="~/css/CartPopup.css" />
 }
 
     <div class="container" style="max-width:100%">
         <div class="left-column">
             <div class="product-image">
-                @if (!string.IsNullOrEmpty(Model.SanPham.HinhAnh))
-                {
-                    <img src="~/LayoutOgani/img/@Model.SanPham.HinhAnh" alt="@Model.SanPham.TenSanPham" class="main-product-image" />
-                }
-                else
-                {
-                    <img src="~/img/no-image.png" alt="No Image" />
-                }
+            @if (!string.IsNullOrEmpty(Model.SanPham.HinhAnh))
+            {
+                        <img src="~/LayoutOgani/img/@Model.SanPham.HinhAnh" alt="@Model.SanPham.TenSanPham" class="main-product-image" />
+            }
+            else
+            {
+                        <img src="~/img/no-image.png" alt="No Image" />
+            }
             </div>
             <div class="thumbnail-images">
             @foreach (var ctp in Model.ChiTietSanPhamList)
             {
-                <img src="~/LayoutOgani/img/@ctp.HinhAnhBienThe" alt="Ảnh biến thể" />
+                    <img src="~/LayoutOgani/img/@ctp.HinhAnhBienThe" alt="Ảnh biến thể" />
             }
             </div>
         </div>
         <div class="right-column">
             <div class="product-title">
-                @Model.SanPham.TenSanPham
+            @Model.SanPham.TenSanPham
             </div>
             <div class="product-code">
                 Mã sản phẩm: @Model.SanPham.MaSanPham
             </div>
             <div class="price">
                 Giá gốc: <span class="original-price">@Model.SanPham.GiaBan đ</span>
-                @if (Model.SanPham.GiaGiam > 0)
-                {
-                    <span class="discount-price">Giá giảm: @Model.SanPham.GiaGiam đ</span>
-                }
+            @if (Model.SanPham.GiaGiam > 0)
+            {
+                        <span class="discount-price">Giá giảm: @Model.SanPham.GiaGiam đ</span>
+            }
             </div>
         <div class="product-description">
             <h2>Mô tả chi tiết</h2>
@@ -48,7 +48,7 @@
                 <select id="size-selector">
                 @foreach (var ctp in Model.ChiTietSanPhamList.Select(c => c.TenKichThuoc).Distinct())
                 {
-                    <option value="@ctp">@ctp</option>
+                        <option value="@ctp">@ctp</option>
                 }
                 </select>
             </div>
@@ -57,7 +57,7 @@
                 <select id="color-selector">
                 @foreach (var ctp in Model.ChiTietSanPhamList.Select(c => c.TenMauSac).Distinct())
                 {
-                    <option value="@ctp">@ctp</option>
+                        <option value="@ctp">@ctp</option>
                 }
                 </select>
             </div>
@@ -86,16 +86,16 @@
     <h3>Đánh giá sản phẩm</h3>
     @foreach (var danhGia in Model.DanhGiaList)
     {
-        <div class="comment-item">
-            <p><strong>@danhGia.TenKhachHang</strong> - <small>@danhGia.NgayDanhGia.ToString("dd/MM/yyyy")</small></p>
-            <div class="star-rating">
+            <div class="comment-item">
+                <p><strong>@danhGia.TenKhachHang</strong> - <small>@danhGia.NgayDanhGia.ToString("dd/MM/yyyy")</small></p>
+                <div class="star-rating">
                 @for (int i = 1; i <= 5; i++)
                 {
-                    <span class="star @(i <= danhGia.SoDiem ? "star-gold" : "star-gray")">&#9733;</span>
+                            <span class="star @(i <= danhGia.SoDiem ? "star-gold" : "star-gray")">&#9733;</span>
                 }
+                </div>
+                <p>@danhGia.BinhLuan</p>
             </div>
-            <p>@danhGia.BinhLuan</p>
-        </div>
     }
 </div>
 
@@ -104,6 +104,109 @@
         // Logic đặt hàng có thể được thêm vào đây
         alert("Sản phẩm đã được đặt hàng!");
     }
+    function updateCartCount() {
+        $.ajax({
+            url: '/Cart/GetCartDetails',
+            type: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    const itemCount = response.totalQuantity;
+                    $('.cart span').text(`(${itemCount})`);
+                }
+            },
+            error: function (error) {
+                console.error("Lỗi khi lấy số lượng giỏ hàng.", error);
+            }
+        });
+    }
+    function openCartPopup() {
+        $.ajax({
+            url: '/Cart/GetCartDetails',
+            method: 'GET',
+            success: function (response) {
+                if (response.success) {
+                    let cartItems = response.cartItems;
+                    let totalQuantity = response.totalQuantity;
+
+                    $('.cart-popup').remove();
+
+                    let cartHtml = `<div class="cart-popup">
+                        <div class="cart-popup-header">
+                            <h4 class="cart-title">Giỏ hàng của bạn <span class="badge">${totalQuantity}</span></h4>
+                            <button class="close-btn" onclick="closeCartPopup()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="cart-items-container">
+                            <ul>`;
+
+                    cartHtml += cartItems.map(item => {
+                        const formattedPrice = (item.giaBan || 0).toLocaleString('vi-VN') + '₫';
+                        return `<li>
+                            <img src="/LayoutOgani/img/${item.hinhAnh || 'default-image.jpg'}" alt="${item.tenSanPham || 'Sản phẩm'}">
+                            <div class="item-info">
+                                <h6>${item.tenSanPham || 'Sản phẩm không tên'}</h6>
+                                <p>Màu sắc: ${item.mauSac || 'N/A'}</p>
+                                <p>Kích thước: ${item.kichThuoc || 'N/A'}</p>
+                                <p>${formattedPrice} × ${item.soLuong || 1}</p>
+                            </div>
+                            <button onclick="removeCartItem('${item.maSanPham}', '${item.mauSac}', '${item.kichThuoc}')">X</button>
+                        </li>`;
+                    }).join("");
+
+                    cartHtml += `</ul>
+                        </div>
+                        <div class="cart-popup-footer">
+                            <div class="cart-summary">
+                                <span>Tổng cộng:</span>
+                                <span class="total-price">${(response.totalPrice || 0).toLocaleString('vi-VN')}₫</span>
+                            </div>
+                            <div class="cart-actions">
+                                <button class="btn checkout-btn" onclick="viewCartDetails()">Thanh toán</button>
+                            </div>
+                        </div>
+                    </div>`;
+
+                    $('body').append(cartHtml);
+
+                    // Định vị trí cho popup
+                    const cartButton = $('.btn.cart');
+                    const buttonOffset = cartButton.offset();
+
+                    $('.cart-popup').css({
+                        top: buttonOffset.top + cartButton.outerHeight() + 10,
+                        left: buttonOffset.left - 350
+                    });
+
+                    // Hiệu ứng xuất hiện
+                    setTimeout(() => {
+                        $('.cart-popup').addClass('show');
+                    }, 10);
+                }
+            }
+        });
+    }
+
+    function viewCartDetails() {
+        window.location.href = "/Cart/Index";
+    }
+    $(document).ready(function () {
+    $(document).on('click', function (event) {
+        if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
+            $('.cart-popup').remove(); 
+        }
+    });
+});
+$(document).on('click', '.cart-popup', function (event) {
+    event.stopPropagation(); 
+}); 
+
+    $('#cartPopup').on('click', function (e) {
+        e.stopPropagation();
+    });
 </script>
 <style>
     /* ===== PRODUCT DETAIL PAGE REDESIGN ===== */

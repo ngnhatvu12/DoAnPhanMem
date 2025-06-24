@@ -1,0 +1,686 @@
+﻿@using PagedList.Core;
+@using DoAnPhanMem.Models
+@using PagedList.Core.Mvc;
+@model PagedList.Core.IPagedList<SanPham>
+@{
+    ViewBag.Title = ViewBag.ProductTypeName;
+    Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
+    <link href="~/css/Item.css" rel="stylesheet">;
+}
+
+<section class="breadcrumb-section set-bg" data-setbg="~/LayoutOgani/img/wallpp.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>@ViewBag.ProductTypeName</h2>
+                    <div class="breadcrumb__option">
+                        <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+                        <span>@ViewBag.ProductTypeName</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Product Section Begin -->
+<section class="product spad">
+    <div class="container" style="max-width: 100%;">
+        <div class="row">
+            <div class="col-lg-3 col-md-5">
+                <div class="sidebar">
+                    <div class="sidebar__item">
+                        <h4>Danh mục</h4>
+                        <ul>
+                            @foreach (var category in ViewBag.Categories)
+                            {
+                                <li><a href="@Url.Action("ProductType", "Home", new { maLoai = ViewBag.MaLoai, danhMuc = category.MaDanhMuc })">@category.TenDanhMuc</a></li>
+                            }
+                        </ul>
+                    </div>
+
+                    <!-- Thêm các bộ lọc khác -->
+                    <div class="sidebar__item">
+                        <h4>Lọc theo giá</h4>
+                        <div class="price-range-wrap">
+                            <div class="price-range">
+                                <div class="price-input">
+                                    <input type="text" class="js-input-from" placeholder="Từ" />
+                                    <input type="text" class="js-input-to" placeholder="Đến" />
+                                    <button class="filter-btn">Lọc</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidebar__item">
+                        <h4>Thương hiệu</h4>
+                        <div class="checkbox-list">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="brand1">
+                                <label for="brand1">Nike</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="brand2">
+                                <label for="brand2">Adidas</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="brand3">
+                                <label for="brand3">Puma</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9 col-md-7">
+                <div class="filter__item">
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-5">
+                            <div class="filter__sort">
+                                <span>Sắp xếp theo</span>
+                                <select id="sort-select">
+                                    <option value="0">Mặc định</option>
+                                    <option value="1">Giá tăng dần</option>
+                                    <option value="2">Giá giảm dần</option>
+                                    <option value="3">Tên A-Z</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4">
+                            <div class="filter__found">
+                                <h6><span>@Model.TotalItemCount</span> sản phẩm</h6>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-3 text-right">
+                            <div class="view-options">
+                                <span>Xem:</span>
+                                <a href="#" class="grid-view active"><i class="fa fa-th"></i></a>
+                                <a href="#" class="list-view"><i class="fa fa-list"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="product-item">
+                                <div class="product-title">
+                                    <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })">@item.TenSanPham</a>
+                                    <div class="ratting">
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    </div>
+                                </div>
+                                <div class="product-image">
+                                    @if (!string.IsNullOrEmpty(item.HinhAnh))
+                                    {
+                                        <img src="~/LayoutOgani/img/@item.HinhAnh" alt="Product Image" style="height:400px !important" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/LayoutOgani/img/no-image.png" alt="No Image" />
+                                    }
+                                    <div class="product-action">
+                                        <a href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')"><i class="fa fa-cart-plus"></i></a>
+                                        <a href="javascript:void(0);" onclick="addToWishlist('@item.MaSanPham')"><i class="fa fa-heart"></i></a>
+                                        <a href="@Url.Action("ProductDetail", "Home", new { id = item.MaSanPham })"><i class="fa fa-search"></i></a>
+                                    </div>
+                                </div>
+                                <div class="product-price">
+                                    <h3>@item.GiaBan.ToString("N0")<span>đ</span></h3>
+                                    <a class="btn" href="javascript:void(0);" onclick="checkLoginAndOpenModal('@item.MaSanPham')"><i class="fa fa-shopping-cart"></i>Mua ngay</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="product__pagination">
+                    <pager list="@Model"
+                           asp-action="ProductType"
+                           asp-controller="Home"
+                           asp-route-maLoai="@ViewBag.MaLoai"
+                           asp-route-danhMuc="@Context.Request.Query["danhMuc"]"
+                           asp-route-sortOrder="@ViewBag.CurrentSort"
+                           options="@PagedListRenderOptions.Bootstrap4Full" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Xử lý sắp xếp
+            $('#sort-select').change(function () {
+                var sortValue = $(this).val();
+                var url = new URL(window.location.href);
+                url.searchParams.set('sortOrder', sortValue);
+                window.location.href = url.toString();
+            });
+
+            // Xử lý chuyển đổi giữa grid view và list view
+            $('.list-view').click(function (e) {
+                e.preventDefault();
+                $('.row').addClass('list-view-active');
+                $('.grid-view').removeClass('active');
+                $('.list-view').addClass('active');
+            });
+
+            $('.grid-view').click(function (e) {
+                e.preventDefault();
+                $('.row').removeClass('list-view-active');
+                $('.list-view').removeClass('active');
+                $('.grid-view').addClass('active');
+            });
+        });
+    </script>
+}
+<style>
+    /* ========== Breadcrumb Section ========== */
+.breadcrumb-section {
+    padding: 120px 0;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+        margin-bottom: 50px;
+}
+
+.breadcrumb-section:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
+}
+
+.breadcrumb__text {
+    position: relative;
+    z-index: 1;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.breadcrumb__text h2 {
+    color: #ffffff;
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.breadcrumb__option {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.breadcrumb__option a {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-right: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb__option a:hover {
+    color: #574cff;
+    transform: translateY(-2px);
+}
+
+.breadcrumb__option a:after {
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    content: "›";
+    color: #ffffff;
+    font-size: 1.5rem;
+}
+
+.breadcrumb__option span {
+    color: #574cff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* ========== Sidebar Filter ========== */
+.sidebar {
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    border: 1px solid #eaeaea;
+}
+
+.sidebar__item {
+    margin-bottom: 2.5rem;
+    position: relative;
+}
+
+.sidebar__item h4 {
+    color: #1c1c1c;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #f3f3f3;
+    font-size: 2.0rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.sidebar__item ul {
+    padding-left: 0;
+}
+
+.sidebar__item ul li {
+    margin-bottom: 0.8rem;
+    transition: all 0.3s;
+}
+
+.sidebar__item ul li:hover {
+    transform: translateX(5px);
+}
+
+.sidebar__item ul li a {
+    color: #555;
+    font-size: 1.5rem;
+    font-weight: 500;
+    display: block;
+    padding: 0.5rem 0;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.sidebar__item ul li a:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background: #574cff;
+    transition: width 0.3s;
+}
+
+.sidebar__item ul li a:hover {
+    color: #574cff;
+    text-decoration: none;
+}
+
+.sidebar__item ul li a:hover:before {
+    width: 30px;
+}
+
+/* Price Range Filter */
+.price-range-wrap {
+    margin-top: 1.5rem;
+}
+
+.price-range {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.range-slider {
+    margin-bottom: 1.5rem;
+}
+
+.price-input {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+}
+
+.price-input input {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.price-input input:focus {
+    border-color: #7fad39;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(127, 173, 57, 0.2);
+}
+
+.filter-btn {
+    background: #574cff;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-btn:hover {
+    background: #574cff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+/* Brand Filter */
+.checkbox-list {
+    margin-top: 1rem;
+}
+
+.checkbox-item {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-item input[type="checkbox"] {
+    margin-right: 0.8rem;
+    width: 18px;
+    height: 18px;
+    accent-color: #7fad39;
+    cursor: pointer;
+}
+
+.checkbox-item label {
+    color: #555;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.checkbox-item:hover label {
+    color: #7fad39;
+}
+
+/* ========== Filter Bar ========== */
+.filter__item {
+    padding: 1.2rem 1.5rem;
+    background: #ffffff;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    border: 1px solid #f0f0f0;
+}
+
+.filter__sort {
+    display: flex;
+    align-items: center;
+}
+
+.filter__sort span {
+    color: #555;
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-right: 1rem;
+    white-space: nowrap;
+}
+
+.filter__sort select {
+    height: 40px;
+    border: 1px solid #e0e0e0;
+    padding: 0 1rem;
+    color: #555;
+    border-radius: 6px;
+    background: #f9f9f9;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    min-width: 180px;
+}
+
+.filter__sort select:focus {
+    border-color: #574cff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(127, 173, 57, 0.2);
+}
+
+.filter__found h6 {
+    color: #777;
+    font-size: 1.3rem;
+    text-align: center;
+    margin: 0;
+}
+
+.filter__found h6 span {
+    color: #1c1c1c;
+    font-weight: 700;
+    margin-left: 0.3rem;
+}
+
+.view-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+.view-options span {
+    color: #555;
+    font-size: 1.3rem;
+    font-weight: 500;
+}
+
+.view-options a {
+    color: #aaa;
+    font-size: 1.2rem;
+    transition: all 0.3s;
+    padding: 0.5rem;
+}
+
+.view-options a.active {
+    color: #574cff;
+}
+
+.view-options a:hover {
+    color: #574cff;
+    transform: scale(1.1);
+}
+
+/* ========== PAGINATION STYLES ========== */
+.product__pagination {
+    padding: 2.5rem 0;
+    margin-top: 3rem;
+    text-align: center;
+    border-top: 1px solid #f0f0f0;
+}
+
+/* Container của pager */
+.pager-container {
+    display: inline-block;
+    margin: 0 auto;
+}
+
+/* Danh sách pagination */
+.pagination {
+    display: inline-flex;
+    gap: 0.6rem;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    align-items: center;
+        justify-content: center
+}
+
+/* Mỗi item phân trang */
+.page-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    height: 42px;
+}
+
+/* Link phân trang */
+.page-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 5px;
+    line-height: 1;
+    color: #555;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    box-sizing: border-box;
+}
+
+/* Căn giữa nội dung */
+.page-link span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+/* Trang hiện tại */
+.page-item.active .page-link {
+    background-color: #574cff;
+    border-color: #574cff;
+    color: white;
+    box-shadow: 0 2px 8px rgba(127, 173, 57, 0.3);
+}
+
+/* Hiệu ứng hover */
+.page-link:hover:not(.active) {
+    color: #7fad39;
+    background-color: #f9f9f9;
+    border-color: #d0d0d0;
+    transform: translateY(-1px);
+}
+
+/* Các nút điều hướng (Previous/Next) */
+.page-item:first-child .page-link,
+.page-item:last-child .page-link {
+    min-width: 80px;
+    padding: 0 15px;
+    border-radius: 30px;
+}
+
+/* Icon mũi tên */
+.page-item:first-child .page-link span::before {
+    content: "←";
+    margin-right: 5px;
+}
+
+.page-item:last-child .page-link span::after {
+    content: "→";
+    margin-left: 5px;
+}
+
+/* Vô hiệu hóa nút */
+.page-item.disabled .page-link {
+    color: #aaa;
+    background-color: #f9f9f9;
+    border-color: #eee;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Responsive cho mobile */
+@@media (max-width: 576px) {
+    .pagination {
+        gap: 0.3rem;
+    }
+    
+    .page-link {
+        min-width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
+    }
+    
+    .page-item:first-child .page-link,
+    .page-item:last-child .page-link {
+        min-width: 70px;
+        padding: 0 10px;
+    }
+}
+
+/* Focus state */
+.page-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(127, 173, 57, 0.15);
+}
+
+/* ========== Responsive ========== */
+@@media (max-width: 1199px) {
+    .breadcrumb__text h2 {
+        font-size: 2.5rem;
+    }
+}
+
+@@media (max-width: 991px) {
+    .sidebar {
+        margin-bottom: 2rem;
+    }
+    
+    .filter__item {
+        padding: 1rem;
+    }
+    
+    .filter__sort {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .filter__sort span {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@@media (max-width: 767px) {
+    .breadcrumb-section {
+        padding: 80px 0;
+    }
+    
+    .breadcrumb__text h2 {
+        font-size: 2rem;
+    }
+    
+    .product {
+        padding: 50px 0;
+    }
+    
+    .filter__item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .filter__found, .view-options {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+@@media (max-width: 575px) {
+    .breadcrumb__text h2 {
+        font-size: 1.8rem;
+    }
+    
+    .breadcrumb__option a, .breadcrumb__option span {
+        font-size: 1rem;
+    }
+    
+    .sidebar {
+        padding: 1.5rem;
+    }
+}
+</style>

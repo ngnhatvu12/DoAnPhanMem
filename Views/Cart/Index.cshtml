@@ -125,12 +125,11 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // Kiểm tra xem mã tài khoản có tồn tại trong ViewBag không
     var maTaiKhoan = '@ViewBag.MaTaiKhoan';
     console.log("Mã tài khoản từ Session:", maTaiKhoan);
 </script>
 <script>
-    var stripe = Stripe('pk_test_51QHQ0IGVyUQsdJTUKqBdjNH4ZW79wTWV4LUD5oYz36anI4gCTYgceBS0Pthhyh7RO1uCWTJESYrzFH6ilmvUs8LM004IBc0Ump'); // Thay YOUR_PUBLIC_STRIPE_KEY bằng khóa công khai của Stripe
+    var stripe = Stripe('pk_test_51QHQ0IGVyUQsdJTUKqBdjNH4ZW79wTWV4LUD5oYz36anI4gCTYgceBS0Pthhyh7RO1uCWTJESYrzFH6ilmvUs8LM004IBc0Ump'); 
     var elements = stripe.elements();
     var card = elements.create('card');
 
@@ -207,7 +206,6 @@
                 data: { maGiamGia: maGiamGia },
                 success: function (response) {
                     if (response.success) {
-                        // Cập nhật giảm giá và tổng tiền
                         $(".savings span").text(response.discountAmount.toLocaleString() + "đ");
                         var currentTotal = parseInt($(".total-price span").text().replace(/,/g, ""));
                         var newTotal = currentTotal - response.discountAmount;
@@ -226,15 +224,10 @@
     });
     document.querySelectorAll('.payment-option input[type="radio"]').forEach(radio => {
         radio.addEventListener('change', function () {
-            // Remove active class from all options
             document.querySelectorAll('.payment-option').forEach(option => {
                 option.classList.remove('active');
             });
-
-            // Add active class to selected option
             this.closest('.payment-option').classList.add('active');
-
-            // Handle Stripe card element visibility
             const stripeElement = document.querySelector('.stripe-card-element');
             if (this.value === 'stripe') {
                 stripeElement.style.display = 'block';
@@ -243,8 +236,6 @@
             }
         });
     });
-
-    // Initialize with first option active
     document.querySelector('.payment-option input[type="radio"]:checked')
         .closest('.payment-option').classList.add('active');
 </script>

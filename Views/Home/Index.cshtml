@@ -3,8 +3,7 @@
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_LayoutOgani.cshtml";
-    <link href="~/css/Item.css" rel="stylesheet">
-    ;
+    <link href="~/css/Item.css" rel="stylesheet"> ;
     <script src="~/js/site.js"></script>
     <link rel="stylesheet" href="~/css/CartPopup.css" />
 
@@ -258,44 +257,70 @@ else
 </div>
 <!-- Modal thêm vào giỏ hàng -->
 <div class="modal fade" id="addToCartModal" tabindex="-1" aria-labelledby="addToCartModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="productName">Tên Sản Phẩm</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="productName">Thêm vào giỏ hàng</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="productId" value="" />
-                <img id="productImage" src="" alt="Product Image" style="width: 100%; height: auto;">
-                <p id="productPrice">Giá: 0 đ</p>
-                <p id="productQuantity">Số lượng tồn: 0</p>
-                <div>
-                    <label for="colorSelect">Màu sắc:</label>
-                    <select id="colorSelect" class="form-control">
-                        <!-- Tùy chọn màu sắc sẽ được load tại đây -->
-                    </select>
-                </div>
-                <div>
-                    <label for="sizeSelect">Kích thước:</label>
-                    <select id="sizeSelect" class="form-control">
-                        <!-- Tùy chọn kích thước sẽ được load tại đây -->
-                    </select>
-                </div>
-                <div>
-                    <label for="quantityInput">Số lượng:</label>
-                    <input type="number" id="quantityInput" class="form-control" min="1" value="1">
+                <div class="product-modal-container">
+                    <div class="product-image-container">
+                        <img id="productImage" src="" alt="Product Image" class="product-modal-image">
+                    </div>
+                    <div class="product-details-container">
+                        <input type="hidden" id="productId" value="" />
+
+                        <div class="product-info">
+                            <h3 id="productTitle" class="product-title">Tên Sản Phẩm</h3>
+                            <div class="price-container">
+                                <span id="productPrice" class="product-price">0 đ</span>
+                                <span id="productOriginalPrice" class="product-original-price">0 đ</span>
+                            </div>
+                            <div class="stock-info">
+                                <span class="stock-label">Tồn kho:</span>
+                                <span id="productQuantity" class="stock-value">0</span>
+                            </div>
+                        </div>
+
+                        <div class="product-options">
+                            <div class="option-group">
+                                <label for="colorSelect" class="option-label">Màu sắc</label>
+                                <select id="colorSelect" class="form-select option-select">
+                                    <option value="" disabled selected>Chọn màu</option>
+                                    <!-- Tùy chọn màu sắc sẽ được load tại đây -->
+                                </select>
+                            </div>
+
+                            <div class="option-group">
+                                <label for="sizeSelect" class="option-label">Kích thước</label>
+                                <select id="sizeSelect" class="form-select option-select">
+                                    <option value="" disabled selected>Chọn kích thước</option>
+                                    <!-- Tùy chọn kích thước sẽ được load tại đây -->
+                                </select>
+                            </div>
+
+                            <div class="option-group">
+                                <label for="quantityInput" class="option-label">Số lượng</label>
+                                <div class="quantity-control">
+                                    <button type="button" class="quantity-btn minus" onclick="adjustQuantity(-1)">-</button>
+                                    <input type="number" id="quantityInput" class="quantity-input" min="1" value="1">
+                                    <button type="button" class="quantity-btn plus" onclick="adjustQuantity(1)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" onclick="$('#addToCartModal').modal('hide')">Đóng</button>
-                <button type="button" class="btn btn-primary" id="addToCartButton" onclick="addToCart()">Thêm vào giỏ hàng</button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Tiếp tục mua sắm</button>
+                <button type="button" class="btn btn-primary" id="addToCartButton" onclick="addToCart()">
+                    <i class="fas fa-shopping-cart me-2"></i> Thêm vào giỏ hàng
+                </button>
             </div>
         </div>
     </div>
 </div>
-
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -304,12 +329,11 @@ else
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('animated');
-                    observer.unobserve(entry.target); // Dừng quan sát sau khi animated
+                    observer.unobserve(entry.target); 
                 }
             });
         }, { threshold: 0.1 });
 
-        // Áp dụng cho tất cả banner
         document.querySelectorAll('.banner-container').forEach(banner => {
             observer.observe(banner);
         });
@@ -320,10 +344,8 @@ else
             type: 'GET',
             success: function (response) {
                 if (response.isLoggedIn) {
-                    // Người dùng đã đăng nhập, mở modal thêm sản phẩm vào giỏ hàng
                     openAddToCartModal(productId);
                 } else {
-                    // Người dùng chưa đăng nhập, yêu cầu họ đăng nhập
                     alert("Bạn cần đăng nhập để thêm sản phẩm vào giỏ hàng.");
                     window.location.href = '/Access/Login';
                 }
@@ -457,9 +479,6 @@ else
         });
     }
 
-
-
-    // Hàm cập nhật số lượng hiển thị trên nút giỏ hàng
     function updateCartCount() {
         $.ajax({
             url: '/Cart/GetCartDetails',
@@ -546,44 +565,33 @@ else
         });
     }
 
-    // Hàm viewCartDetails giữ nguyên từ code cũ
-    function viewCartDetails() {
-        window.location.href = "/Cart/Details";
-    }
-
 function removeCartItem(maSanPham, mauSac, kichThuoc) {
     // Xử lý xóa sản phẩm khỏi giỏ hàng
     openCartPopup();
 }
 
 
-// Hàm xem chi tiết giỏ hàng
 function viewCartDetails() {
     window.location.href = '/Cart/Index';
 }
 
 
 $(document).ready(function () {
-    // Đóng popup khi click bên ngoài
     $(document).on('click', function (event) {
         if (!$(event.target).closest('.btn.cart, .cart-popup').length) {
-            $('.cart-popup').remove(); // Xóa popup nếu nhấn bên ngoài
+            $('.cart-popup').remove(); 
         }
     });
 });
 
-// Đảm bảo popup không bị xóa khi nhấn vào nó
 $(document).on('click', '.cart-popup', function (event) {
-    event.stopPropagation(); // Ngăn chặn sự kiện click tiếp tục
+    event.stopPropagation(); 
 }); 
 
-    // Prevent closing when clicking inside popup
     $('#cartPopup').on('click', function (e) {
         e.stopPropagation();
     });
 
-
-    // Hàm xem chi tiết giỏ hàng
     function viewCartDetails() {
         window.location.href = '/Cart/Index';
     }
@@ -624,4 +632,222 @@ $(document).on('click', '.cart-popup', function (event) {
         });
     }
 </script>
+<style>
+
+    /* Modal Container */
+    #addToCartModal .modal-dialog {
+        max-width: 800px;
+    }
+
+    #addToCartModal .modal-content {
+        border-radius: 12px;
+        overflow: hidden;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Modal Header */
+    #addToCartModal .modal-header {
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 15px 20px;
+    }
+
+    #addToCartModal .modal-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #333;
+        margin: 0;
+    }
+
+    #addToCartModal .btn-close {
+        padding: 0.5rem;
+        margin: -0.5rem -0.5rem -0.5rem auto;
+    }
+
+    /* Modal Body */
+    #addToCartModal .modal-body {
+        padding: 20px;
+    }
+
+    .product-modal-container {
+        display: flex;
+        gap: 20px;
+    }
+
+    .product-image-container {
+        flex: 0 0 40%;
+        max-width: 40%;
+    }
+
+    .product-modal-image {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+        aspect-ratio: 1/1;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-details-container {
+        flex: 1;
+    }
+
+    .product-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .price-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .product-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #e53935;
+    }
+
+    .product-original-price {
+        font-size: 14px;
+        color: #999;
+        text-decoration: line-through;
+    }
+
+    .stock-info {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    .stock-label {
+        color: #666;
+    }
+
+    .stock-value {
+        color: #2e7d32;
+        font-weight: 500;
+    }
+
+    /* Product Options */
+    .product-options {
+        margin-top: 20px;
+    }
+
+    .option-group {
+        margin-bottom: 20px;
+    }
+
+    .option-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+        margin-bottom: 8px;
+    }
+
+    .option-select {
+        width: 100%;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+        .option-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
+        }
+
+    /* Quantity Control */
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        width: 120px;
+    }
+
+    .quantity-btn {
+        width: 30px;
+        height: 30px;
+        background: #f5f5f5;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .quantity-btn:hover {
+            background: #e0e0e0;
+        }
+
+    .quantity-input {
+        width: 50px;
+        height: 30px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        margin: 0 5px;
+        font-size: 14px;
+    }
+
+    /* Modal Footer */
+    #addToCartModal .modal-footer {
+        border-top: 1px solid #e9ecef;
+        padding: 15px 20px;
+        justify-content: space-between;
+    }
+
+    #addToCartModal .btn-outline-secondary {
+        border-color: #ddd;
+        color: #333;
+        padding: 8px 20px;
+        border-radius: 6px;
+    }
+
+        #addToCartModal .btn-outline-secondary:hover {
+            background-color: #f8f9fa;
+        }
+
+    #addToCartModal .btn-primary {
+        background-color: #574cff;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: background-color 0.2s;
+    }
+
+        #addToCartModal .btn-primary:hover {
+            background-color: #1b5e20;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .product-modal-container {
+            flex-direction: column;
+        }
+
+        .product-image-container {
+            flex: 0 0 100%;
+            max-width: 100%;
+            margin-bottom: 20px;
+        }
+
+        #addToCartModal .modal-dialog {
+            margin: 10px;
+        }
+    }
+</style>
 }
