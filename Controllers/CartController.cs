@@ -75,7 +75,6 @@ public class CartController : Controller
         ViewBag.Savings = savings;
         ViewBag.CartItems = cartDetails;
 
-        // Lấy mã giảm giá từ bảng GiamGia
         var discountCodes = _db.GiamGia.ToList();
         ViewBag.DiscountCodes = discountCodes;
 
@@ -139,7 +138,7 @@ public class CartController : Controller
     }
 
     [HttpPost]
-    public IActionResult CreateOrder(string paymentMethodId, string paymentMethod)
+    public IActionResult CreateOrder(string paymentMethodId, string paymentMethod, string maGiamGia = null)
     {
         using (var transaction = _db.Database.BeginTransaction())
         {
@@ -156,7 +155,19 @@ public class CartController : Controller
                 {
                     return Json(new { success = false, message = "Không tìm thấy thông tin khách hàng." });
                 }
-
+                GiamGia discount = null;
+                if (!string.IsNullOrEmpty(maGiamGia))
+                {
+                    discount = _db.GiamGia.FirstOrDefault(g => g.MaGiamGia == maGiamGia);
+                    if (discount == null)
+                    {
+                        return Json(new { success = false, message = "Mã giảm giá không hợp lệ." });
+                    }
+                    if (discount.NgayHieuLuc < DateTime.Now)
+                    {
+                        return Json(new { success = false, message = "Mã giảm giá đã hết hạn." });
+                    }
+                }
                 string maDonHang = "DH" + DateTime.Now.ToString("yyyyMMdd");
                 Console.WriteLine("Mã đơn hàng được tạo: " + maDonHang);
 
@@ -171,8 +182,6 @@ public class CartController : Controller
                 };
                 _db.DonHang.Add(donHang);
                 _db.SaveChanges();
-                Console.WriteLine("Đơn hàng đã được lưu vào DB.");
-
                 var maGioHang = HttpContext.Session.GetString("MaGioHang");
                 var cartItems = _db.ChiTietGioHang.Include(ct => ct.ChiTietSanPham).ThenInclude(ctsp => ctsp.SanPham)
                                                    .Where(ct => ct.MaGioHang == maGioHang).ToList();
@@ -188,11 +197,15 @@ public class CartController : Controller
                         MaChiTietDonHang = maChiTietDonHang,
                         MaDonHang = maDonHang,
                         MaChiTietSP = item.MaChiTietSP,
-                        MaGiamGia = "GG003",
+                        MaGiamGia = discount?.MaGiamGia,
                         SoLuong = item.SoLuong,
                         GiaBan = item.ChiTietSanPham.SanPham.GiaBan * item.SoLuong
                     };
-
+                    if (discount != null)
+                    {
+                        chiTietDonHang.GiaBan -= discount.MucGiamGia;
+                        if (chiTietDonHang.GiaBan < 0) chiTietDonHang.GiaBan = 0;
+                    }
                     tongTienDonHang += chiTietDonHang.GiaBan;
                     _db.ChiTietDonHang.Add(chiTietDonHang);
                     var chiTietSanPham = _db.ChiTietSanPham.FirstOrDefault(ctsp => ctsp.MaChiTietSP == item.MaChiTietSP);
@@ -207,9 +220,10 @@ public class CartController : Controller
                         _db.ChiTietSanPham.Update(chiTietSanPham);
                     }
                 }
-
-                Console.WriteLine("Tổng tiền đơn hàng: " + tongTienDonHang);
-
+                if (discount != null)
+                {
+                    _db.GiamGia.Remove(discount);
+                }
                 string maThanhToan = "TT" + DateTime.Now.Ticks.ToString().Substring(0, 8);
                 var thanhToan = new ThanhToan
                 {
@@ -235,8 +249,8 @@ public class CartController : Controller
                         Confirm = true,
                         AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
                         {
-                            Enabled = true,   // Cho phép Stripe tự động chọn phương thức thanh toán
-                            AllowRedirects = "never" // Không cho phép các phương thức yêu cầu chuyển hướng
+                            Enabled = true,   
+                            AllowRedirects = "never" 
                         }
                     };
 
@@ -305,11 +319,9 @@ public class CartController : Controller
 
         try
         {
-
-            // Kiểm tra tồn kho của sản phẩm
             var product = _db.ChiTietSanPham
                               .AsNoTracking()
-                              .Include(p => p.SanPham)  // Lấy thông tin sản phẩm
+                              .Include(p => p.SanPham)  
                               .FirstOrDefault(p => p.MaChiTietSP == maChiTietSP);
 
             if (product == null)
@@ -321,8 +333,6 @@ public class CartController : Controller
             {
                 return Json(new { success = false, message = "Số lượng tồn không đủ." });
             }
-
-            // Tạo mới chi tiết giỏ hàng
             var chiTietGioHang = new ChiTietGioHang
             {
                 MaChiTietGioHang = GenerateUniqueCartDetailId(),
@@ -331,8 +341,6 @@ public class CartController : Controller
                 SoLuong = soLuong,
                 TongTien = product.SanPham.GiaBan * soLuong
                 };
-
-                // Thêm chi tiết giỏ hàng vào DbContext và cập nhật tồn kho
                 _db.ChiTietGioHang.Add(chiTietGioHang);
                 product.SoLuongTon -= soLuong;
                 _db.SaveChanges();

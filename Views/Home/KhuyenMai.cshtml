@@ -1,0 +1,186 @@
+﻿@{
+    ViewData["Title"] = "Khuyến mãi";
+    Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
+    var discountCodes = ViewBag.DiscountCodes as List<GiamGia>;
+}
+
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="/LayoutOgani/img/breadcrumb.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Chương trình khuyến mãi</h2>
+                    <div class="breadcrumb__option">
+                        <a href="/">Trang chủ</a>
+                        <span>Khuyến mãi</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<!-- Discount Section Begin -->
+<section class="featured spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <h2>Mã giảm giá hiện có</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            @foreach (var code in discountCodes)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="discount-card @(code.NgayHieuLuc < DateTime.Now ? "expired" : "")">
+                        <div class="discount-header">
+                            <span class="discount-value">Giảm @code.MucGiamGia.ToString("N0")đ</span>
+                            <span class="discount-code">@code.MaGiamGia</span>
+                        </div>
+                        <div class="discount-body">
+                            <p><i class="fa fa-calendar"></i> Hiệu lực đến: @code.NgayHieuLuc.ToString("dd/MM/yyyy")</p>
+                            <p><i class="fa fa-info-circle"></i> @code.DieuKien</p>
+                        </div>
+                        <div class="discount-footer">
+                            @if (code.NgayHieuLuc >= DateTime.Now)
+                            {
+                                <button class="btn-copy-code" data-code="@code.MaGiamGia">
+                                    <i class="fa fa-copy"></i> Sao chép mã
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn-copy-code expired" disabled>
+                                    <i class="fa fa-times-circle"></i> Hết hạn
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+<!-- Discount Section End -->
+<style>
+    .discount-card {
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border: 1px solid #e0e0e0;
+    }
+
+        .discount-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .discount-card.expired {
+            opacity: 0.7;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e0e0e0 100%);
+        }
+
+    .discount-header {
+        background: linear-gradient(to right, #ff416c, #ff4b2b);
+        color: white;
+        padding: 15px;
+        text-align: center;
+        position: relative;
+    }
+
+    .discount-card.expired .discount-header {
+        background: linear-gradient(to right, #9e9e9e, #616161);
+    }
+
+    .discount-value {
+        font-size: 24px;
+        font-weight: bold;
+        display: block;
+    }
+
+    .discount-code {
+        font-size: 18px;
+        letter-spacing: 2px;
+        background: white;
+        color: #ff4b2b;
+        padding: 5px 10px;
+        border-radius: 4px;
+        display: inline-block;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .discount-card.expired .discount-code {
+        color: #616161;
+    }
+
+    .discount-body {
+        padding: 15px;
+        background: white;
+    }
+
+        .discount-body p {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .discount-body i {
+            margin-right: 8px;
+            color: #ff4b2b;
+        }
+
+    .discount-card.expired .discount-body i {
+        color: #9e9e9e;
+    }
+
+    .discount-footer {
+        padding: 10px;
+        text-align: center;
+        background: #f9f9f9;
+        border-top: 1px solid #eee;
+    }
+
+    .btn-copy-code {
+        background: #ff4b2b;
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+        .btn-copy-code:hover {
+            background: #ff416c;
+        }
+
+        .btn-copy-code.expired {
+            background: #9e9e9e;
+            cursor: not-allowed;
+        }
+
+        .btn-copy-code i {
+            margin-right: 5px;
+        }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Copy discount code to clipboard
+            $('.btn-copy-code').click(function () {
+                var code = $(this).data('code');
+                navigator.clipboard.writeText(code).then(function () {
+                    alert('Đã sao chép mã giảm giá: ' + code + '\nBạn có thể sử dụng mã này khi thanh toán!');
+                }, function () {
+                    alert('Không thể sao chép mã. Vui lòng thử lại.');
+                });
+            });
+        });
+    </script>
+}

@@ -62,27 +62,24 @@ app.UseRouting();
 app.UseSession(); // Cấu hình session middleware
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Cấu hình route mặc định cho ứng dụng
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Cấu hình route cho sản phẩm chi tiết
 app.MapControllerRoute(
     name: "productDetail",
     pattern: "product/{id}",
     defaults: new { controller = "Home", action = "ProductDetail" });
 app.MapControllerRoute(
+    name: "khuyenmai",
+    pattern: "khuyen-mai",
+    defaults: new { controller = "Home", action = "KhuyenMai" });
+app.MapControllerRoute(
     name: "Category",
     pattern: "Category/{action}/{id?}",
     defaults: new { controller = "Category", action = "Index" });
-// Cấu hình route cho Admin
 app.MapControllerRoute(
     name: "admin",
     pattern: "{controller=Admin}/{action=Dashboard}/{id?}");
-
-// Cấu hình Razor Pages cho các trang đăng nhập, đăng ký, v.v...
 app.MapRazorPages();
 
 app.Run();

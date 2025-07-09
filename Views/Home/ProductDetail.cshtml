@@ -33,10 +33,10 @@
                 Mã sản phẩm: @Model.SanPham.MaSanPham
             </div>
             <div class="price">
-                Giá gốc: <span class="original-price">@Model.SanPham.GiaBan đ</span>
+            Giá gốc: <span class="original-price">@Model.SanPham.GiaBan.ToString("N0") đ</span>
             @if (Model.SanPham.GiaGiam > 0)
             {
-                        <span class="discount-price">Giá giảm: @Model.SanPham.GiaGiam đ</span>
+                <span class="discount-price">Giá giảm: @Model.SanPham.GiaGiam.ToString("N0") đ</span>
             }
             </div>
         <div class="product-description">

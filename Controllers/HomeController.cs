@@ -366,5 +366,12 @@ namespace DoAnPhanMem.Controllers
 
             return View(pagedProducts);
         }
+
+        public IActionResult KhuyenMai()
+        {
+            var discountCodes = _db.GiamGia.ToList();
+            ViewBag.DiscountCodes = discountCodes;
+            return View();
+        }
     }
 }
