@@ -2,18 +2,27 @@
     ViewData["Title"] = "Khuyến mãi";
     Layout = "~/Views/Shared/_LayoutOgani2.cshtml";
     var discountCodes = ViewBag.DiscountCodes as List<GiamGia>;
+    var isVip = ViewBag.IsVip as bool? ?? false;
 }
 
 <!-- Breadcrumb Section Begin -->
-<section class="breadcrumb-section set-bg" data-setbg="/LayoutOgani/img/breadcrumb.jpg">
+<section class="breadcrumb-section set-bg" data-setbg="/LayoutOgani/img/wallpp.jpg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
                     <h2>Chương trình khuyến mãi</h2>
-                    <div class="breadcrumb__option">
-                        <a href="/">Trang chủ</a>
-                        <span>Khuyến mãi</span>
+                    <div class="breadcrumb-options">
+                        <div class="breadcrumb__option">
+                            <a href="/">Trang chủ</a>
+                            <span>Khuyến mãi</span>
+                        </div>
+                        @if (isVip)
+                        {
+                            <div class="vip-badge">
+                                <i class="fa fa-crown"></i> THÀNH VIÊN VIP
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -23,17 +32,61 @@
 <!-- Breadcrumb Section End -->
 <!-- Discount Section Begin -->
 <section class="featured spad">
-    <div class="container">
+    <div class="container" style="max-width:100%">
+        @if (isVip)
+        {
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="section-title">
+                        <h2>Ưu đãi đặc biệt dành riêng cho VIP</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                @foreach (var code in discountCodes.Where(c => c.LoaiGiamGia == "VIP"))
+                {
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="discount-card vip @(code.NgayHieuLuc < DateTime.Now ? "expired" : "")">
+                            <div class="discount-header">
+                                <span class="discount-value">Giảm @code.MucGiamGia.ToString("N0")đ</span>
+                                <span class="discount-badge">VIP EXCLUSIVE</span>
+                                <span class="discount-code">@code.MaGiamGia</span>
+                            </div>
+                            <div class="discount-body">
+                                <p><i class="fa fa-calendar"></i> Hiệu lực đến: @code.NgayHieuLuc.ToString("dd/MM/yyyy")</p>
+                                <p><i class="fa fa-info-circle"></i> @code.DieuKien</p>
+                            </div>
+                            <div class="discount-footer">
+                                @if (code.NgayHieuLuc >= DateTime.Now)
+                                {
+                                    <button class="btn-copy-code" data-code="@code.MaGiamGia">
+                                        <i class="fa fa-copy"></i> Sao chép mã
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button class="btn-copy-code expired" disabled>
+                                        <i class="fa fa-times-circle"></i> Hết hạn
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <h2>Mã giảm giá hiện có</h2>
+                    <h2>Mã giảm giá dành cho mọi khách hàng</h2>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            @foreach (var code in discountCodes)
+            @foreach (var code in discountCodes.Where(c => c.LoaiGiamGia != "VIP"))
             {
                 <div class="col-lg-4 col-md-6 mb-4">
                     <div class="discount-card @(code.NgayHieuLuc < DateTime.Now ? "expired" : "")">
@@ -66,7 +119,287 @@
     </div>
 </section>
 <!-- Discount Section End -->
+
 <style>
+    /* ========== Layout chung ========== */
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .breadcrumb-section {
+        padding: 80px 0 70px;
+        position: relative;
+        z-index: 1;
+    }
+
+        .breadcrumb-section:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+    .breadcrumb__text h2 {
+        font-size: 42px;
+        margin-bottom: 20px;
+        color: #fff;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+
+    .featured {
+        padding: 50px 0 80px;
+        background-color: #fff;
+    }
+
+    .container {
+        max-width: 100%;
+        padding: 0 30px;
+    }
+
+    /* ========== Section Title ========== */
+    .section-title {
+        margin-bottom: 40px;
+        text-align: center;
+        position: relative;
+    }
+
+        .section-title h2 {
+            font-size: 35px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: inline-block;
+            position: relative;
+            font-family: 'Montserrat', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 10px;
+        }
+
+            .section-title h2:after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 60px;
+                height: 3px;
+                background: #3498db;
+                border-radius: 3px;
+            }
+
+        .section-title p {
+            color: #6f6f6f;
+            margin-top: 15px;
+            font-size: 18px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+    /* ========== VIP Badge ========== */
+    .vip-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #ffd700 0%, #daa520 100%);
+        color: #000;
+        padding: 10px 25px;
+        border-radius: 30px;
+        font-weight: bold;
+        margin-top: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        order: 2;
+    }
+
+        .vip-badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+        }
+
+        .vip-badge i {
+            margin-right: 10px;
+            color: #8b7500;
+        }
+
+    /* ========== Breadcrumb Navigation ========== */
+    .breadcrumb__text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .breadcrumb-options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .breadcrumb__option {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .breadcrumb__option a {
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-right: 1.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+            .breadcrumb__option a:hover {
+                color: #574cff;
+                transform: translateY(-2px);
+            }
+
+            .breadcrumb__option a:after {
+                position: absolute;
+                right: -1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                content: "›";
+                color: #ffffff;
+                font-size: 1.5rem;
+            }
+
+        .breadcrumb__option span {
+            color: #574cff;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+    /* ========== Grid Layout ========== */
+    .row {
+        margin: 0 -15px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start
+    }
+
+    .col-lg-4,
+    .col-md-6 {
+        padding: 0 15px;
+        margin-bottom: 30px;
+    }
+
+    /* ========== Responsive Design ========== */
+    @@media (max-width: 1200px) {
+        .container {
+            padding: 0 25px;
+        }
+    }
+
+    @@media (max-width: 992px) {
+        .breadcrumb__text h2 {
+            font-size: 36px;
+        }
+
+        .section-title h2 {
+            font-size: 28px;
+        }
+    }
+
+    @@media (max-width: 768px) {
+        .breadcrumb-section {
+            padding: 60px 0 50px;
+        }
+
+        .breadcrumb__text h2 {
+            font-size: 30px;
+        }
+
+        .section-title h2 {
+            font-size: 24px;
+        }
+
+        .section-title p {
+            font-size: 16px;
+        }
+
+        .container {
+            padding: 0 20px;
+        }
+
+        .vip-badge {
+            padding: 8px 20px;
+            font-size: 14px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .breadcrumb__text h2 {
+            font-size: 26px;
+        }
+
+        .breadcrumb__option a,
+        .breadcrumb__option span {
+            font-size: 14px;
+        }
+
+        .container {
+            padding: 0 15px;
+        }
+
+        .col-lg-4,
+        .col-md-6 {
+            padding: 0 10px;
+        }
+    }
+
+    /* ========== Animation Effects ========== */
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .section-title {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    /* ========== Background Pattern ========== */
+    .featured {
+        position: relative;
+        overflow: hidden;
+    }
+
+        .featured:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 15px 15px;
+            z-index: 0;
+        }
+
+        .featured > .container {
+            position: relative;
+            z-index: 1;
+        }
+
     .discount-card {
         border-radius: 10px;
         overflow: hidden;

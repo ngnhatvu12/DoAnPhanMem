@@ -1,4 +1,8 @@
 ﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,12 +64,35 @@
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                     <div class="navbar-nav mr-auto">
-                        <a href="Home/Index.cshtml" class="nav-item nav-link active">Trang chủ</a>
-                        <a href="product-list.html" class="nav-item nav-link">Sản phẩm</a>
-                        <a href="product-detail.html" class="nav-item nav-link">Tin tức</a>
-                        <a href="Home/KhuyenMai.cshtml" class="nav-item nav-link">Khuyến mãi</a>
-                        <a href="checkout.html" class="nav-item nav-link">Dụng cụ thể thao</a>
-                        <a href="my-account.html" class="nav-item nav-link">Sản phẩm mới</a>
+                        <a href="@Url.Action("Index", "Home")"
+                           class="nav-item nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")">
+                            Trang chủ
+                        </a>
+
+                        <a href="@Url.Action("ProductList", "Product")"
+                           class="nav-item nav-link @(currentController == "Product" && currentAction == "ProductList" ? "active" : "")">
+                            Sản phẩm
+                        </a>
+
+                        <a href="@Url.Action("News", "Home")"
+                           class="nav-item nav-link @(currentController == "Home" && currentAction == "News" ? "active" : "")">
+                            Tin tức
+                        </a>
+
+                        <a href="@Url.Action("KhuyenMai", "Home")"
+                           class="nav-item nav-link @(currentController == "Home" && currentAction == "KhuyenMai" ? "active" : "")">
+                            Khuyến mãi
+                        </a>
+
+                        <a href="@Url.Action("Index", "Sports")"
+                           class="nav-item nav-link @(currentController == "Sports" && currentAction == "Index" ? "active" : "")">
+                            Dụng cụ thể thao
+                        </a>
+
+                        <a href="@Url.Action("NewProducts", "Product")"
+                           class="nav-item nav-link @(currentController == "Product" && currentAction == "NewProducts" ? "active" : "")">
+                            Sản phẩm mới
+                        </a>
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Bộ sưu tập</a>
                             <div class="dropdown-menu">

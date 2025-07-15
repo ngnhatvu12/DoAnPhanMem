@@ -369,8 +369,28 @@ namespace DoAnPhanMem.Controllers
 
         public IActionResult KhuyenMai()
         {
-            var discountCodes = _db.GiamGia.ToList();
+            // Lấy thông tin khách hàng từ session
+            var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
+            var isVip = false;
+
+            if (!string.IsNullOrEmpty(maKhachHang))
+            {
+                var khachHang = _db.KhachHang.FirstOrDefault(k => k.MaKhachHang == maKhachHang);
+                isVip = khachHang?.DacQuyen == "VIP";
+            }
+
+            // Lấy tất cả mã giảm giá thông thường
+            var discountCodes = _db.GiamGia.Where(g => g.LoaiGiamGia == "Thường" || g.LoaiGiamGia == null).ToList();
+
+            // Nếu là VIP, thêm các mã giảm giá VIP
+            if (isVip)
+            {
+                var vipDiscounts = _db.GiamGia.Where(g => g.LoaiGiamGia == "VIP").ToList();
+                discountCodes.AddRange(vipDiscounts);
+            }
+
             ViewBag.DiscountCodes = discountCodes;
+            ViewBag.IsVip = isVip;
             return View();
         }
     }
