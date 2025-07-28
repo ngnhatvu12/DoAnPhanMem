@@ -13,20 +13,13 @@
     <meta content="eCommerce HTML Template Free Download" name="description">
 
     <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/Detail.css" /> <!-- Thay đổi đường dẫn nếu cần -->
-    <!-- Favicon -->
+    <link rel="stylesheet" href="~/css/Detail.css" /> 
     <link href="../LayoutOgani/img/favicon.ico" rel="icon">
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Source+Code+Pro:700,900&display=swap" rel="stylesheet">
-
-    <!-- CSS Libraries -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="../LayoutOgani/lib/slick/slick.css" rel="stylesheet">
     <link href="../LayoutOgani/lib/slick/slick-theme.css" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
     <link href="~/css/site.css" rel="stylesheet">
 </head>
 <body>
@@ -553,6 +546,453 @@
         </div>
     </footer>
     <!-- Footer End-->
+    <!-- Chatbot Icon -->
+    <div class="chatbot-icon" id="chatbotIcon">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Chatbot Modal -->
+    <div class="chatbot-modal" id="chatbotModal">
+        <div class="chatbot-header">
+            <h5>Trợ lý ảo</h5>
+            <button type="button" class="close-chatbot">&times;</button>
+        </div>
+        <div class="chatbot-body" id="chatbotMessages">
+            <div class="chatbot-message chatbot-response">
+                <p>Xin chào! Tôi có thể giúp gì cho bạn hôm nay?</p>
+                <p>Bạn có thể hỏi tôi về:</p>
+                <ul>
+                    <li>- Gợi ý sản phẩm phù hợp</li>
+                    <li>- Giải đáp thắc mắc về đơn hàng</li>
+                    <li>- Hỗ trợ khiếu nại</li>
+                </ul>
+            </div>
+        </div>
+        <div class="chatbot-footer">
+            <input type="text" id="chatbotInput" placeholder="Nhập câu hỏi của bạn...">
+            <button id="sendMessageBtn"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <style>
+        /* Chatbot Styles */
+        .chatbot-icon {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #574cff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+            .chatbot-icon:hover {
+                transform: scale(1.1);
+                background-color: #574cff;
+            }
+
+            .chatbot-icon i {
+                font-size: 30px;
+            }
+
+        .chatbot-modal {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            left: 30px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            flex-direction: column;
+        }
+
+        .chatbot-header {
+            padding: 15px;
+            background-color: #574cff;
+            color: white;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+            .chatbot-header h5 {
+                margin: 0;
+            }
+
+        .close-chatbot {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .chatbot-body {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+
+        .chatbot-footer {
+            padding: 10px;
+            display: flex;
+            border-top: 1px solid #ddd;
+            background-color: white;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+            .chatbot-footer input {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 20px;
+                outline: none;
+            }
+
+            .chatbot-footer button {
+                background-color: #574cff;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                margin-left: 10px;
+                cursor: pointer;
+            }
+
+        .chatbot-message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            word-wrap: break-word;
+        }
+
+        .chatbot-response {
+            background-color: #e5e5ea;
+            color: black;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            background-color: #574cff;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+        /* CSS chỉ áp dụng trong chatbot modal */
+        #chatbotModal .products-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+#chatbotModal .product-item {
+    flex-direction: column;
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid #eaeaea;
+    transition: all 0.2s ease;
+    width: calc(100% - 24px); /* Trừ đi padding */
+    box-sizing: border-box;
+}
+
+#chatbotModal .product-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+#chatbotModal .product-image-container {
+    width: 70px;
+    height: 70px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f8f8;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+#chatbotModal .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#chatbotModal .product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+}
+
+#chatbotModal .product-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    color: #333;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#chatbotModal .product-price-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+#chatbotModal .product-price {
+    color: #e74c3c;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+#chatbotModal .product-original-price {
+    color: #999;
+    font-size: 12px;
+    text-decoration: line-through;
+}
+
+#chatbotModal .product-discount {
+    background-color: #e74c3c;
+    color: white;
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+#chatbotModal .product-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+#chatbotModal .product-type,
+#chatbotModal .product-color,
+#chatbotModal .product-size {
+    font-size: 11px;
+    color: #666;
+    background-color: #f3f3f3;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@@media (max-width: 400px) {
+    #chatbotModal .product-item {
+        flex-direction: column;
+    }
+    
+    #chatbotModal .product-image-container {
+        width: 100%;
+        height: 120px;
+    }
+}
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chatbotIcon = document.getElementById('chatbotIcon');
+            const chatbotModal = document.getElementById('chatbotModal');
+            const closeChatbot = document.querySelector('.close-chatbot');
+            const sendMessageBtn = document.getElementById('sendMessageBtn');
+            const chatbotInput = document.getElementById('chatbotInput');
+            const chatbotMessages = document.getElementById('chatbotMessages');
+
+            // Toggle chatbot modal
+            chatbotIcon.addEventListener('click', function () {
+                chatbotModal.style.display = chatbotModal.style.display === 'flex' ? 'none' : 'flex';
+            });
+
+            closeChatbot.addEventListener('click', function () {
+                chatbotModal.style.display = 'none';
+            });
+
+            // Send message function
+            async function sendMessage() {
+                const message = chatbotInput.value.trim();
+                if (message === '') return;
+
+                // Add user message to chat
+                addMessage(message, 'user');
+                chatbotInput.value = '';
+
+                try {
+                    const response = await getBotResponse(message);
+                    if (response.type === 'products') {
+                        addMessage(response.text, 'bot', response);
+                    } else {
+                        addMessage(response.text, 'bot');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    addMessage("Xin lỗi, có lỗi xảy ra khi xử lý yêu cầu của bạn.", 'bot');
+                }
+            }
+
+            // Send message on button click or Enter key
+            sendMessageBtn.addEventListener('click', sendMessage);
+            chatbotInput.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+
+            // Add message to chat
+            function addMessage(text, sender, data = null) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chatbot-message', sender === 'user' ? 'user-message' : 'chatbot-response');
+
+                if (data && data.type === 'products') {
+                    const messageText = document.createElement('p');
+                    messageText.textContent = data.text;
+                    messageDiv.appendChild(messageText);
+
+                    const productsContainer = document.createElement('div');
+                    productsContainer.classList.add('products-container');
+
+                    if (Array.isArray(data.products) && data.products.length > 0) {
+                        data.products.forEach(product => {
+                            // Tạo thẻ div cho sản phẩm
+                            const productDiv = document.createElement('div');
+                            productDiv.classList.add('product-item');
+
+                            // Tạo hình ảnh sản phẩm
+                            const imgContainer = document.createElement('div');
+                            imgContainer.classList.add('product-image-container');
+
+                            const img = document.createElement('img');
+                            img.src = `/LayoutOgani/img/${product.hinhAnh || 'default-product.jpg'}`;
+                            img.alt = product.tenSanPham || 'Sản phẩm';
+                            img.classList.add('product-image');
+                            img.onerror = function () {
+                                this.src = '/LayoutOgani/img/default-product.jpg';
+                            };
+                            imgContainer.appendChild(img);
+
+                            // Tạo thông tin sản phẩm
+                            const infoDiv = document.createElement('div');
+                            infoDiv.classList.add('product-info');
+
+                            // Tên sản phẩm
+                            const nameEl = document.createElement('h4');
+                            nameEl.classList.add('product-name');
+                            nameEl.textContent = product.tenSanPham || 'Không có tên';
+                            infoDiv.appendChild(nameEl);
+
+                            // Giá sản phẩm
+                            const priceEl = document.createElement('div');
+                            priceEl.classList.add('product-price');
+
+                            if (product.giaGiam > 0) {
+                                const originalPrice = document.createElement('span');
+                                originalPrice.classList.add('original-price');
+                                originalPrice.textContent = product.giaBan?.toLocaleString() + 'đ' || '0đ';
+
+                                const salePrice = document.createElement('span');
+                                salePrice.classList.add('sale-price');
+                                salePrice.textContent = (product.giaBan - product.giaGiam)?.toLocaleString() + 'đ' || '0đ';
+
+                                priceEl.appendChild(originalPrice);
+                                priceEl.appendChild(salePrice);
+                            } else {
+                                const price = document.createElement('span');
+                                price.textContent = product.giaBan?.toLocaleString() + 'đ' || '0đ';
+                                priceEl.appendChild(price);
+                            }
+                            infoDiv.appendChild(priceEl);
+
+                            // Loại sản phẩm
+                            const typeEl = document.createElement('p');
+                            typeEl.classList.add('product-type');
+                            typeEl.textContent = 'Loại: ' + (product.loai || 'Không xác định');
+                            infoDiv.appendChild(typeEl);
+
+                            // Thêm vào productDiv
+                            productDiv.appendChild(imgContainer);
+                            productDiv.appendChild(infoDiv);
+
+                            // Thêm vào container
+                            productsContainer.appendChild(productDiv);
+                        });
+                    } else {
+                        const noProductMsg = document.createElement('p');
+                        noProductMsg.textContent = "Không tìm thấy sản phẩm phù hợp.";
+                        productsContainer.appendChild(noProductMsg);
+                    }
+
+                    messageDiv.appendChild(productsContainer);
+                } else {
+                    const messageText = document.createElement('p');
+                    messageText.textContent = text;
+                    messageDiv.appendChild(messageText);
+                }
+
+                chatbotMessages.appendChild(messageDiv);
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            }
+
+            // Simple bot response logic (you'll replace this with your actual logic)
+            async function getBotResponse(message) {
+                try {
+                    const response = await fetch('/Chatbot/GetResponse', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ text: message })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+
+                    const data = await response.json();
+                    console.log("API Response:", data); // Thêm dòng này để debug
+                    return data.response;
+                } catch (error) {
+                    console.error('Error:', error);
+                    return {
+                        text: "Xin lỗi, có lỗi xảy ra khi xử lý yêu cầu của bạn.",
+                        type: "text"
+                    };
+                }
+            }
+        });
+    </script>
+
     <!-- Back to Top -->
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
 

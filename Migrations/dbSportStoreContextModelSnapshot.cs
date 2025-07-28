@@ -109,7 +109,6 @@ namespace DoAnPhanMem.Migrations
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("MaGiamGia")
-                        .IsRequired()
                         .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("SoLuong")
@@ -705,9 +704,7 @@ namespace DoAnPhanMem.Migrations
 
                     b.HasOne("GiamGia", "GiamGia")
                         .WithMany()
-                        .HasForeignKey("MaGiamGia")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MaGiamGia");
 
                     b.Navigation("ChiTietSanPham");
 

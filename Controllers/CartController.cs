@@ -57,7 +57,7 @@ public class CartController : Controller
                 MaSanPham = ct.ChiTietSanPham.MaSanPham,
                 TenSanPham = ct.ChiTietSanPham.SanPham.TenSanPham,
                 GiaBan = ct.ChiTietSanPham.SanPham.GiaBan,
-                GiaGiam = ct.ChiTietSanPham.SanPham.GiaGiam, 
+                GiaGiam = ct.ChiTietSanPham.SanPham.GiaGiam,
                 SoLuong = ct.SoLuong,
                 TongTien = ct.TongTien,
                 HinhAnh = string.IsNullOrEmpty(ct.ChiTietSanPham.HinhAnhBienThe) ? ct.ChiTietSanPham.SanPham.HinhAnh : ct.ChiTietSanPham.HinhAnhBienThe,
@@ -119,7 +119,7 @@ public class CartController : Controller
     {
         var payment = new ThanhToan
         {
-            MaThanhToan = GeneratePaymentId(), // hàm này tự định nghĩa để tạo mã thanh toán
+            MaThanhToan = GeneratePaymentId(), 
             MaDonHang = maDonHang,
             PhuongThuc = phuongThuc,
             TongTien = tongTien,
@@ -249,8 +249,8 @@ public class CartController : Controller
                         Confirm = true,
                         AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
                         {
-                            Enabled = true,   
-                            AllowRedirects = "never" 
+                            Enabled = true,
+                            AllowRedirects = "never"
                         }
                     };
 
@@ -292,11 +292,33 @@ public class CartController : Controller
                 transaction.Rollback();
                 return Json(new { success = false, message = "Đã xảy ra lỗi không xác định trong quá trình đặt hàng." });
             }
+            catch (DbUpdateException dbEx)
+            {
+                // Ghi log inner exception
+                Console.WriteLine("DbUpdateException Inner Exception: " + dbEx.InnerException?.Message);
+                Console.WriteLine("DbUpdateException Stack Trace: " + dbEx.StackTrace);
+
+                transaction.Rollback();
+                return Json(new
+                {
+                    success = false,
+                    message = "Lỗi database: " + dbEx.InnerException?.Message,
+                    details = dbEx.InnerException?.ToString()
+                });
+            }
             catch (Exception ex)
             {
-                Console.WriteLine("Lỗi xảy ra trong quá trình đặt hàng: " + ex.Message);
+                Console.WriteLine("Full Exception: " + ex.ToString());
+                Console.WriteLine("Inner Exception: " + ex.InnerException?.Message);
+                Console.WriteLine("Stack Trace: " + ex.StackTrace);
+
                 transaction.Rollback();
-                return Json(new { success = false, message = "Đã xảy ra lỗi trong quá trình tạo đơn hàng: " + ex.Message });
+                return Json(new
+                {
+                    success = false,
+                    message = "Đã xảy ra lỗi trong quá trình tạo đơn hàng: " + ex.Message,
+                    details = ex.ToString()
+                });
             }
         }
     }
@@ -321,7 +343,7 @@ public class CartController : Controller
         {
             var product = _db.ChiTietSanPham
                               .AsNoTracking()
-                              .Include(p => p.SanPham)  
+                              .Include(p => p.SanPham)
                               .FirstOrDefault(p => p.MaChiTietSP == maChiTietSP);
 
             if (product == null)
@@ -340,23 +362,22 @@ public class CartController : Controller
                 MaChiTietSP = maChiTietSP,
                 SoLuong = soLuong,
                 TongTien = product.SanPham.GiaBan * soLuong
-                };
-                _db.ChiTietGioHang.Add(chiTietGioHang);
-                product.SoLuongTon -= soLuong;
-                _db.SaveChanges();
+            };
+            _db.ChiTietGioHang.Add(chiTietGioHang);
+            product.SoLuongTon -= soLuong;
+            _db.SaveChanges();
 
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
+            return Json(new { success = true });
         }
-
-        private string GenerateUniqueCartDetailId()
+        catch (Exception ex)
         {
-            return Guid.NewGuid().ToString("N").Substring(0, 6);
+            return Json(new { success = false, message = ex.Message });
         }
+    }
+
+    private string GenerateUniqueCartDetailId()
+    {
+        return Guid.NewGuid().ToString("N").Substring(0, 6);
+    }
 
 }
-

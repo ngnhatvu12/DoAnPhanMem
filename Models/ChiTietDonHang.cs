@@ -15,9 +15,9 @@ public class ChiTietDonHang
     [ForeignKey("MaChiTietSP")]
     public ChiTietSanPham ChiTietSanPham { get; set; }
 
-    public string MaGiamGia { get; set; }
+    public string? MaGiamGia { get; set; }
     [ForeignKey("MaGiamGia")]
-    public GiamGia GiamGia { get; set; }
+    public GiamGia? GiamGia { get; set; }
 
     public int SoLuong { get; set; }
     public decimal GiaBan { get; set; }
