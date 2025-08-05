@@ -2,16 +2,18 @@
 using DoAnPhanMem.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace DoAnPhanMem.Controllers
 {
     public class AdminController : Controller
     {
         private readonly dbSportStoreContext _db;
-
-        public AdminController(dbSportStoreContext db)
+        private readonly IMemoryCache _cache;
+        public AdminController(dbSportStoreContext db, IMemoryCache cache)
         {
             _db = db;
+            _cache = cache;
         }
         public IActionResult Index()
         {
@@ -25,7 +27,7 @@ namespace DoAnPhanMem.Controllers
             var currentMonth = DateTime.Now.Month;
             var currentYear = DateTime.Now.Year;
             var totalOrdersThisMonth = _db.DonHang
-                .Count(dh =>  
+                .Count(dh =>
                              dh.NgayDat.Month == currentMonth &&
                              dh.NgayDat.Year == currentYear);
 
@@ -88,7 +90,7 @@ namespace DoAnPhanMem.Controllers
                                      TenDangNhap = tk.TenDangNhap,
                                      NgaySinh = kh.NgaySinh,
                                      DacQuyen = kh.DacQuyen,
-                                     HinhAnh =  string.IsNullOrEmpty(kh.HinhAnh) ? "/LayoutOgani/img/noimg.jpg" : kh.HinhAnh
+                                     HinhAnh = string.IsNullOrEmpty(kh.HinhAnh) ? "/LayoutOgani/img/noimg.jpg" : kh.HinhAnh
                                  }).ToList();
             return View(khachHangList);
         }
@@ -472,7 +474,8 @@ namespace DoAnPhanMem.Controllers
         {
             var product = _db.SanPham
                                    .Where(p => p.MaSanPham == maSanPham)
-                                   .Select(p => new {
+                                   .Select(p => new
+                                   {
                                        p.MaSanPham,
                                        p.TenSanPham,
                                        p.MoTa,
@@ -643,46 +646,57 @@ namespace DoAnPhanMem.Controllers
             return Json(new { success = true, message = "Xóa đánh giá thành công." });
         }
 
-
-
-        //XU LY CHO QUAN LY DON HANG
         public IActionResult DuyetDonHang(string maDonHang)
-{
-    var donHang = _db.DonHang.FirstOrDefault(dh => dh.MaDonHang == maDonHang);
-    if (donHang != null)
-    {
-        // Cập nhật trạng thái đơn hàng
-        if (donHang.TrangThai == "Đã thanh toán")
         {
-            donHang.TrangThai = "Đang xử lý";
-        }
-        else if (donHang.TrangThai == "Đang xử lý")
-        {
-            donHang.TrangThai = "Chờ lấy hàng";
-        }
-        else if (donHang.TrangThai == "Chờ lấy hàng")
-        {
-            donHang.TrangThai = "Đang giao hàng";
-                    string maGiaoHang = "GH" + Guid.NewGuid().ToString("N").Substring(0, 6); // Tạo mã Giao Hàng tự động
+            var donHang = _db.DonHang.FirstOrDefault(dh => dh.MaDonHang == maDonHang);
+            if (donHang != null)
+            {
+                if (donHang.TrangThai == "Đã thanh toán")
+                {
+                    if (_cache.TryGetValue(maDonHang, out DateTime thoiGianThanhToan))
+                    {
+                        if ((DateTime.Now - thoiGianThanhToan).TotalMinutes >= 15)
+                        {
+                            donHang.TrangThai = "Chờ lấy hàng";
+                        }
+                        else
+                        {
+                            donHang.TrangThai = "Đang xử lý";
+                        }
+                    }
+                    else
+                    {
+                        _cache.Set(maDonHang, DateTime.Now, TimeSpan.FromMinutes(20));
+                        donHang.TrangThai = "Đang xử lý";
+                    }
+                }
+                else if (donHang.TrangThai == "Đang xử lý")
+                {
+                    donHang.TrangThai = "Chờ lấy hàng";
+                }
+                else if (donHang.TrangThai == "Chờ lấy hàng")
+                {
+                    donHang.TrangThai = "Đang giao hàng";
+                    string maGiaoHang = "GH" + Guid.NewGuid().ToString("N").Substring(0, 6);
                     var giaoHang = new GiaoHang
                     {
                         MaGiaoHang = maGiaoHang,
                         MaDonHang = maDonHang,
-                        NgayGiao =donHang.NgayGiao ?? DateTime.MinValue, // Nếu null, sử dụng DateTime.MinValue
+                        NgayGiao = donHang.NgayGiao ?? DateTime.MinValue, // Nếu null, sử dụng DateTime.MinValue
                         TrangThai = "Chưa hoàn thành"
                     };
                     _db.GiaoHang.Add(giaoHang);
                 }
-        else if (donHang.TrangThai == "Đang giao hàng")
-        {
-            donHang.TrangThai = "Đã hoàn thành";
-        }
+                else if (donHang.TrangThai == "Đang giao hàng")
+                {
+                    donHang.TrangThai = "Đã hoàn thành";
+                }
 
-        // Khi trạng thái đơn hàng là "Đã hoàn thành", thêm vào bảng HoaDon và ChiTietHoaDon
-        if (donHang.TrangThai == "Đã hoàn thành")
-        {
-            // Tạo mã hóa đơn tự động (giả sử chúng ta có một hàm GenerateMaHoaDon để tạo mã duy nhất)
-            string maHoaDon = GenerateMaHoaDon();
+                // Khi trạng thái đơn hàng là "Đã hoàn thành", thêm vào bảng HoaDon và ChiTietHoaDon
+                if (donHang.TrangThai == "Đã hoàn thành")
+                {
+                    // Tạo mã hóa đơn tự động (giả sử chúng ta có một hàm GenerateMaHoaDon để tạo mã duy nhất)
+                    string maHoaDon = GenerateMaHoaDon();
 
                     // Tính tổng tiền của đơn hàng dựa trên các chi tiết đơn hàng
                     var chiTietSanPhamList = _db.ChiTietDonHang
@@ -703,65 +717,65 @@ namespace DoAnPhanMem.Controllers
                     decimal tongTien = chiTietSanPhamList.Sum(item => item.SoLuong * item.GiaBan);
                     // Tạo hóa đơn mới
                     var hoaDon = new HoaDon
-            {
-                MaHoaDon = maHoaDon,
-                MaDonHang = donHang.MaDonHang,
-                TongTien = tongTien, // Lấy tổng tiền của đơn hàng đã tính ở trên
-                NgayLap = DateTime.Now, // Ngày lập hóa đơn là ngày hiện tại
-                TrangThai = "Đã hoàn thành"
-            };
-            _db.HoaDon.Add(hoaDon);
+                    {
+                        MaHoaDon = maHoaDon,
+                        MaDonHang = donHang.MaDonHang,
+                        TongTien = tongTien, // Lấy tổng tiền của đơn hàng đã tính ở trên
+                        NgayLap = DateTime.Now, // Ngày lập hóa đơn là ngày hiện tại
+                        TrangThai = "Đã hoàn thành"
+                    };
+                    _db.HoaDon.Add(hoaDon);
 
-            // Thêm chi tiết hóa đơn dựa trên các chi tiết đơn hàng
-            var chiTietDonHangList = _db.ChiTietDonHang.Where(ct => ct.MaDonHang == maDonHang).ToList();
-            foreach (var chiTietDonHang in chiTietDonHangList)
-            {
-                // Lấy mã sản phẩm từ bảng ChiTietSanPham
-                var maSanPham = _db.ChiTietSanPham
-                    .Where(ctsp => ctsp.MaChiTietSP == chiTietDonHang.MaChiTietSP)
-                    .Select(ctsp => ctsp.MaSanPham)
-                    .FirstOrDefault();
+                    // Thêm chi tiết hóa đơn dựa trên các chi tiết đơn hàng
+                    var chiTietDonHangList = _db.ChiTietDonHang.Where(ct => ct.MaDonHang == maDonHang).ToList();
+                    foreach (var chiTietDonHang in chiTietDonHangList)
+                    {
+                        // Lấy mã sản phẩm từ bảng ChiTietSanPham
+                        var maSanPham = _db.ChiTietSanPham
+                            .Where(ctsp => ctsp.MaChiTietSP == chiTietDonHang.MaChiTietSP)
+                            .Select(ctsp => ctsp.MaSanPham)
+                            .FirstOrDefault();
 
-                // Lấy giá bán tại thời điểm mua từ bảng SanPham
-                var giaThoiDiemMua = _db.SanPham
-                    .Where(sp => sp.MaSanPham == maSanPham)
-                    .Select(sp => sp.GiaBan)
-                    .FirstOrDefault();
+                        // Lấy giá bán tại thời điểm mua từ bảng SanPham
+                        var giaThoiDiemMua = _db.SanPham
+                            .Where(sp => sp.MaSanPham == maSanPham)
+                            .Select(sp => sp.GiaBan)
+                            .FirstOrDefault();
 
-                // Tạo mã chi tiết hóa đơn tự động
-                string maChiTietHoaDon = GenerateMaChiTietHoaDon();
+                        // Tạo mã chi tiết hóa đơn tự động
+                        string maChiTietHoaDon = GenerateMaChiTietHoaDon();
 
-                // Tạo chi tiết hóa đơn mới
-                var chiTietHoaDon = new ChiTietHoaDon
-                {
-                    MaChiTietHoaDon = maChiTietHoaDon,
-                    MaHoaDon = maHoaDon,
-                    MaSanPham = maSanPham,
-                    SoLuong = chiTietDonHang.SoLuong,
-                    GiaThoiDiemMua = giaThoiDiemMua
-                };
-                _db.ChiTietHoaDon.Add(chiTietHoaDon);
+                        // Tạo chi tiết hóa đơn mới
+                        var chiTietHoaDon = new ChiTietHoaDon
+                        {
+                            MaChiTietHoaDon = maChiTietHoaDon,
+                            MaHoaDon = maHoaDon,
+                            MaSanPham = maSanPham,
+                            SoLuong = chiTietDonHang.SoLuong,
+                            GiaThoiDiemMua = giaThoiDiemMua
+                        };
+                        _db.ChiTietHoaDon.Add(chiTietHoaDon);
+                    }
+                }
+
+                // Lưu các thay đổi vào cơ sở dữ liệu
+                _db.SaveChanges();
             }
+
+            return RedirectToAction("QuanLyDonHang");
         }
 
-        // Lưu các thay đổi vào cơ sở dữ liệu
-        _db.SaveChanges();
-    }
+        // Giả sử chúng ta có các hàm để tạo mã tự động cho Hóa Đơn và Chi Tiết Hóa Đơn
+        private string GenerateMaHoaDon()
+        {
+            // Mã hóa đơn tự động có thể được tạo dựa trên một quy tắc hoặc tăng dần
+            return "HD" + DateTime.Now.Ticks;
+        }
 
-    return RedirectToAction("QuanLyDonHang");
-}
-
-// Giả sử chúng ta có các hàm để tạo mã tự động cho Hóa Đơn và Chi Tiết Hóa Đơn
-private string GenerateMaHoaDon()
-{
-    // Mã hóa đơn tự động có thể được tạo dựa trên một quy tắc hoặc tăng dần
-    return "HD" + DateTime.Now.Ticks;
-}
-
-private string GenerateMaChiTietHoaDon()
-{
-    return "CTHD" + DateTime.Now.Ticks;
-}
+        private string GenerateMaChiTietHoaDon()
+        {
+            return "CTHD" + DateTime.Now.Ticks;
+        }
 
 
         [HttpPost]

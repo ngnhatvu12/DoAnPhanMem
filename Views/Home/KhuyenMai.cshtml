@@ -5,7 +5,6 @@
     var isVip = ViewBag.IsVip as bool? ?? false;
 }
 
-<!-- Breadcrumb Section Begin -->
 <section class="breadcrumb-section set-bg" style="background-image: url('/LayoutOgani/img/background.jpg');">
     <div class="container">
         <div class="row">
@@ -23,6 +22,73 @@
                                 <i class="fa fa-crown"></i> THÀNH VIÊN VIP
                             </div>
                         }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="loyalty-section">
+    <div class="container" style="max-width:90%">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="loyalty-progress">
+                    <h3 class="loyalty-title">THÀNH TÍCH TIÊU DÙNG</h3>
+                    <div class="progress-container">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: @ViewBag.ProgressPercentage%;"></div>
+                        </div>
+                        <div class="milestones">
+                            @{
+                                var milestones = new[] { 500000, 1000000, 2000000, 3500000, 5000000 };
+                                var icons = new[] { "fa-crown", "fa-coins", "fa-gift", "fa-truck", "fa-gem" };
+                                var labels = new[] { "VIP", "TÍCH ĐIỂM", "QUÀ TẶNG", "MIỄN PHÍ VC", "VIP DIAMOND" };
+                                var rewards = new[] {
+                            "Trở thành VIP với ưu đãi đặc biệt",
+                            "Mở khóa tính năng tích điểm",
+                            "Nhận quà tặng độc quyền",
+                            "Miễn phí vận chuyển trọn đời",
+                            "Thành viên Diamond cao cấp"
+                            };
+                            }
+                            @for (int i = 0; i < milestones.Length; i++)
+                            {
+                                <div class="milestone milestone-@(i+1) @(ViewBag.TongTienDaTieu >= milestones[i] ? "achieved" : "")"
+                                     data-milestone="@milestones[i]">
+                                    <div class="milestone-icon">
+                                        <i class="fas @icons[i]"></i>
+                                    </div>
+                                    <div class="milestone-content">
+                                        <span class="milestone-amount">@(milestones[i] < 1000000 ? (milestones[i] / 1000 + "K") : (milestones[i] / 1000000 + "TR"))</span>
+                                        <div class="milestone-reward">@rewards[i]</div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="progress-info">
+                        <div class="current-info">
+                            <div class="info-box">
+                                <span class="info-label">
+                                    <i class="fas fa-wallet"></i> TIÊU DÙNG HIỆN TẠI
+                                </span>
+                                <span class="current-amount">@ViewBag.TongTienDaTieu.ToString("N0")đ</span>
+                                <div class="progress-percentage">
+                                    Đã đạt <span>@ViewBag.ProgressPercentage%</span> mục tiêu
+                                </div>
+                            </div>
+                        </div>
+                        <div class="target-info">
+                            <div class="info-box">
+                                <span class="info-label">
+                                    <i class="fas fa-bullseye"></i> MỤC TIÊU TIẾP THEO
+                                </span>
+                                <span class="target-amount">@ViewBag.NextMilestone.ToString("N0")đ</span>
+                                <div class="progress-percentage">
+                                    Còn thiếu <span>@((ViewBag.NextMilestone - ViewBag.TongTienDaTieu).ToString("N0"))đ</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -281,6 +347,301 @@
             font-weight: 700;
         }
 
+    .loyalty-section {
+    padding: 40px 0;
+    background-color: #fff;
+    margin: 40px 0;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eaeaea;
+}
+
+.loyalty-title {
+    text-align: center;
+    margin-bottom: 35px;
+    position: relative;
+    letter-spacing: 1px;
+    font-size: 35px;
+    font-weight: 700;
+    color: #2c3e50;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+
+.loyalty-title:after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 4px;
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
+    border-radius: 2px;
+}
+
+.progress-container {
+    position: relative;
+    margin: 100px 0 40px;
+    padding: 0 20px;
+}
+
+.progress-bar {
+    height: 16px;
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    border-radius: 8px;
+    transition: width 1s ease-in-out;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(255, 105, 140, 0.4);
+}
+
+.progress-fill:after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border: 4px solid #ff4b2b;
+    border-radius: 50%;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+.milestones {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    width: calc(100% - 40px);
+    top: -70px; /* Điều chỉnh để nổi lên cao hơn */
+    left: 20px;
+}
+
+.milestone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    width: 20%;
+    transform: none;
+}
+
+.milestone-icon {
+    width: 70px;
+    height: 70px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    color: #d1d1d1;
+    font-size: 28px;
+    border: 3px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.milestone.achieved .milestone-icon {
+    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+    color: white;
+    border-color: #ff4b2b;
+    box-shadow: 0 8px 25px rgba(255, 105, 140, 0.3);
+}
+
+.milestone-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.milestone-amount {
+    font-size: 20px;
+    font-weight: 800;
+    color: #bdc3c7;
+    margin-bottom: 8px;
+}
+
+.milestone-reward {
+    font-size: 12px;
+    font-weight: 600;
+    color: #95a5a6;
+    max-width: 120px;
+    line-height: 1.4;
+}
+
+.milestone.achieved .milestone-amount {
+    color: #ff4b2b;
+}
+
+.milestone.achieved .milestone-reward {
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 80px;
+    padding: 0 20px;
+    gap: 20px;
+}
+
+.current-info, .target-info {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.info-box {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    width: 100%;
+    text-align: center;
+    border: 1px solid #f0f0f0;
+    transition: transform 0.3s ease;
+}
+
+.info-box:hover {
+    transform: translateY(-5px);
+}
+
+.info-label {
+    font-size: 16px;
+    color: #6c757d;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-label i {
+    margin-right: 10px;
+    font-size: 18px;
+    color: #ff4b2b;
+}
+
+.current-amount, .target-amount {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 10px 0;
+    display: block;
+}
+
+.current-amount {
+    color: #ff4b2b;
+    text-shadow: 0 2px 4px rgba(255, 75, 43, 0.2);
+}
+
+.target-amount {
+    color: #2c3e50;
+}
+
+.progress-percentage {
+    font-size: 14px;
+    font-weight: 600;
+    color: #6c757d;
+    margin-top: 15px;
+}
+
+.progress-percentage span {
+    color: #ff4b2b;
+    font-weight: 700;
+}
+
+/* Responsive */
+@@media (max-width: 992px) {
+    .milestones {
+        top: -60px;
+    }
+    
+    .milestone-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+    
+    .milestone-amount {
+        font-size: 18px;
+    }
+    
+    .current-amount, .target-amount {
+        font-size: 28px;
+    }
+}
+
+@@media (max-width: 768px) {
+    .loyalty-title {
+        font-size: 24px;
+    }
+    
+    .milestones {
+        top: -50px;
+    }
+    
+    .milestone-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+    
+    .milestone-amount {
+        font-size: 16px;
+    }
+    
+    .current-amount, .target-amount {
+        font-size: 24px;
+    }
+    
+    .info-label {
+        font-size: 14px;
+    }
+    
+    .progress-info {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+@@media (max-width: 576px) {
+    .milestones {
+        top: -40px;
+    }
+    
+    .milestone-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    
+    .milestone-reward {
+        font-size: 10px;
+        max-width: 80px;
+    }
+    
+    .current-amount, .target-amount {
+        font-size: 20px;
+    }
+}
     /* ========== Grid Layout ========== */
     .row {
         margin: 0 -15px;
@@ -512,6 +873,33 @@
                 }, function () {
                     alert('Không thể sao chép mã. Vui lòng thử lại.');
                 });
+            });
+        });
+        $(document).ready(function () {
+            // Tooltip cho các mốc thành tích
+            $('.milestone').each(function () {
+                var milestone = $(this).data('milestone');
+                var tooltipText = '';
+
+                switch (milestone) {
+                    case '500000':
+                        tooltipText = 'Đạt 500,000đ - Mở khóa huy hiệu VIP';
+                        break;
+                    case '1000000':
+                        tooltipText = 'Đạt 1,000,000đ - Mở khóa tính năng tích điểm';
+                        break;
+                    case '2000000':
+                        tooltipText = 'Đạt 2,000,000đ - Nhận quà tặng đặc biệt';
+                        break;
+                    case '3500000':
+                        tooltipText = 'Đạt 3,500,000đ - Miễn phí vận chuyển trọn đời';
+                        break;
+                    case '5000000':
+                        tooltipText = 'Đạt 5,000,000đ - Thành viên Diamond với ưu đãi độc quyền';
+                        break;
+                }
+
+                $(this).append('<div class="milestone-tooltip">' + tooltipText + '</div>');
             });
         });
     </script>

@@ -22,7 +22,6 @@
             </div>
         </div>
     </div>
-    <!-- Order Content (giữ nguyên phần này) -->
     <div class="row">
         <div class="col-12">
             @if (!Model.Any())
@@ -41,7 +40,6 @@
                 foreach (var donHang in Model)
                 {
                     <div class="order-card mb-4 p-4 shadow-sm">
-                        <!-- Giữ nguyên nội dung đơn hàng -->
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <div>
                                 <h5>Mã đơn hàng: <a href="#">@donHang.MaDonHang</a></h5>
@@ -108,8 +106,6 @@
     </div>
 </div>
 
-<!-- Modal đánh giá sản phẩm (giữ nguyên) -->
-<!-- Modal đánh giá sản phẩm -->
 <div class="modal fade" id="ratingModal" tabindex="-1" aria-labelledby="ratingModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -119,7 +115,6 @@
             </div>
             <div class="modal-body">
                 <form id="ratingForm" action="/Order/GhiDanhGia" method="post">
-                    <!-- Các trường ẩn để lưu thông tin cần thiết -->
                     <input type="hidden" name="MaKhachHang" id="MaKhachHang">
                     <input type="hidden" name="MaHoaDon" id="MaHoaDon">
                     <input type="hidden" name="MaSanPham" id="MaSanPham">
@@ -134,7 +129,6 @@
                         <label for="productImage" class="form-label">Hình ảnh sản phẩm</label>
                         <img id="productImage" class="img-fluid" src="" alt="Hình ảnh sản phẩm">
                     </div>
-                    <!-- Đánh giá bằng sao -->
                     <div class="mb-3">
                         <label class="form-label">Đánh giá</label>
                         <div class="rating">
@@ -172,7 +166,6 @@
         margin-bottom: 30px;
     }
 
-    /* Tab Navigation */
     .order-tabs {
         margin-bottom: 30px;
     }

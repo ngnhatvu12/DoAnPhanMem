@@ -15,14 +15,19 @@ namespace DoAnPhanMem.Controllers
         }
 
         // Phương thức lấy danh sách sản phẩm theo danh mục
-        public IActionResult SanPhamTheoDanhMuc(string maDanhMuc, decimal? minPrice, decimal? maxPrice, string maLoai = null, string maMauSac = null, string maKichThuoc = null)
+        public IActionResult SanPhamTheoDanhMuc(string tenDanhMuc, string maDanhMuc, decimal? minPrice, decimal? maxPrice, string maLoai = null, string maMauSac = null, string maKichThuoc = null)
         {
             // Kiểm tra danh mục hợp lệ
             if (string.IsNullOrEmpty(maDanhMuc))
             {
                 return NotFound("Danh mục không tồn tại.");
             }
-
+            var danhMuc = _db.DanhMuc.Find(maDanhMuc);
+            if (danhMuc == null)
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy danh mục sản phẩm";
+                return RedirectToAction("Index", "Home");
+            }
             // Truy vấn cơ bản dựa vào danh mục
             var query = _db.SanPham
                 .Include(sp => sp.ChiTietSanPham) // Bao gồm thông tin chi tiết sản phẩm
@@ -58,14 +63,11 @@ namespace DoAnPhanMem.Controllers
 
             // Thực hiện truy vấn và trả kết quả
             var sanPhamTheoDanhMuc = query.ToList();
-
-            // Truyền dữ liệu cho ViewBag để hiển thị trong giao diện lọc
+            ViewBag.TenDanhMuc = danhMuc.TenDanhMuc;
             ViewBag.DanhSachLoai = _db.Loai.ToList();
             ViewBag.DanhSachMauSac = _db.MauSac.ToList();
             ViewBag.DanhSachKichThuoc = _db.KichThuoc.ToList();
-            ViewBag.MaDanhMuc = maDanhMuc; // Lưu lại mã danh mục
-
-            // Trả về giao diện cùng với dữ liệu
+            ViewBag.MaDanhMuc = maDanhMuc; 
             return View("Index", sanPhamTheoDanhMuc);
         }
 

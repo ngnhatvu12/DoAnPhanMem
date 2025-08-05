@@ -346,7 +346,6 @@ namespace DoAnPhanMem.Controllers
                     break;
             }
 
-            // Sử dụng constructor đúng của PagedList
             var pagedProducts = new PagedList<SanPham>(query, pageNumber, pageSize);
 
             var productType = _db.Loai.Find(maLoai);
@@ -372,17 +371,55 @@ namespace DoAnPhanMem.Controllers
             // Lấy thông tin khách hàng từ session
             var maKhachHang = HttpContext.Session.GetString("MaKhachHang");
             var isVip = false;
+            decimal tongTienDaTieu = 0;
+            var milestones = new[] { 500000, 1000000, 2000000, 3500000, 5000000 };
+            decimal nextMilestone = 500000;
+            int progressPercentage = 0;
 
             if (!string.IsNullOrEmpty(maKhachHang))
             {
+                // Tính tổng tiền từ các đơn hàng đã hoàn thành
+                var donHangs = _db.DonHang
+                    .Include(dh => dh.ChiTietDonHang)
+                    .Where(dh => dh.MaKhachHang == maKhachHang && dh.TrangThai == "Đã hoàn thành")
+                    .ToList();
+
+                foreach (var donHang in donHangs)
+                {
+                    tongTienDaTieu += donHang.ChiTietDonHang.Sum(ct => ct.SoLuong * ct.GiaBan);
+                }
+
+                // Kiểm tra và cập nhật VIP nếu đạt mốc
                 var khachHang = _db.KhachHang.FirstOrDefault(k => k.MaKhachHang == maKhachHang);
-                isVip = khachHang?.DacQuyen == "VIP";
+                if (khachHang != null)
+                {
+                    isVip = khachHang.DacQuyen == "VIP";
+
+                    // Nếu chưa là VIP nhưng đạt mốc 500k thì nâng cấp
+                    if (!isVip && tongTienDaTieu >= 500000)
+                    {
+                        khachHang.DacQuyen = "VIP";
+                        _db.SaveChanges();
+                        isVip = true;
+                    }
+                }
+
+                // Tính % tiến trình và mốc tiếp theo
+                for (int i = 0; i < milestones.Length; i++)
+                {
+                    if (tongTienDaTieu < milestones[i])
+                    {
+                        nextMilestone = milestones[i];
+                        break;
+                    }
+                }
+
+                progressPercentage = (int)(tongTienDaTieu / 5000000 * 100);
+                if (progressPercentage > 100) progressPercentage = 100;
             }
 
-            // Lấy tất cả mã giảm giá thông thường
+            // Lấy mã giảm giá
             var discountCodes = _db.GiamGia.Where(g => g.LoaiGiamGia == "Thường" || g.LoaiGiamGia == null).ToList();
-
-            // Nếu là VIP, thêm các mã giảm giá VIP
             if (isVip)
             {
                 var vipDiscounts = _db.GiamGia.Where(g => g.LoaiGiamGia == "VIP").ToList();
@@ -391,7 +428,60 @@ namespace DoAnPhanMem.Controllers
 
             ViewBag.DiscountCodes = discountCodes;
             ViewBag.IsVip = isVip;
+            ViewBag.TongTienDaTieu = tongTienDaTieu;
+            ViewBag.NextMilestone = nextMilestone;
+            ViewBag.ProgressPercentage = progressPercentage;
+
             return View();
+        }
+        public IActionResult ChiTiet(string id)
+        {
+            var sanPham = _db.SanPham
+                            .Include(p => p.Loai) // Thêm include Loai nếu cần
+                            .FirstOrDefault(sp => sp.MaSanPham == id);
+
+            if (sanPham == null)
+            {
+                _logger.LogWarning($"Không tìm thấy sản phẩm với mã: {id}");
+                return NotFound();
+            }
+
+            // Lấy danh sách đánh giá với cú pháp tương tự ProductDetail
+            var danhGiaList = (from dg in _db.DanhGia
+                               join hd in _db.HoaDon on dg.MaHoaDon equals hd.MaHoaDon
+                               join dh in _db.DonHang on hd.MaDonHang equals dh.MaDonHang
+                               join kh in _db.KhachHang on dh.MaKhachHang equals kh.MaKhachHang
+                               where dg.MaSanPham == id
+                               select new DanhGiaViewModel2
+                               {
+                                   TenKhachHang = kh.TenKhachHang,
+                                   SoDiem = dg.SoDiem,
+                                   BinhLuan = dg.BinhLuan,
+                                   NgayDanhGia = dg.NgayDanhGia
+                               }).ToList();
+
+            // Lấy chi tiết sản phẩm với cú pháp tương tự ProductDetail
+            var chiTietSanPhamList = (from ctp in _db.ChiTietSanPham
+                                      join kt in _db.KichThuoc on ctp.MaKichThuoc equals kt.MaKichThuoc
+                                      join ms in _db.MauSac on ctp.MaMauSac equals ms.MaMauSac
+                                      where ctp.MaSanPham == id
+                                      select new ChiTietSanPhamViewModel
+                                      {
+                                          MaChiTietSP = ctp.MaChiTietSP,
+                                          TenKichThuoc = kt.TenKichThuoc,
+                                          TenMauSac = ms.TenMauSac,
+                                          HinhAnhBienThe = ctp.HinhAnhBienThe
+                                      }).ToList();
+
+            // Tạo ViewModel
+            var viewModel = new ProductDetailViewModel2
+            {
+                SanPham = sanPham,
+                DanhGiaList = danhGiaList,
+                ChiTietSanPhamList = chiTietSanPhamList
+            };
+
+            return View(viewModel);
         }
     }
 }

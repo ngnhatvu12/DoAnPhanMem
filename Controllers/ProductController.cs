@@ -68,4 +68,5 @@ public class ProductController : Controller
 
         return Json(wishlistItems);
     }
+
 }

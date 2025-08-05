@@ -21,5 +21,6 @@ public class DonHang
 
     [StringLength(255)]
     public string DiaChiGiao { get; set; }
+    public ICollection<ChiTietDonHang> ChiTietDonHang { get; set; }
 }
 
